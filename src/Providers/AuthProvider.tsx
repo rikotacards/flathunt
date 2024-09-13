@@ -1,0 +1,39 @@
+import { onAuthStateChanged, User } from 'firebase/auth';
+import React from 'react';
+import { auth } from '../firebase/firebaseConfig';
+interface AuthContextProps {
+    user: User | null,
+    isUserLoading: boolean
+}
+export const AuthContext = React.createContext({} as AuthContextProps)
+interface AuthProviderProps {
+    children: React.ReactNode
+}
+export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+    const [isUserLoading, setIsLoading] = React.useState(true);
+
+    const [user, setUser] = React.useState<User | null>({} as User)
+    React.useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+         if (user) { 
+                // Note: this logic should be added in your signin process and not here.
+                setIsLoading(false);
+                setUser(user); 
+             } else {
+            setUser(null); 
+             }
+            });
+        return () => {
+          unsubscribe();
+        };
+        }, [user?.uid]);
+        const value = {
+            user,
+            isUserLoading
+        }
+    return (
+        <AuthContext.Provider value={value}>
+        {children}
+        </AuthContext.Provider>
+    )
+}
