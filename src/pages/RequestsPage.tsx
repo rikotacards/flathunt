@@ -3,10 +3,12 @@ import React from "react";
 import { getRequests } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { IRequests } from "../firebase/types";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import {
   AppBar,
   Avatar,
   Box,
+  Button,
   Card,
   Divider,
   Drawer,
@@ -25,7 +27,6 @@ import { Link } from "react-router-dom";
 import { ListingTile } from "../components/ListingTile";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
-import { CopyAll, WhatsApp } from "@mui/icons-material";
 const UserRow: React.FC<{ userId: string; messageCount: number }> = ({
   userId,
   messageCount,
@@ -97,11 +98,12 @@ export const RequestsPage: React.FC = () => {
               {userMessages[selectedUserId]?.[0].sendingUserId}
             </Typography>
             <Box sx={{ ml: "auto", display: "flex", alignItems: "center" }}>
-              <IconButton>
-                <WhatsApp />
-              </IconButton>
+                <Typography> {userMessages[selectedUserId]?.[0].contactNumber}</Typography>
+                <Button endIcon={<WhatsAppIcon/>} sx={{textTransform: 'capitalize'}}>
+                    Message in whatsapp
+                </Button>
+         
               <Typography>
-                {userMessages[selectedUserId]?.[0].contactNumber}
               </Typography>
             </Box>
           </Toolbar>
