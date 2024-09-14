@@ -19,11 +19,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
 const settings = [
-  {
-    path: "profile",
-    name: "Profile",
-    icon: <Avatar sx={{ height: 25, width: 25 }} />,
-  },
   { path: "listings", name: "My Listings", icon: <ViewListIcon /> },
   {
     path: "saved-listings",
@@ -57,8 +52,7 @@ export const UserMenu: React.FC = () => {
         sx={{ mt: "45px", borderRadius: 9, overflow: "hidden" }}
         id="menu-appbar"
         anchorEl={anchorElUser}
-        slotProps={{'paper': {style: {borderRadius:10}
-        }}}
+        slotProps={{ paper: { style: { borderRadius: 10 } } }}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -72,10 +66,29 @@ export const UserMenu: React.FC = () => {
         onClose={handleCloseUserMenu}
       >
         <MenuList sx={{ m: 1 }}>
-          {!user && <Button onClick={signIn} variant="contained" fullWidth sx={{ mb: 1 }}>
-            Log in
-          </Button>}
-
+          {!user && (
+            <Button
+              onClick={signIn}
+              variant="contained"
+              fullWidth
+              sx={{ mb: 1 }}
+            >
+              Log in
+            </Button>
+          )}
+          {user && (
+            <MenuItem
+              onClick={() => {
+                handleCloseUserMenu();
+                nav("profile");
+              }}
+            >
+              <ListItemIcon>
+                <Avatar sx={{height:25, width:25}} />
+              </ListItemIcon>
+              <Typography sx={{ textAlign: "center" }}>Profile</Typography>
+            </MenuItem>
+          )}
           {settings.map((setting) => (
             <MenuItem
               key={setting.path}

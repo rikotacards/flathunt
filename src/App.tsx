@@ -42,10 +42,10 @@ function App() {
   });
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <CssBaseline />
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <CssBaseline />
 
-        <QueryClientProvider client={queryClient}>
           <SnackbarProvider>
             <FiltersProvider>
               <Layout>
@@ -67,8 +67,8 @@ function App() {
               </Layout>
             </FiltersProvider>
           </SnackbarProvider>
-        </QueryClientProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

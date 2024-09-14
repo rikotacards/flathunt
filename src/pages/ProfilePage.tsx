@@ -46,27 +46,27 @@ export const ProfilePage: React.FC = () => {
       }}
     >
       {/* <Toolbar /> */}
-      <Typography fontWeight={"bold"}>Name</Typography>
-      <TextField disabled value={user.displayName} sx={{ mb: 2 }} />
-      <Typography fontWeight={"bold"}>Email</Typography>
-      <TextField sx={{mb:1}} disabled value={user.email} />
+      <Typography variant='body2' fontWeight={"bold"}>Name</Typography>
+      <Typography variant='body1'>{user.displayName}</Typography>
+      <Typography variant='body2' fontWeight={"bold"}>Email</Typography>
+      <Typography variant='body1'>{user.email}</Typography>
       <Typography fontWeight={"bold"}>Whatsapp contact</Typography>
-      <TextField type='tel' />
+      <TextField size='small' type='tel' />
       <Card sx={{ p: 1, mt: 1, mb: 2 }} variant="outlined">
         <Typography variant='caption'>Your number will be forwarded to the agent.</Typography>
       </Card>
       <Divider sx={{ width: "100%", p: 2 }} />
       <Typography variant='body2'>For Agents</Typography>
       <Typography fontWeight={"bold"}>Company</Typography>
-      <TextField sx={{ mb: 2 }} />
+      <TextField size='small' sx={{ mb: 2 }} />
       <Typography fontWeight={"bold"}>License ID</Typography>
-      <TextField sx={{ mb: 2 }} />
+      <TextField size='small' sx={{ mb: 2 }} />
       <Button
         variant="contained"
         color="error"
         onClick={() => onSignOut(() => nav("/"))}
       >
-        Sign out
+        Log out
       </Button>
     </Box>
   );

@@ -5,7 +5,6 @@ import {
   Typography,
   IconButton,
   Box,
-  TextField,
   Card,
   Button,
   Alert,
@@ -16,19 +15,48 @@ import { addContactRequest } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
+import { addUser, updateUser } from "../firebase/user";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useQuery } from "@tanstack/react-query";
+
 interface ContactFormProps {
   onClose: () => void;
   listingId: string;
 }
+const auth = getAuth();
+
 export const ContactForm: React.FC<ContactFormProps> = ({
   onClose,
   listingId,
 }) => {
-  const [number, setNumber] = React.useState("");
-  const { user } = useAuthContext();
+    const provider = new GoogleAuthProvider();
+    const { user, contactNumber } = useAuthContext();
+  const [number, setNumber] = React.useState(contactNumber);
   const [openSignIn, setOpenSignIn] = React.useState(false);
   const s = useSnackbarContext();
-
+  const onSignIn = async() => {
+    try {
+        const res = await signInWithPopup(auth, provider)
+        await addUser({userId: res.user.uid, contactNumber: number})
+        await addContactRequest({
+            contactNumber: number,
+            sendingUserId: USER_ID,
+            receivingUserId: USER_ID,
+            listingId,
+            message: "",
+          });
+          s.setSnackbarChildComponent(
+            <Alert variant="filled" sx={{ width: "100%" }} severity="success">
+              Message succesfully sent to agent.
+            </Alert>
+          );
+          s.toggleSnackbar();
+          onClose();
+    } catch (e) {
+        alert(e)
+    }
+    
+  };
   const onOpenSignIn = () => {
     setOpenSignIn(true);
   };
@@ -38,7 +66,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     }
     try {
       if (!user) {
-        await signIn();
+        onOpenSignIn();
+        return;
       }
       await addContactRequest({
         contactNumber: number,
@@ -47,8 +76,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         listingId,
         message: "",
       });
-      s.setSnackbarChildComponent(<Alert variant="filled" sx={{width:'100%'}} severity="success">Message succesfully sent to agent.</Alert>)
-      s.toggleSnackbar()
+      s.setSnackbarChildComponent(
+        <Alert variant="filled" sx={{ width: "100%" }} severity="success">
+          Message succesfully sent to agent.
+        </Alert>
+      );
+      s.toggleSnackbar();
       onClose();
     } catch (e) {
       alert(e);
@@ -58,7 +91,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     <>
       <AppBar position="relative">
         <Toolbar>
-          <Typography>Contact agent</Typography>
+          <Typography>Contact Agent</Typography>
           <IconButton onClick={onClose} sx={{ ml: "auto" }}>
             <KeyboardArrowDownOutlined />
           </IconButton>
@@ -68,30 +101,36 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         <OutlinedInput
           onChange={(e) => setNumber(e.target.value)}
           type="tel"
-          placeholder="Your Whatsapp number"
-          sx={{ mb: 1 }}          
+          value={number}
+          placeholder="Whatsapp number: +85212345678"
+          sx={{ mb: 1 }}
         />
         <Card variant="outlined" sx={{ p: 1, mb: 1 }}>
-          <Typography color='textSecondary' variant="caption">
-          Your contact will be sent to the agent.
-          The agent will reach out to you as soon as possible. In addition, your contact will be saved for future agent requests.
+          <Typography color="textSecondary" variant="caption">
+            Your contact will be sent to the agent. The agent will reach out to
+            you as soon as possible. In addition, your contact will be saved for
+            future agent requests.
           </Typography>
         </Card>
         {openSignIn && (
-          <Card variant="outlined" sx={{ p: 1, mb: 1 }}>
-            <Typography variant="caption">Please sign in</Typography>
-            <Button>Sign in with google</Button>
+          <Card  variant="elevation" elevation={10} sx={{ p: 1, mb: 1 }}>
+            <Typography color='warning' variant="caption" sx={{ ml: 1 }}>
+              Sign in to send your request to the agent.
+            </Typography>
           </Card>
         )}
-        <Button
+        {openSignIn? <Button
+        onClick={onSignIn}
+         variant='contained' size="large"
+        >Sign in with Google</Button>:<Button
           onClick={() => {
             onSendContact();
           }}
-          size='large'
+          size="large"
           variant="contained"
         >
           Send
-        </Button>
+        </Button>}
       </Box>
     </>
   );
