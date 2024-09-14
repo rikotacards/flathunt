@@ -15,12 +15,17 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  MenuList,
   Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Link } from "react-router-dom";
+import { ListingTile } from "../components/ListingTile";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+
+import { CopyAll, WhatsApp } from "@mui/icons-material";
 const UserRow: React.FC<{ userId: string; messageCount: number }> = ({
   userId,
   messageCount,
@@ -65,7 +70,6 @@ export const RequestsPage: React.FC = () => {
     }
   });
   const userIds = Object.keys(userMessages);
-  console.log("messages", userMessages);
   return (
     <>
       <List>
@@ -82,36 +86,47 @@ export const RequestsPage: React.FC = () => {
         onClose={closeDrawer}
         open={selectedUserId.length > 0}
         anchor="right"
+        sx={{ display: "flex", flexDirection: "column" }}
       >
         <AppBar sx={{ background: "white" }} position="fixed">
           <Toolbar component={Paper}>
             <IconButton onClick={closeDrawer}>
               <ChevronLeftIcon />
             </IconButton>
-            <Typography>{userMessages[selectedUserId]?.[0].sendingUserId}</Typography>
-
+            <Typography>
+              {userMessages[selectedUserId]?.[0].sendingUserId}
+            </Typography>
+            <Box sx={{ ml: "auto", display: "flex", alignItems: "center" }}>
+              <IconButton>
+                <WhatsApp />
+              </IconButton>
+              <Typography>
+                {userMessages[selectedUserId]?.[0].contactNumber}
+              </Typography>
+            </Box>
           </Toolbar>
         </AppBar>
-        <Toolbar></Toolbar>
-        <Card sx={{ m: 1, p: 1 }}>
-          <Avatar />
-          <Box>{userMessages[selectedUserId]?.[0].contactNumber}</Box>
-        </Card>
+        <Toolbar />
+
         {userMessages[selectedUserId]?.map((m) => (
-          <Box
-            sx={{
-              m: 1,
-              display: "flex",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Avatar sx={{ mr: 1 }} />
-              {`Hi, I'm interested in listing \n`}
-              <Link target="_blank" to={`/listing/${m.listingId}`}>
-                {m.listingId}
-              </Link>
+         
+            <Box  sx={{m:1, flexWrap: 'nowrap', display: "flex"}}>
+              <Avatar sx={{ m: 1 }} />
+              <Typography>
+                {`Hi, I'm interested in listing `}
+                <Box sx={{ display: "flex", flexWrap: 'wrap' }}>
+                  <Link target="_blank" to={`/listing/${m.listingId}`}>
+                  <Typography variant='body2'>
+
+                    {`flathunt.co/listing/${m.listingId}`}
+                  </Typography>
+                  </Link>
+                  <IconButton size="small">
+                    <ContentCopyIcon />
+                  </IconButton>
+                </Box>
+              </Typography>
             </Box>
-          </Box>
         ))}
       </Drawer>
     </>

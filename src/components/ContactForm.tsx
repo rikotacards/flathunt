@@ -36,6 +36,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         queryFn: () => getUser(user?.uid || ""),
       });
   const [number, setNumber] = React.useState(data?.contactNumber);
+
+  React.useEffect(() => {
+    setNumber(data?.contactNumber)
+  }, [isLoading])
   const [openSignIn, setOpenSignIn] = React.useState(false);
   const s = useSnackbarContext();
   
@@ -66,7 +70,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     setOpenSignIn(true);
   };
   const onSendContact = async () => {
-    if (number.length === 0) {
+    if (number?.length === 0) {
       return;
     }
     try {
