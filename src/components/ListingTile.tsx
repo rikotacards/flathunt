@@ -294,6 +294,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
         >
           {isNarrow && (
             <IconButton
+            size="large"
               sx={{
                 borderRadius: 10,
                 color: "white",

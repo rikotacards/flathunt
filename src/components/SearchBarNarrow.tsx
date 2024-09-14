@@ -56,7 +56,7 @@ export const SearchBarNarrow: React.FC<SearchBarWideProps> = ({
           // maxWidth:'400px',
           display: "flex",
           alignItems: "center",
-          // boxShadow: 6,
+          boxShadow: '0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)',
           overflow: "visible",
           pl: 0,
 
@@ -78,7 +78,7 @@ export const SearchBarNarrow: React.FC<SearchBarWideProps> = ({
           <Box sx={{ border: 0, flexGrow: 1 }} onClick={() => onFilterClick()}>
             {!filters.location && !filters.minPrice && !filters.maxPrice && (
               <Typography
-                variant="body1"
+                variant="body2"
                 color="textSecondary"
                 fontWeight={"bold"}
               >

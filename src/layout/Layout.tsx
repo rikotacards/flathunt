@@ -12,10 +12,10 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { SearchBarNarrow } from "../components/SearchBarNarrow";
-
 import { SearchFilters } from "../components/searchFilters";
 import { useAuthContext } from "../Providers/contextHooks";
 import { UserMenu } from "../components/UserMenu";
+import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -41,9 +41,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <Box sx={{ position: "relative" }}>
       <AppBar
-        elevation={1}
         sx={{
-          background: 'white',
+          boxShadow:
+            "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+          background: "white",
           display: "flex",
           justifyContent: "center",
           height: isListingPage && isNarrow ? 0 : undefined,
@@ -52,9 +53,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         position="fixed"
       >
         <Toolbar
-          sx={{ flexDirection: "row", 
-            display: "flex", 
-            alignItems: "center" }}
+          sx={{ flexDirection: "row", display: "flex", alignItems: "center" }}
         >
           {!isNarrow && (
             <Typography
@@ -67,24 +66,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Typography>
           )}
           {isNarrow && (
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                marginRight: 4,
-              }}
-            >
-              <SearchBarNarrow
-                disablePropertyType
-                onFilterClick={onSearchbarClick}
-                isFiltersOpen={isFiltersOpen}
-                onClose={onSearchbarClose}
-              />
-            </div>
+            <Box sx={{ flexGrow: 1, flexBasis: 1, overflow: "hidden" }}>
+              <SearchbarNarrow2 />
+            </Box>
           )}
-
-          <UserMenu />
+          <Box sx={{ flexBasis: 1 }}>
+            <UserMenu />
+          </Box>
+        
         </Toolbar>
+      
 
         <Collapse unmountOnExit in={isFiltersOpen}>
           <Box sx={{ p: 2, pt: 1 }}>

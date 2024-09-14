@@ -16,6 +16,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ForumIcon from "@mui/icons-material/Forum";
 import { useNavigate } from "react-router";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
 const settings = [
@@ -41,15 +43,28 @@ export const UserMenu: React.FC = () => {
   return (
     <>
       <Tooltip title="Open settings">
-        <IconButton onClick={handleOpenUserMenu} sx={{ ml: "auto", p: 0 }}>
-          <Avatar
-            sx={{ height: 35, width: 35 }}
-            src={user?.photoURL || undefined}
-          />
+        <IconButton
+          onClick={handleOpenUserMenu}
+          
+          sx={{
+            ml: "auto",
+            p: 0,
+            boxShadow:
+              "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+          }}
+        >
+          {user ? (
+            <Avatar
+              sx={{ height: 35, width: 35 }}
+              src={user?.photoURL || undefined}
+            />
+          ) : (
+            <AccountCircleIcon fontSize="large" />
+          )}
         </IconButton>
       </Tooltip>
       <Menu
-        sx={{ mt: "45px", borderRadius: 9, overflow: "hidden" }}
+        sx={{ mt: "45px" }}
         id="menu-appbar"
         anchorEl={anchorElUser}
         slotProps={{ paper: { style: { borderRadius: 10 } } }}
@@ -76,7 +91,7 @@ export const UserMenu: React.FC = () => {
               Log in
             </Button>
           )}
-          {user && (
+        {user && (
             <MenuItem
               onClick={() => {
                 handleCloseUserMenu();
@@ -84,7 +99,7 @@ export const UserMenu: React.FC = () => {
               }}
             >
               <ListItemIcon>
-                <Avatar sx={{height:25, width:25}} />
+                <AccountCircleIcon/>
               </ListItemIcon>
               <Typography sx={{ textAlign: "center" }}>Profile</Typography>
             </MenuItem>

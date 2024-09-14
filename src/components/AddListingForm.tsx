@@ -368,7 +368,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
             label="Price"
             required
             name="price"
-            type="number"
+            type="tel"
             placeholder="Monthly rent (HKD)"
             onChange={onChange}
           />
@@ -386,7 +386,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
               sx={{ mb: 1 }}
               required
               name="netArea"
-              type="number"
+              type="tel"
               placeholder="Net Area"
               label="Net area"
               onChange={onChange}
@@ -394,14 +394,14 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
             <TextField
               sx={{ mb: 1 }}
               name="grossArea"
-              type="number"
+              type="tel"
               placeholder="Gross Area"
               label="Gross Area"
               onChange={onChange}
             />
           </Box>
 
-          <Button sx={{ m: 0 }} variant="contained" onClick={onAdd}>
+          <Button size='large' sx={{ m: 0 }} variant="contained" onClick={onAdd}>
             Add
           </Button>
         </FormControl>

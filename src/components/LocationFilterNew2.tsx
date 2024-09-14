@@ -13,7 +13,17 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-const locations = ["central", "wanchai", "kennedy town", "causeway bay"];
+const locations = [
+  "central",
+  "wanchai",
+  "kennedy town",
+  "causeway bay",
+  "Sheung Wan",
+  "Happy Valley",
+  "Quarry Bay",
+  "Admirality",
+  "Lohas Park",
+];
 
 interface LocationFilterNew2Props {
   onClick: (location: string) => void;
@@ -30,22 +40,25 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
   };
   return (
     <Box
-      elevation={0}
-      component={Paper}
       textAlign={"left"}
       sx={{
+        p: 2,
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
       }}
     >
-      <Typography fontWeight={"bold"}>Where</Typography>
+      <Typography sx={{ mb: 1 }} variant="body1" fontWeight={"bold"}>
+        Location
+      </Typography>
 
       <Autocomplete
-        onClick={() => onClick(value)}
+        onClick={() => {onClick(value); setValue(value)}}
         onChange={(event, newValue) => {
           setValue(newValue);
           onClick(newValue);
         }}
+        size="small"
         value={value}
         options={locations}
         renderInput={(params) => (
@@ -65,15 +78,20 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
         <Chip label={"Causeway Bay"} />
       </Card>
       <Card variant="outlined">
-        <MenuList sx={{ textTransform: "capitalize" }}>
-          {locations.map((l) => (
-            <MenuItem onClick={() => onMenuItemClick(l)} selected={value === l}>
-              {l}
-            </MenuItem>
-          ))}
-        </MenuList>
+          <MenuList sx={{maxHeight:300, overflowY:'scroll', textTransform: "capitalize" }}>
+            {locations.map((l) => (
+              <MenuItem
+                onClick={() => onMenuItemClick(l)}
+                selected={value === l}
+              >
+                {l}
+              </MenuItem>
+            ))}
+          </MenuList>
       </Card>
-      <Button onClick={onClose} variant='outlined' sx={{mt:1}}>Cancel</Button>
+      <Button onClick={onClose} variant="outlined" sx={{ mt: 1 }}>
+        Cancel
+      </Button>
     </Box>
   );
 };

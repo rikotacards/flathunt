@@ -1,9 +1,9 @@
 export const getRangeLabel = (minPrice?: number, maxPrice?: number, units?: string) => {
     if (maxPrice && !minPrice) {
-        return `<= ${maxPrice} ${units}`
+        return `<= ${maxPrice} ${units || ''}`
     }
     if (minPrice && !maxPrice) {
-        return `>= ${minPrice} ${units}`
+        return `>= ${minPrice} ${units || ''}`
     }
     if (!maxPrice && !minPrice) {
         return 'Price'

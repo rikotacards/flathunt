@@ -62,16 +62,19 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
       component={Paper}
       elevation={0}
       sx={{
-        p: 0,
+        p: 1,
         m: 0,
         width: isNarrow ? undefined : "500px",
       }}
     >
-      <Box sx={{ mr: 1, ml: 1 }}>
+      <Typography sx={{alignSelft: 'center'}} variant="body1" fontWeight={"bold"}>
+        Price
+      </Typography>
+      <Box sx={{ mr: 4, ml: 4, mt: 4 }}>
         <Slider
           min={MIN}
           max={MAX}
-          valueLabelDisplay="auto"
+          valueLabelDisplay="on"
           step={1000}
           onChange={onChange}
           value={range}
@@ -89,6 +92,7 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
           <OutlinedInput
             value={range[0]}
             size="small"
+            type="tel"
             onFocus={(e) => e?.target.select()}
             startAdornment={"$"}
             sx={{
@@ -111,7 +115,6 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
                 padding: 0,
                 border: "0px",
               },
-              type: "number",
               "aria-labelledby": "input-slider",
             }}
           />

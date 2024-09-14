@@ -78,7 +78,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
       });
       s.setSnackbarChildComponent(
         <Alert variant="filled" sx={{ width: "100%" }} severity="success">
-          Message succesfully sent to agent.
+          Message succesfully sent to agent
         </Alert>
       );
       s.toggleSnackbar();
