@@ -29,7 +29,6 @@ export const SearchResultPage: React.FC = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
-      {!isNarrow && <SearchBarWide showMore />}
       {!!data?.length && (
         <Box
           component={Paper}
@@ -44,7 +43,7 @@ export const SearchResultPage: React.FC = () => {
             borderRadius: 10,
           }}
         >
-          <Typography fontWeight={"bold"}>{data?.length} places</Typography>
+          <Typography color='textSecondary' variant='body2' fontWeight={"bold"}>{data?.length} places</Typography>
           <Button onClick={onClear} sx={{ textTransform: "capitalize" }}>
             Clear filters
           </Button>

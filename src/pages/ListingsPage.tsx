@@ -17,7 +17,7 @@ import { AddListingForm } from "../components/AddListingForm";
 
 import AddIcon from "@mui/icons-material/Add";
 
-import { useAuthContext, useFilterContext } from "../Providers/contextHooks";
+import { useAppBarContext, useAuthContext, useFilterContext } from "../Providers/contextHooks";
 
 import { SearchBarWide } from "../components/SearchBarWide";
 import { useIsNarrow } from "../utils/useIsNarrow";
@@ -26,13 +26,17 @@ import { USER_ID } from "../firebase/firebaseConfig";
 import { useQuery } from "@tanstack/react-query";
 import { copy } from "../utils/copy";
 import { CloseOutlined } from "@mui/icons-material";
+import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 
 export const ListingsPage: React.FC = () => {
   const { filters, setFilters } = useFilterContext();
   const {user} = useAuthContext();
+  const {setAppBarChildComponent} = useAppBarContext()
+
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     setFilters({});
+    setAppBarChildComponent(<SearchbarNarrow2 disableRedirect/>)
   }, []);
   const isNarrow = useIsNarrow();
 
@@ -60,10 +64,9 @@ export const ListingsPage: React.FC = () => {
     Link: flathunt.co/listing/${listing?.listingId}\n`
   );
   const copyText = shareText?.join("\n");
-  const onCopy = copy(copyText || "");
+  const onCopy = () => copy(copyText || "");
   return (
     <>
-      {!isNarrow && <SearchBarWide disableRedirect disableApiCall showMore />}
 
      <AgentListingsTable {...filters} />
      
@@ -85,36 +88,7 @@ export const ListingsPage: React.FC = () => {
           <AddListingForm onClose={handleClose} />
         </Drawer>
       )}
-      <Box
-        sx={{
-          display: "flex",
-          position: "sticky",
-          bottom: 1,
-          width: "100%",
-          justifyContent: "flex-end",
-          p: 2,
-          alignItems: "center",
-          zIndex: 99,
-        }}
-      >
-        <Fab
-          variant="extended"
-          sx={{ m: 0, p: 2, alignItems: "center" }}
-          onClick={onOpenDrawer}
-          color={'secondary'}
-        >
-          <Typography sx={{ mr: 1 }} variant="body2">
-            {data?.length} listings
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <IosShareIcon sx={{ mb: 0.5 }} />
-          </Box>
-        </Fab>
-
-        <Fab size="medium" color="primary" sx={{ m: 1 }} onClick={handleOpen}>
-          <AddIcon />
-        </Fab>
-      </Box>
+  
       <Drawer anchor="bottom" open={openDrawer} onClose={closeDrawer}>
         <AppBar position="relative">
           <Toolbar>

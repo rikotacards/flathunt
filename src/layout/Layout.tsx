@@ -1,21 +1,17 @@
 import {
   AppBar,
   Box,
-  Button,
   Collapse,
   Toolbar,
-  Tooltip,
   Typography,
-  Zoom,
 } from "@mui/material";
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useIsNarrow } from "../utils/useIsNarrow";
-import { SearchBarNarrow } from "../components/SearchBarNarrow";
 import { SearchFilters } from "../components/searchFilters";
-import { useAuthContext } from "../Providers/contextHooks";
 import { UserMenu } from "../components/UserMenu";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
+import { useAppBarContext } from "../Providers/contextHooks";
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -37,7 +33,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
   const location = useLocation();
   const isListingPage = location.pathname.indexOf("/listing/") >= 0;
-
+  const {getAppBar} = useAppBarContext();
   return (
     <Box sx={{ position: "relative" }}>
       <AppBar
@@ -65,9 +61,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               Flathunt.co
             </Typography>
           )}
-          {isNarrow && (
+          { (
             <Box sx={{ flexGrow: 1, flexBasis: 1, overflow: "hidden" }}>
-              <SearchbarNarrow2 />
+             {getAppBar()}
             </Box>
           )}
           <Box sx={{ flexBasis: 1 }}>

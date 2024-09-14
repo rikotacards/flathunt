@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useFilterContext } from "../Providers/contextHooks";
 const locations = [
   "central",
   "wanchai",
@@ -33,6 +34,11 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
   onClick,
   onClose,
 }) => {
+const {setFilters} = useFilterContext();
+const onClear = () => {
+    setFilters((p) => ({...p, location: undefined}))
+    onClose();
+}
   const [value, setValue] = React.useState();
   const onMenuItemClick = (l: string) => {
     setValue(l);
@@ -89,6 +95,9 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
             ))}
           </MenuList>
       </Card>
+      <Button onClick={onClear} variant="outlined" sx={{ mt: 1 }}>
+        Clear filter
+      </Button>
       <Button onClick={onClose} variant="outlined" sx={{ mt: 1 }}>
         Cancel
       </Button>

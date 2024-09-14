@@ -17,7 +17,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import { useNavigate } from "react-router";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
+import HolidayVillageRoundedIcon from "@mui/icons-material/HolidayVillageRounded";
 import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
 const settings = [
@@ -45,7 +45,6 @@ export const UserMenu: React.FC = () => {
       <Tooltip title="Open settings">
         <IconButton
           onClick={handleOpenUserMenu}
-          
           sx={{
             ml: "auto",
             p: 0,
@@ -91,7 +90,20 @@ export const UserMenu: React.FC = () => {
               Log in
             </Button>
           )}
-        {user && (
+          <MenuItem
+           onClick={() => {
+            handleCloseUserMenu();
+            nav("/");
+          }}
+          >
+            <ListItemIcon
+             
+            >
+              <HolidayVillageRoundedIcon />
+            </ListItemIcon>
+            <Typography sx={{ textAlign: "center" }}>Home</Typography>
+          </MenuItem>
+          {user && (
             <MenuItem
               onClick={() => {
                 handleCloseUserMenu();
@@ -99,7 +111,7 @@ export const UserMenu: React.FC = () => {
               }}
             >
               <ListItemIcon>
-                <AccountCircleIcon/>
+                <AccountCircleIcon />
               </ListItemIcon>
               <Typography sx={{ textAlign: "center" }}>Profile</Typography>
             </MenuItem>

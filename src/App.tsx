@@ -15,6 +15,7 @@ import { RequestsPage } from "./pages/RequestsPage";
 import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { AuthProvider } from "./Providers/AuthProvider";
+import { AppBarProvider } from "./Providers/AppbarProvider";
 
 function App() {
   const queryClient = new QueryClient();
@@ -44,29 +45,34 @@ function App() {
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <CssBaseline />
+          <FiltersProvider>
+            <AppBarProvider>
+              <CssBaseline />
 
-          <SnackbarProvider>
-            <FiltersProvider>
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<SearchPage />} />
-                  <Route path="/listings" element={<ListingsPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/listing/:listingId" element={<ListingPage />} />
-                  <Route
-                    path="/saved-listings"
-                    element={<SavedListingsPage />}
-                  />
-                  <Route
-                    path="/search-results"
-                    element={<SearchResultPage />}
-                  />
-                  <Route path="/requests" element={<RequestsPage />} />
-                </Routes>
-              </Layout>
-            </FiltersProvider>
-          </SnackbarProvider>
+              <SnackbarProvider>
+                <Layout>
+                  <Routes>
+                    <Route path="/" element={<SearchPage />} />
+                    <Route path="/listings" element={<ListingsPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route
+                      path="/listing/:listingId"
+                      element={<ListingPage />}
+                    />
+                    <Route
+                      path="/saved-listings"
+                      element={<SavedListingsPage />}
+                    />
+                    <Route
+                      path="/search-results"
+                      element={<SearchResultPage />}
+                    />
+                    <Route path="/requests" element={<RequestsPage />} />
+                  </Routes>
+                </Layout>
+              </SnackbarProvider>
+            </AppBarProvider>
+          </FiltersProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>

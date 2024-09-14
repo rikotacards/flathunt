@@ -21,8 +21,11 @@ import { useLocation, useNavigate } from "react-router";
 import { useFilterContext } from "../Providers/contextHooks";
 import { MoreFilter } from "./MoreFilters";
 import { getRangeLabel } from "../utils/getRangeLabel";
-
-export const SearchbarNarrow2: React.FC = () => {
+import { IFilters } from "../firebase/types";
+interface SearchbarNarrow2Props {
+  disableRedirect?: boolean;
+}
+export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({disableRedirect}) => {
   const urlLocation = useLocation();
   const nav = useNavigate();
   const goHome = () => nav("/");
@@ -43,7 +46,7 @@ export const SearchbarNarrow2: React.FC = () => {
   const onLocationClick = (location: string) => {
     setFilters((p) => ({ ...p, location }));
     onCloseDrawer();
-    nav("/search-results");
+    !disableRedirect && nav("/search-results");
   };
   const onFilterClick = (index: number) => {
     setFilterIndex(index);
@@ -57,8 +60,17 @@ export const SearchbarNarrow2: React.FC = () => {
       maxPrice: priceRange[1],
     }));
     onCloseDrawer();
-    nav("/search-results");
+   !disableRedirect &&  nav("/search-results");
   };
+  const onMoreFiltersDone = (filters: IFilters) => {
+    setFilters((p) => ({
+      ...p,
+      minNetArea: priceRange[0],
+      maxPrice: priceRange[1],
+    }));
+    onCloseDrawer();
+    !disableRedirect && nav("/search-results");
+  }
   const priceLabel = getRangeLabel(filters.minPrice, filters.maxPrice, "HKD");
   const location = (
     <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -95,7 +107,7 @@ export const SearchbarNarrow2: React.FC = () => {
       <MenuList
         sx={{
           display: "flex",
-          overflowX: "scroll",
+          overflowX: "auto",
           pl: 1,
           pr: 1,
           borderRadius: 10,
@@ -154,7 +166,7 @@ export const SearchbarNarrow2: React.FC = () => {
               onClose={onPriceDone}
             />
           )}
-          {filterIndex === 2 && <MoreFilter onClose={onPriceDone} />}
+          {filterIndex === 2 && <MoreFilter onClose={onCloseDrawer} />}
         </Box>
       </Drawer>
     </Box>

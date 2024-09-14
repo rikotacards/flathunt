@@ -4,22 +4,25 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ListingTile } from "../components/ListingTile";
 import { getAllListings, getAllListingsNoFilters } from "../firebase/listings";
 import Grid from "@mui/material/Grid2";
-import { useAuthContext, useFilterContext } from "../Providers/contextHooks";
+import { useAppBarContext, useAuthContext, useFilterContext } from "../Providers/contextHooks";
 import { SearchBarWide } from "../components/SearchBarWide";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { ListingTileSkeleton } from "../components/ListingTileSkeleton";
 import { SignInWithGoogle } from "../components/SignInWithGoogle";
 import { getAuth } from "firebase/auth";
 import { SignInPopup } from "../components/SignInPopup";
+import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 export const SearchPage: React.FC = () => {
   const { setFilters } = useFilterContext();
   const queryClient = useQueryClient();
   const auth = getAuth()
   console.log('AUTH', auth)
   const {user, isUserLoading} = useAuthContext()
+  const {setAppBarChildComponent} = useAppBarContext();
   console.log('user', user)
   const isNarrow = useIsNarrow();
   React.useEffect(() => {
+    setAppBarChildComponent(<SearchbarNarrow2/>)
     setFilters({});
     queryClient.clear();
   }, []);
@@ -40,7 +43,6 @@ export const SearchPage: React.FC = () => {
         p: 2,
       }}
     >
-      {!isNarrow && <SearchBarWide />}
       <Grid
         sx={{ mt: 1 }}
         container

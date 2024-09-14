@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -58,7 +59,7 @@ interface AddListingFormProps {
 export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
   const queryClient = useQueryClient();
   const [files, setFiles] = React.useState([] as File[]);
-
+  const [isAdding, setIsAdding] = React.useState(false);
   const [form, setForm] = React.useState({
     rentBuy: "rent",
     propertyType: "residential",
@@ -175,25 +176,32 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
   const onAdd = async () => {
     // get download URLS,
     // add them to the listing
-    const docRef = doc(collection(db, "listings"));
+    try {
+      setIsAdding(true);
+      const docRef = doc(collection(db, "listings"));
 
-    const fileNames = files.map((file) => file.name);
-    await handleUpload(USER_ID, docRef.id);
-    await setDoc(docRef, {
-      ...form,
-      rentBuy: form.rentBuy || "rent",
-      location: form.location,
-      propertyType: form.propertyType,
-      price: parseInt(form.price),
-      netArea: parseInt(form.netArea),
-      grossArea: parseInt(form.grossArea),
-      agentId: USER_ID,
-      userId: USER_ID,
-      images: fileNames,
-      dateAdded: serverTimestamp(),
-    });
-    queryClient.invalidateQueries({ queryKey: ["getAgentListings"] });
-    onClose();
+      const fileNames = files.map((file) => file.name);
+      await handleUpload(USER_ID, docRef.id);
+      await setDoc(docRef, {
+        ...form,
+        rentBuy: form.rentBuy || "rent",
+        location: form.location,
+        propertyType: form.propertyType,
+        price: parseInt(form.price),
+        netArea: parseInt(form.netArea),
+        grossArea: parseInt(form.grossArea),
+        agentId: USER_ID,
+        userId: USER_ID,
+        images: fileNames,
+        dateAdded: serverTimestamp(),
+      });
+      setIsAdding(false);
+      queryClient.invalidateQueries({ queryKey: ["getAgentListings"] });
+      onClose();
+    } catch (e) {
+      alert(e);
+      onClose();
+    }
   };
   const outlinedOrContained = (condition: boolean) => {
     return condition ? "contained" : "outlined";
@@ -265,7 +273,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
           </div>
         </div>
         <FormControl sx={{ mb: 1, mt: 2 }} fullWidth>
-          <Typography variant="h6" fontWeight={'bold'}>Property Type</Typography>
+          <Typography variant="h6" fontWeight={"bold"}>
+            Property Type
+          </Typography>
           <Box sx={{ display: "flex" }}>
             <Button
               onClick={() => onClick("propertyType", "residential")}
@@ -288,7 +298,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
             </Button>
           </Box>
           <Box>
-            <Typography variant="h6" fontWeight={'bold'}>To</Typography>
+            <Typography variant="h6" fontWeight={"bold"}>
+              To
+            </Typography>
 
             <Box display={"flex"}>
               <Button
@@ -359,7 +371,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
               setForm((p) => ({ ...p, location: newValue }));
             }}
             sx={{ mb: 1 }}
-            renderInput={(params) => <TextField placeholder="Select location" {...params} />}
+            renderInput={(params) => (
+              <TextField placeholder="Select location" {...params} />
+            )}
             options={["central", "wanchai"]}
           />
 
@@ -399,9 +413,23 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
               label="Gross Area"
               onChange={onChange}
             />
+            <TextField
+              sx={{ mb: 1 }}
+              name="licenseNumber"
+              type="string"
+              placeholder="License Number"
+              label="License Number"
+              onChange={onChange}
+            />
           </Box>
 
-          <Button size='large' sx={{ m: 0 }} variant="contained" onClick={onAdd}>
+          <Button
+            size="large"
+            sx={{ m: 0 }}
+            variant="contained"
+            onClick={onAdd}
+            endIcon={isAdding ? <CircularProgress/> : null}
+          >
             Add
           </Button>
         </FormControl>

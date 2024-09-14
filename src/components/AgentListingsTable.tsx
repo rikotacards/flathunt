@@ -7,9 +7,10 @@ import {
   Collapse,
   Dialog,
   DialogActions,
+  Fab,
+  IconButton,
   DialogContent,
   Drawer,
-  IconButton,
   Modal,
   Table,
   TableBody,
@@ -18,6 +19,10 @@ import {
   TableHead,
   TableRow,
   Typography,
+  AppBar,
+  Card,
+  CardActionArea,
+  Toolbar,
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -27,21 +32,28 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { USER_ID } from "../firebase/firebaseConfig";
 import EditIcon from "@mui/icons-material/Edit";
 import { EditListing } from "./EditListing";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { IFilters, IListing } from "../firebase/types";
 import {
   CheckBox,
+  CloseOutlined,
   InsertLink,
   MoreVertOutlined,
   OpenInNew,
 } from "@mui/icons-material";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import SendIcon from "@mui/icons-material/Send";
+import AddIcon from "@mui/icons-material/Add";
+
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Link } from "react-router-dom";
-import { useSnackbarContext } from "../Providers/contextHooks";
+import { useFilterContext, useSnackbarContext } from "../Providers/contextHooks";
 import { copy } from "../utils/copy";
+import IosShareIcon from "@mui/icons-material/IosShare";
+
 import { ListingTile } from "./ListingTile";
+import { AddListingForm } from "./AddListingForm";
 const getBedroomCondition = (bedrooms: number, bedroomsFilter?: string) => {
   if (bedroomsFilter === undefined) {
     return bedrooms >= 0;
@@ -182,10 +194,9 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 alignItems: "center",
               }}
             >
-                   <Box sx={{ display: "flex", maxWidth: "300px", mt:2 }}>
+              <Box sx={{ display: "flex", maxWidth: "350px", mt: 2 }}>
                 <ListingTile {...row} />
               </Box>
-         
             </Box>
             {isNarrow && (
               <Box
@@ -196,36 +207,43 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                   p: 1,
                 }}
               >
-                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <IconButton size="small" onClick={toggleDeleteDialog}>
                     <DeleteIcon />
                   </IconButton>
-                  <Typography variant='caption'>Delete</Typography>
+                  <Typography variant="caption">Delete</Typography>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
                   <IconButton onClick={() => handleOpen(listingId)}>
                     <EditIcon />
                   </IconButton>
-                  <Typography variant='caption'>Edit</Typography>
-
+                  <Typography variant="caption">Edit</Typography>
                 </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-
-                <IconButton onClick={() => onCopyLinkClick(listingId)}>
-                  <InsertLink />
-                </IconButton>
-                <Typography variant='caption'>Copy link</Typography>
-
-                </Box>
-                <Box sx={{display: 'flex', flexDirection: 'column'}}>
-
-                <Link to={`/listing/${listingId}`} target="_blank">
-                  <IconButton>
-                    <OpenInNew />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <IconButton onClick={() => onCopyLinkClick(listingId)}>
+                    <InsertLink />
                   </IconButton>
-                </Link>
-                <Typography variant='caption'>Open</Typography>
-
+                  <Typography variant="caption">Copy link</Typography>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Link to={`/listing/${listingId}`} target="_blank">
+                    <IconButton>
+                      <OpenInNew />
+                    </IconButton>
+                  </Link>
+                  <Typography variant="caption">Open</Typography>
                 </Box>
               </Box>
             )}
@@ -263,8 +281,22 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const { maxPrice, minPrice, maxNetArea, minNetArea, bedrooms, location } =
     props;
   const isNarrow = useIsNarrow();
-
+  const {setFilters} = useFilterContext();
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const onOpenDrawer = () => {
+    setOpenDrawer(true);
+  };
+  const closeDrawer = () => {
+    setOpenDrawer(false);
+  };
   const [open, setOpen] = React.useState(false);
+  const [openAddNewDrawer, setAddNewDrawer] = React.useState(false);
+  const onOpenAddNewDrawer = () => {
+    setAddNewDrawer(true)
+  }
+  const onCloseAddNewDrawer = () => {
+    setAddNewDrawer(false)
+  }
   const [editingListingId, setEditingListingId] = React.useState("");
   const handleOpen = (listingId: string) => {
     setEditingListingId(listingId);
@@ -275,6 +307,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
     queryKey: ["getAgentListings"],
     queryFn: () => getAgentListings(USER_ID),
   });
+
   const filteredData = data?.filter(
     (d) =>
       (!location ||
@@ -285,13 +318,26 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         getRangeCondition(Number(d.netArea), maxNetArea, minNetArea)) &&
       getBedroomCondition(d.bedrooms, bedrooms)
   );
+  const shareText = filteredData?.map(
+    (listing) =>
+      `Asking ${listing?.price} HKD,
+    address: ${listing?.address},
+    net area: ${listing?.netArea},
+    Link: flathunt.co/listing/${listing?.listingId}\n`
+  );
+  const copyText = shareText?.join("\n");
+  const onClear = () => {
+    setFilters({})
+  }
+  const onCopy = () => copy(copyText || "");
 
   const rows = filteredData?.map((row) => (
     <Row key={row.listingId} {...row} handleOpen={handleOpen} />
   ));
   return (
-    <Box mb={1} mt={2}>
+    <Box sx={{ display: "relative" }} mb={1} mt={2}>
       {isLoading ? <CircularProgress /> : null}
+      <Button onClick={onClear}>Clear filters</Button>
       <TableContainer elevation={0} component={Paper}>
         <Table size="small" stickyHeader>
           <TableHead sx={{ position: "sticy" }}>
@@ -330,6 +376,73 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           listingId={editingListingId}
         />
       </Dialog>
+      <Box
+        sx={{
+          display: "flex",
+          position: "sticky",
+          bottom: 1,
+          width: "100%",
+          justifyContent: "flex-end",
+          p: 2,
+          alignItems: "center",
+          zIndex: 99,
+        }}
+      >
+        <Fab
+          variant="extended"
+          sx={{ m: 0, p: 2, alignItems: "center" }}
+          onClick={onOpenDrawer}
+          color={"secondary"}
+        >
+          <Typography sx={{ mr: 1 }} variant="body2">
+            {filteredData?.length} listings
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <IosShareIcon sx={{ mb: 0.5 }} />
+          </Box>
+        </Fab>
+
+        <Fab size="medium" color="primary" sx={{ m: 1 }} onClick={onOpenAddNewDrawer}>
+          <AddIcon />
+        </Fab>
+      </Box>
+      {isNarrow && (
+        <Drawer open={openAddNewDrawer} anchor="bottom" onClose={handleClose}>
+          <AddListingForm onClose={onCloseAddNewDrawer} />
+        </Drawer>
+      )}
+      <Drawer anchor="bottom" open={openDrawer} onClose={closeDrawer}>
+        <AppBar position="relative">
+          <Toolbar>
+            Share {filteredData?.length} listings
+            <IconButton sx={{ ml: "auto" }} onClick={closeDrawer}>
+              <CloseOutlined />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Box>
+          <Card sx={{ p: 1, m: 1 }} variant="outlined">
+            Tap the below to copy text and share on Whatsapp.
+          </Card>
+          <Card variant="outlined" sx={{ p: 0, m: 1 }}>
+            <CardActionArea
+              sx={{ p: 1, display: 'flex', flexDirection: 'column' }}
+              onClick={() => {
+                closeDrawer();
+                onCopy();
+              }}
+            >
+              <Box
+              sx={{position: 'relative', ml:'auto'}}
+              >
+
+              <ContentCopyIcon/>
+              </Box>
+              {shareText?.map((text) => <Typography>{text}</Typography>)}
+            </CardActionArea>
+          </Card>
+        </Box>
+      </Drawer>
     </Box>
   );
 });

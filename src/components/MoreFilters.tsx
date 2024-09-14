@@ -3,6 +3,7 @@ import React from "react";
 import { useFilterContext } from "../Providers/contextHooks";
 import { BedroomSlider } from "./BedroomsSlider";
 import { AreaSlider } from "./AreaSlider";
+import { useNavigate } from "react-router";
 const MIN = 200;
 const MAX = 2000;
 
@@ -12,7 +13,7 @@ interface MoreFilterProps {
 export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
   const [bedrooms, setBedrooms] = React.useState([0, 5]);
   const { filters, setFilters } = useFilterContext();
-
+  const nav = useNavigate();
   const [areaRange, setAreaRange] = React.useState([
     filters.minNetArea || MIN,
     filters.maxNetArea || MAX,
@@ -25,6 +26,7 @@ export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
       maxNetArea: areaRange[1],
     }));
     onClose();
+    nav('/search-results')
   };
   const onClear = () => {
     setFilters((p) => ({
@@ -47,10 +49,10 @@ export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
         <Typography fontWeight={"bold"}>Filters</Typography>
       </Toolbar>
       <Box sx={{ p: 2, mb: 1 }}>
-        <Typography fontWeight={"bold"}>Bedrooms</Typography>
+        {/* <Typography fontWeight={"bold"}>Bedrooms</Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <BedroomSlider setPriceRange={setBedrooms} />
-        </Box>
+        </Box> */}
         <Box>
           <Typography fontWeight={"bold"}>Area</Typography>
           <AreaSlider setAreaRange={setAreaRange} />

@@ -15,7 +15,7 @@ import { addContactRequest } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
-import { addUser, updateUser } from "../firebase/user";
+import { addUser, getUser, updateUser } from "../firebase/user";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useQuery } from "@tanstack/react-query";
 
@@ -30,10 +30,15 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   listingId,
 }) => {
     const provider = new GoogleAuthProvider();
-    const { user, contactNumber } = useAuthContext();
-  const [number, setNumber] = React.useState(contactNumber);
+    const { user } = useAuthContext();
+    const { data, isLoading } = useQuery({
+        queryKey: ["getUser"],
+        queryFn: () => getUser(user?.uid || ""),
+      });
+  const [number, setNumber] = React.useState(data?.contactNumber);
   const [openSignIn, setOpenSignIn] = React.useState(false);
   const s = useSnackbarContext();
+  
   const onSignIn = async() => {
     try {
         const res = await signInWithPopup(auth, provider)

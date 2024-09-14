@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -83,11 +84,12 @@ export const RequestsPage: React.FC = () => {
         anchor="right"
       >
         <AppBar sx={{ background: "white" }} position="fixed">
-          <Toolbar>
+          <Toolbar component={Paper}>
             <IconButton onClick={closeDrawer}>
               <ChevronLeftIcon />
             </IconButton>
-            
+            <Typography>{userMessages[selectedUserId]?.[0].sendingUserId}</Typography>
+
           </Toolbar>
         </AppBar>
         <Toolbar></Toolbar>
@@ -104,7 +106,7 @@ export const RequestsPage: React.FC = () => {
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Avatar sx={{ mr: 1 }} />
-              {`Hi, I'm interested in listing`}
+              {`Hi, I'm interested in listing \n`}
               <Link target="_blank" to={`/listing/${m.listingId}`}>
                 {m.listingId}
               </Link>

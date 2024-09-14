@@ -14,7 +14,9 @@ export const updateUser = async (uid: string, data: UpdateListingProps) => {
 }
 interface NewUser {
     userId: string, 
-    contactNumber?: string
+    contactNumber?: string;
+    realEstateCompany?: string;
+    licenseNumber?: string;
 }
 export const addUser = async (args: NewUser) => {
     try {

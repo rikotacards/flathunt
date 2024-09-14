@@ -53,3 +53,10 @@ export interface IRequest {
 }
 
 export type IRequests = {[key: string]: IRequest[]}
+
+
+export interface MoreUserInfo {
+    contactNumber?: string;
+    realEstateCompany?: string;
+    licenseNumber?: string;
+}
