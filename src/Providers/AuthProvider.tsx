@@ -18,21 +18,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = React.useState<User | null>({} as User);
   const { data, isLoading } = useQuery({
     queryKey: ["getUser"],
-    queryFn: () => getUser(user?.uid || ''),
+    queryFn: () => getUser(user?.uid || ""),
   });
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
-    queryClient.invalidateQueries({queryKey:['getUser'], exact: true})
+    queryClient.invalidateQueries({ queryKey: ["getUser"], exact: true });
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // Note: this logic should be added in your signin process and not here.
         setIsLoading(false);
         setUser(user);
       } else {
-        console.log(data)
+        console.log(data);
         setUser(null);
-
       }
     });
     return () => {
@@ -42,7 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value = {
     user,
     isUserLoading,
-    contactNumber: data?.contactNumber
+    contactNumber: data?.contactNumber,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
