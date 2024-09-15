@@ -50,3 +50,6 @@ export default tseslint.config({
 ```
 
 airbnb https://dev.to/iamzarv/add-eslint-prettier-and-airbnb-to-your-project-3mo8
+
+signin with insta
+https://firebase.blog/posts/2016/10/authenticate-your-firebase-users-with/

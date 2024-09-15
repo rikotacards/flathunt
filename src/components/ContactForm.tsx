@@ -71,8 +71,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({
       document.getElementById(listingId)?.scrollIntoView({block:'center', behavior: 'instant'})
       window.open(whatsappLink, "_top")
       s.setSnackbarChildComponent(
-        <Alert variant="filled" sx={{ width: "100%" }} severity="success">
-          Signed in and opening whatsapp
+        <Alert icon={<WhatsAppIcon/>} variant="filled" sx={{ width: "100%" }} severity="success">
+          Opening Whatsapp
         </Alert>
       );
       s.toggleSnackbar();
@@ -158,7 +158,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             size="large"
             sx={{ textTransform: "capitalize" }}
           >
-            1. Sign in with Google 2. Whatsapp
+            Sign in
           </Button>
         ) : (
           <Button

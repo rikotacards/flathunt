@@ -26,7 +26,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(user);
       } else {
         queryClient.invalidateQueries({ queryKey: ["getUser"], exact: true});
-
+        setIsLoading(false);
         setUser(null);
       }
     });

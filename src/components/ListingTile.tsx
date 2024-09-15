@@ -65,19 +65,16 @@ export const ListingTile: React.FC<IListing> = (props) => {
       alert(e);
     }
   };
-  const ref = React.useRef<HTMLElement | null>(null);
   const imgs = images?.map((image) => (
     <SwiperSlide style={{ height: "auto", width: "100%" }} key={image}>
       <ListingImage imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
   ));
-  const scroll = React.useCallback(() => {
-    alert(ref?.current.id);
-    ref.current?.scrollIntoView({ block: "center", behavior: "instant" });
-  }, []);
+ 
   return (
-    <div id={listingId} ref={ref}>
+    <>
       <Card
+        id={listingId}
         elevation={isNarrow ? 5 : 0}
         sx={{
           background: "transparent",
@@ -331,6 +328,6 @@ export const ListingTile: React.FC<IListing> = (props) => {
           listingId={listingId}
         />
       </Drawer>
-    </div>
+    </>
   );
 };

@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   CircularProgress,
+  Collapse,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -13,6 +14,7 @@ import {
   InputLabel,
   MenuItem,
   OutlinedInput,
+  Paper,
   Radio,
   RadioGroup,
   Select,
@@ -40,9 +42,11 @@ import { db, USER_ID } from "../firebase/firebaseConfig";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import ClearIcon from "@mui/icons-material/Clear";
-import { hkLocations } from "../listingConfig";
+import { additionalFeatures, hkLocations } from "../listingConfig";
 import { IListing } from "../firebase/types";
-
+import { KeyboardArrowDownOutlined } from "@mui/icons-material";
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
 const bedrooms = [0, 1, 2, 3, 4];
 const bathrooms = [1, 2, 3];
 const otherProperties = [
@@ -203,6 +207,14 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
       onClose();
     }
   };
+  const [openMoreFeatures, setMoreFeatures] = React.useState(false);
+  const onOpenMoreFeatures = () => {
+    setMoreFeatures(true);
+  };
+  const onCloseMoreFeatures = () => {
+    setMoreFeatures(false);
+  };
+  
   const outlinedOrContained = (condition: boolean) => {
     return condition ? "contained" : "outlined";
   };
@@ -419,8 +431,43 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
               type="string"
               placeholder="License Number"
               label="License Number"
+              disabled
               onChange={onChange}
             />
+            <Box component={Paper} sx={{ p: 1 }} variant="outlined">
+              This is autopopulated from the value in your profile.
+            </Box>
+          </Box>
+          <Box>
+            <Box
+              onClick={
+                openMoreFeatures ? onCloseMoreFeatures : onOpenMoreFeatures
+              }
+              sx={{ display: "flex", pt: 1, pb: 1 }}
+            >
+              <Typography
+                sx={{ pt: 1, pb: 1 }}
+                variant="h5"
+                fontWeight={"bold"}
+              >
+                Additional Features
+              </Typography>
+              <IconButton sx={{ ml: "auto" }}>
+                <KeyboardArrowDownOutlined />
+              </IconButton>
+            </Box>
+            <Collapse in={openMoreFeatures}>
+              {additionalFeatures.map((feature) => {
+                return (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Checkbox name={feature} />
+                    <Typography sx={{ textTransform: "capitalize" }}>
+                      {feature}
+                    </Typography>
+                  </Box>
+                );
+              })}
+            </Collapse>
           </Box>
 
           <Button
@@ -428,7 +475,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
             sx={{ m: 0 }}
             variant="contained"
             onClick={onAdd}
-            endIcon={isAdding ? <CircularProgress/> : null}
+            endIcon={isAdding ? <CircularProgress /> : null}
           >
             Add
           </Button>

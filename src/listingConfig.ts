@@ -10,7 +10,7 @@ export const fields = [
 ]
 export const bedrooms = [0, 1, 2, 3, 4, 5]
 export const bathrooms = [1, 2, 3, 4]
-export const otherProperties = ['elevator', 'balcony', 'bathtub', 'Rooftop', 'Open kitchen', 'Closed Kitchen']
+export const additionalFeatures = ['elevator', 'balcony', 'bathtub', 'Rooftop', 'Open kitchen', 'Closed Kitchen', 'Walk up', 'Pet friendly', 'fully furnished', 'no agency fee']
 
 export const hkLocations = [
     {

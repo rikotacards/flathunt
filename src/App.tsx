@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { AuthProvider } from "./Providers/AuthProvider";
 import { AppBarProvider } from "./Providers/AppbarProvider";
+import { SignUpPage } from "./pages/SignUpPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ function App() {
       ].join(","),
     },
   });
+
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
@@ -55,6 +57,8 @@ function App() {
                     <Route path="/" element={<SearchPage />} />
                     <Route path="/listings" element={<ListingsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/sign-up" element={<SignUpPage />} />
+
                     <Route
                       path="/listing/:listingId"
                       element={<ListingPage />}

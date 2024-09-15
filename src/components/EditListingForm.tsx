@@ -9,7 +9,7 @@ import { Card } from './draggableImage';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { bathrooms, bedrooms, fields, otherProperties } from '../listingConfig';
+import { bathrooms, bedrooms, fields, additionalFeatures } from '../listingConfig';
 
 
 

@@ -189,10 +189,11 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
             <Box
               sx={{
                 pb: 2,
-                maxWidth: "100%",
+                maxWidth: "350px",
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
+                overflow: 'hidden'
               }}
             >
               <Box sx={{ display: "flex", maxWidth: "350px", mt: 2 }}>

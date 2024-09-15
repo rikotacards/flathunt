@@ -8,11 +8,24 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { SignInWithGoogle } from "./SignInWithGoogle";
-import { signIn } from "../utils/signInWithGoogle";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
 import GoogleIcon from '@mui/icons-material/Google';
+import { useNavigate } from "react-router";
 export const SignInPopup: React.FC = () => {
   const [isClosed, setClosed] = React.useState(false);
+  const nav = useNavigate();
+  const onSignIn = async() => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    try {
+      const res = await signInWithPopup(auth, provider)
+     
+    }catch(e){
+      alert(e)
+    }
+    
+  }
   return (
     <Box
     component={Paper}
@@ -35,7 +48,7 @@ export const SignInPopup: React.FC = () => {
           startIcon={<GoogleIcon/>}
           size="small"
           variant='contained'
-          onClick={() => signIn()}
+          onClick={onSignIn}
           sx={{p:1, 
             // border: "1px solid white", 
             borderRadius: 5,
