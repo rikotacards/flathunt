@@ -27,7 +27,7 @@ const settings = [
     name: "Saved Listings",
     icon: <FavoriteBorderIcon />,
   },
-  { path: "requests", name: "requests", icon: <ForumIcon /> },
+//   { path: "requests", name: "requests", icon: <ForumIcon /> },
 ];
 export const UserMenu: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);

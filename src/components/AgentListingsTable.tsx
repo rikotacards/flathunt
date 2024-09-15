@@ -29,11 +29,11 @@ import React from "react";
 import { deleteListings, getAgentListings } from "../firebase/listings";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { USER_ID } from "../firebase/firebaseConfig";
+import { auth, USER_ID } from "../firebase/firebaseConfig";
 import EditIcon from "@mui/icons-material/Edit";
 import { EditListing } from "./EditListing";
 
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { IFilters, IListing } from "../firebase/types";
 import {
   CheckBox,
@@ -49,12 +49,17 @@ import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Link } from "react-router-dom";
-import { useFilterContext, useSnackbarContext } from "../Providers/contextHooks";
+import {
+  useAuthContext,
+  useFilterContext,
+  useSnackbarContext,
+} from "../Providers/contextHooks";
 import { copy } from "../utils/copy";
 import IosShareIcon from "@mui/icons-material/IosShare";
 
 import { ListingTile } from "./ListingTile";
 import { AddListingForm } from "./AddListingForm";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 const getBedroomCondition = (bedrooms: number, bedroomsFilter?: string) => {
   if (bedroomsFilter === undefined) {
     return bedrooms >= 0;
@@ -97,6 +102,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
   const [open, setOpen] = React.useState(false);
   const s = useSnackbarContext();
   const [onDeleteClick, setDeleteClick] = React.useState(false);
+
   const queryClient = useQueryClient();
   const isNarrow = useIsNarrow();
   const { handleOpen, listingId } = row;
@@ -193,7 +199,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
-                overflow: 'hidden'
+                overflow: "hidden",
               }}
             >
               <Box sx={{ display: "flex", maxWidth: "350px", mt: 2 }}>
@@ -283,7 +289,8 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const { maxPrice, minPrice, maxNetArea, minNetArea, bedrooms, location } =
     props;
   const isNarrow = useIsNarrow();
-  const {setFilters} = useFilterContext();
+  const { setFilters } = useFilterContext();
+  const { user } = useAuthContext();
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const onOpenDrawer = () => {
     setOpenDrawer(true);
@@ -293,12 +300,23 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   };
   const [open, setOpen] = React.useState(false);
   const [openAddNewDrawer, setAddNewDrawer] = React.useState(false);
+  const [isSignInDrawerOpen, setSignInDrawer] = React.useState(false);
+  const onOpenSignInDrawer = () => {
+    setSignInDrawer(true);
+  };
+  const onCloseSignInDrawer = () => {
+    setSignInDrawer(false);
+  };
   const onOpenAddNewDrawer = () => {
-    setAddNewDrawer(true)
-  }
+    if (!user) {
+      onOpenSignInDrawer();
+      return;
+    }
+    setAddNewDrawer(true);
+  };
   const onCloseAddNewDrawer = () => {
-    setAddNewDrawer(false)
-  }
+    setAddNewDrawer(false);
+  };
   const [editingListingId, setEditingListingId] = React.useState("");
   const handleOpen = (listingId: string) => {
     setEditingListingId(listingId);
@@ -329,13 +347,20 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   );
   const copyText = shareText?.join("\n");
   const onClear = () => {
-    setFilters({})
-  }
+    setFilters({});
+  };
   const onCopy = () => copy(copyText || "");
+  const provider = new GoogleAuthProvider();
 
   const rows = filteredData?.map((row) => (
     <Row key={row.listingId} {...row} handleOpen={handleOpen} />
   ));
+  const onSignIn = async() => {
+    const res = await signInWithPopup(auth, provider)
+    if(res){
+      onCloseSignInDrawer()
+    }
+  }
   return (
     <Box sx={{ display: "relative" }} mb={1} mt={2}>
       {isLoading ? <CircularProgress /> : null}
@@ -404,13 +429,18 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           </Box>
         </Fab>
 
-        <Fab size="medium" color="primary" sx={{ m: 1 }} onClick={onOpenAddNewDrawer}>
+        <Fab
+          size="medium"
+          color="primary"
+          sx={{ m: 1 }}
+          onClick={onOpenAddNewDrawer}
+        >
           <AddIcon />
         </Fab>
       </Box>
       {isNarrow && (
         <Drawer open={openAddNewDrawer} anchor="bottom" onClose={handleClose}>
-          <AddListingForm onClose={onCloseAddNewDrawer} />
+          <AddListingForm userId={user?.uid || ''} onClose={onCloseAddNewDrawer} />
         </Drawer>
       )}
       <Drawer anchor="bottom" open={openDrawer} onClose={closeDrawer}>
@@ -428,21 +458,36 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           </Card>
           <Card variant="outlined" sx={{ p: 0, m: 1 }}>
             <CardActionArea
-              sx={{ p: 1, display: 'flex', flexDirection: 'column' }}
+              sx={{ p: 1, display: "flex", flexDirection: "column" }}
               onClick={() => {
                 closeDrawer();
                 onCopy();
               }}
             >
-              <Box
-              sx={{position: 'relative', ml:'auto'}}
-              >
-
-              <ContentCopyIcon/>
+              <Box sx={{ position: "relative", ml: "auto" }}>
+                <ContentCopyIcon />
               </Box>
               {shareText?.map((text) => <Typography>{text}</Typography>)}
             </CardActionArea>
           </Card>
+        </Box>
+      </Drawer>
+      <Drawer
+        anchor="bottom"
+        sx={{ display: "flex", flexDirection: "column" }}
+        onClose={onCloseSignInDrawer}
+        open={isSignInDrawerOpen}
+      >
+        <Toolbar>
+          <Typography fontWeight={"bold"}>Sign In</Typography>
+          <IconButton onClick={onCloseSignInDrawer} sx={{ml: 'auto'}}><CloseOutlined/></IconButton>
+
+        </Toolbar>
+        <Box sx={{ p: 2 }}>
+          <Typography sx={{mb:1}}>Sign in to add listings</Typography>
+          <Button onClick={onSignIn} fullWidth sx={{}} variant="contained">
+            Sign in with Google
+          </Button>
         </Box>
       </Drawer>
     </Box>

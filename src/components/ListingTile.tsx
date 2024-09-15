@@ -12,7 +12,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ForumIcon from "@mui/icons-material/Forum";
 import { ListingImage } from "./ListingImage";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -24,23 +23,16 @@ import { IListing } from "../firebase/types";
 import { Navigation } from "swiper/modules";
 import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 import { useIsNarrow } from "../utils/useIsNarrow";
-import { addContactRequest, saveListing } from "../firebase/listings";
+import {  saveListing } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
-import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { ContactForm } from "./ContactForm";
-import { useQuery } from "@tanstack/react-query";
-import { getUser } from "../firebase/user";
+
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
-  const [number, setNumber] = React.useState("");
   const [openContactForm, setOpenContactForm] = React.useState(false);
-  const { data, isLoading } = useQuery({
-    queryKey: ["getUser"],
-    queryFn: () => getUser(props.userId || ""),
-  });
+ 
   const toggleContactForm = () => {
     setOpenContactForm(!openContactForm);
   };

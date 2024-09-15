@@ -19,7 +19,7 @@ import { useNavigate } from "react-router";
 import { signIn } from "../utils/signInWithGoogle";
 
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
-import { getUser, updateUser } from "../firebase/user";
+import { addUser, getUser, updateUser } from "../firebase/user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const ProfilePage: React.FC = () => {
@@ -59,7 +59,7 @@ export const ProfilePage: React.FC = () => {
     }
     try {
      
-      await updateUser(user?.uid, { contactNumber: 
+      await addUser( {userId: user?.uid, contactNumber: 
         form.contactNumber || '', 
         licenseNumber: form?.licenseNumber || "",
         realEstateCompany: form.realEstateCompany || ""
@@ -75,7 +75,9 @@ export const ProfilePage: React.FC = () => {
         </Alert>
       );
       s.toggleSnackbar();
-    } catch (e) {}
+    } catch (e) {
+      alert(e)
+    }
 
     onSetField(null);
   };

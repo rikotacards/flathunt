@@ -2,13 +2,14 @@ import { addDoc, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } f
 import { db } from "./firebaseConfig";
 
 interface UpdateListingProps {
-    [key: string]: string | number;
+    [key: string]: string | number | undefined;
 }
 export const updateUser = async (uid: string, data: UpdateListingProps) => {
     const ref = doc(db, "users", uid);
     try {
         await updateDoc(ref, data)
     } catch (e) {
+        throw(e)
         alert(e)
     }
 }
@@ -24,7 +25,7 @@ export const addUser = async (args: NewUser) => {
             doc(db, "users", args.userId), {
             ...args,
             dateAdded: serverTimestamp()
-        });
+        }, {merge: true});
         return docRef
     } catch (e) {
         alert(e)

@@ -7,25 +7,13 @@ import {
   CircularProgress,
   Collapse,
   FormControl,
-  FormControlLabel,
-  FormLabel,
   IconButton,
-  Input,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
   Paper,
-  Radio,
-  RadioGroup,
-  Select,
-  Slider,
-  Switch,
   TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { addListing } from "../firebase/listings";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
   ref,
@@ -33,7 +21,7 @@ import {
   getDownloadURL,
   getStorage,
 } from "firebase/storage";
-const storage = getStorage();
+
 import update from "immutability-helper";
 import { Card } from "./draggableImage";
 import { DndProvider } from "react-dnd";
@@ -44,30 +32,68 @@ import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import ClearIcon from "@mui/icons-material/Clear";
 import { additionalFeatures, hkLocations } from "../listingConfig";
 import { IListing } from "../firebase/types";
-import { KeyboardArrowDownOutlined } from "@mui/icons-material";
-import WarningIcon from '@mui/icons-material/Warning';
-import ErrorIcon from '@mui/icons-material/Error';
+import { AddPhotoAlternate, AddToPhotosRounded, KeyboardArrowDownOutlined } from "@mui/icons-material";
+import ErrorIcon from "@mui/icons-material/Error";
+import { getUser, updateUser } from "../firebase/user";
+import { useIsNarrow } from "../utils/useIsNarrow";
 const bedrooms = [0, 1, 2, 3, 4];
 const bathrooms = [1, 2, 3];
-const otherProperties = [
-  "elevator",
-  "balcony",
-  "bathtub",
-  "Rooftop",
-  "Open kitchen",
-  "Closed Kitchen",
-];
+
 interface AddListingFormProps {
   onClose: () => void;
+  userId: string;
 }
-export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
+export const AddListingForm: React.FC<AddListingFormProps> = ({
+  onClose,
+  userId,
+}) => {
   const queryClient = useQueryClient();
+  const isNarrow = useIsNarrow();
+  const { data, isLoading } = useQuery({
+    queryKey: ["getUser"],
+    queryFn: () => getUser(userId || ""),
+  });
+
   const [files, setFiles] = React.useState([] as File[]);
+  const onUpdateRealEstateCompany = async () => {
+    if (!form.realEstateCompany) {
+      return;
+    }
+    await updateUser(userId, { realEstateCompany: form.realEstateCompany });
+  };
+  const onUpdateLicenseNumber = async () => {
+    try {
+      if (!form.licenseNumber) {
+        return;
+      }
+      await updateUser(userId, { licenseNumber: form.licenseNumber });
+    } catch (e) {
+      alert(e);
+    }
+  };
+  const storage = getStorage();
   const [isAdding, setIsAdding] = React.useState(false);
+  const [contactNumber, setContactNumber] = React.useState<
+    string | undefined
+  >();
+  const onChangeContactNumber = (e) => {
+    setContactNumber(e.target.value);
+  };
   const [form, setForm] = React.useState({
     rentBuy: "rent",
     propertyType: "residential",
+    realEstateCompany: data?.realEstateCompany,
+    licenseNumber: data?.licenseNumber,
   } as IListing);
+  React.useEffect(() => {
+    setContactNumber(data?.contactNumber);
+    setForm({
+      rentBuy: "rent",
+      propertyType: "residential",
+      realEstateCompany: data?.realEstateCompany,
+      licenseNumber: data?.licenseNumber,
+    } as IListing);
+  }, [isLoading]);
   const [uploadProgress, setUploadProgress] = useState(
     {} as { [key: string]: string | number | readonly string[] | undefined }
   );
@@ -86,7 +112,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
     },
     []
   );
-
+  const isPersonalInfoComplete = Boolean(
+    contactNumber && form.licenseNumber && form.realEstateCompany
+  );
   const removeImage = (fileName: string, index: number) => {
     const input = document.getElementById("files");
     // as an array, u have more freedom to transform the file list using array functions.
@@ -214,15 +242,15 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
   const onCloseMoreFeatures = () => {
     setMoreFeatures(false);
   };
-  
+
   const outlinedOrContained = (condition: boolean) => {
     return condition ? "contained" : "outlined";
   };
   return (
     <DndProvider backend={HTML5Backend}>
-      <AppBar position="relative">
+      <AppBar sx={{}} position="relative">
         <Toolbar>
-          Add Listing
+          <Typography>Add Listing</Typography>
           <IconButton onClick={onClose} color="inherit" sx={{ ml: "auto" }}>
             <ClearIcon />
           </IconButton>
@@ -250,9 +278,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
               cursor: "pointer",
             }}
           >
-            <Typography variant="body2">
+            {isNarrow ? <AddPhotoAlternate color='action'/> : <Typography variant="body2">
               Drag & Drop photos here or click to select photos
-            </Typography>
+            </Typography>}
           </div>
 
           <input
@@ -310,11 +338,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
             </Button>
           </Box>
           <Box>
-            <Typography variant="h6" fontWeight={"bold"}>
-              To
-            </Typography>
-
-            <Box display={"flex"}>
+            <Box display={"flex"} sx={{mt:1}}>
               <Button
                 onClick={() => onClick("rentBuy", "rent")}
                 fullWidth
@@ -374,7 +398,6 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
               ))}
             </Box>
           </Box>
-          <Typography variant="caption">Location</Typography>
 
           <Autocomplete
             autoHighlight
@@ -425,18 +448,57 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({ onClose }) => {
               label="Gross Area"
               onChange={onChange}
             />
+
+ 
+            <Typography variant="h5" fontWeight={"bold"} sx={{ mb: 2, mt: 2 }}>
+              Your Information
+            </Typography>
+            {!isPersonalInfoComplete && (
+              <Typography
+                variant="caption"
+                color="error"
+                sx={{ mb: 2, alignItems: "center", display: "flex" }}
+              >
+                <ErrorIcon color="warning" sx={{ mr: 1 }} />
+                Your information is required before posting so users can contact
+                you directly.
+              </Typography>
+            )}
+            <Typography variant="body2">Whatsapp Number</Typography>
+
+            <TextField
+              sx={{ mb: 1 }}
+              name="contactNumber"
+              type="tel"
+              placeholder="Whatsap Number"
+              disabled={!!data?.contactNumber}
+              onChange={onChangeContactNumber}
+              value={contactNumber}
+            />
+            <Typography variant="body2">Real Estate Company Name</Typography>
+            <TextField
+              sx={{ mb: 1 }}
+              name="realEstateCompany"
+              type="string"
+              placeholder="Company Name"
+              disabled={!!data?.realEstateCompany}
+              onChange={onChange}
+              value={form.realEstateCompany}
+              onBlur={onUpdateRealEstateCompany}
+            />
+
+            <Typography variant="body2">License Number</Typography>
+
             <TextField
               sx={{ mb: 1 }}
               name="licenseNumber"
               type="string"
               placeholder="License Number"
-              label="License Number"
-              disabled
+              disabled={!!data?.licenseNumber}
               onChange={onChange}
+              value={form.licenseNumber}
+              onBlur={onUpdateLicenseNumber}
             />
-            <Box component={Paper} sx={{ p: 1 }} variant="outlined">
-              This is autopopulated from the value in your profile.
-            </Box>
           </Box>
           <Box>
             <Box

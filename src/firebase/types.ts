@@ -18,6 +18,8 @@ export interface IListing {
     dateAdded: Timestamp;
     //@desc 1, rental, 2, commercial, 3, eventspace
     propertyType: string; 
+    realEstateCompany: string;
+    licenseNumber?: string;
 }
 
 export interface IFilters {
