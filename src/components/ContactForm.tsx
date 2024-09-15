@@ -10,6 +10,8 @@ import {
   Alert,
   OutlinedInput,
 } from "@mui/material";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+
 import React from "react";
 import { addContactRequest } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
@@ -18,58 +20,72 @@ import { signIn } from "../utils/signInWithGoogle";
 import { addUser, getUser, updateUser } from "../firebase/user";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useQuery } from "@tanstack/react-query";
-
+import { Link, useNavigate } from "react-router-dom";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 interface ContactFormProps {
   onClose: () => void;
   listingId: string;
+  listingOwnerUid: string;
+  toggle: () => void;
 }
 const auth = getAuth();
 
 export const ContactForm: React.FC<ContactFormProps> = ({
   onClose,
   listingId,
+  toggle,
+  listingOwnerUid,
 }) => {
-    const provider = new GoogleAuthProvider();
-    const { user } = useAuthContext();
-    const { data, isLoading } = useQuery({
-        queryKey: ["getUser"],
-        queryFn: () => getUser(user?.uid || ""),
-      });
+  const provider = new GoogleAuthProvider();
+  const { user } = useAuthContext();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["getUser"],
+    queryFn: () => getUser(listingOwnerUid || ""),
+  });
   const [number, setNumber] = React.useState(data?.contactNumber);
+  const nav = useNavigate();
+  
 
   React.useEffect(() => {
-    setNumber(data?.contactNumber)
-  }, [isLoading])
+    setNumber(data?.contactNumber);
+    
+  }, [isLoading, data?.contactNumber]);
   const [openSignIn, setOpenSignIn] = React.useState(false);
   const s = useSnackbarContext();
-  
-  const onSignIn = async() => {
+
+  const onSignIn = async () => {
     try {
-        const res = await signInWithPopup(auth, provider)
-        await addUser({userId: res.user.uid, contactNumber: number})
-        await addContactRequest({
-            contactNumber: number,
-            sendingUserId: USER_ID,
-            receivingUserId: USER_ID,
-            listingId,
-            message: "",
-          });
-          s.setSnackbarChildComponent(
-            <Alert variant="filled" sx={{ width: "100%" }} severity="success">
-              Message succesfully sent to agent.
-            </Alert>
-          );
-          s.toggleSnackbar();
-          onClose();
+      const res = await signInWithPopup(auth, provider);
+      await addUser({ userId: res.user.uid, contactNumber: number });
+      //   await addContactRequest({
+      //     contactNumber: number,
+      //     sendingUserId: USER_ID,
+      //     receivingUserId: USER_ID,
+      //     listingId,
+      //     message: "",
+      //   });
+      //   if (res) {
+      //     window.open(whatsappLink, "_blank");
+      //   }
+      document.getElementById(listingId)?.scrollIntoView({block:'center', behavior: 'instant'})
+      window.open(whatsappLink, "_top")
+      s.setSnackbarChildComponent(
+        <Alert variant="filled" sx={{ width: "100%" }} severity="success">
+          Signed in and opening whatsapp
+        </Alert>
+      );
+      s.toggleSnackbar();
+    //   onClose();
     } catch (e) {
-        alert(e)
+      alert(e);
     }
-    
   };
   const onOpenSignIn = () => {
     setOpenSignIn(true);
   };
-  const onSendContact = async () => {
+  const whatsappLink = `whatsapp://send?phone=${data?.contactNumber}&text=Hi, I'm interested in \n flathunt.co/listing/${listingId}`;
+  const openWhatsappChat = async () => {
     if (number?.length === 0) {
       return;
     }
@@ -79,15 +95,17 @@ export const ContactForm: React.FC<ContactFormProps> = ({
         return;
       }
       await addContactRequest({
-        contactNumber: number,
+        contactNumber: number || "",
         sendingUserId: USER_ID,
         receivingUserId: USER_ID,
         listingId,
         message: "",
       });
+      
+
       s.setSnackbarChildComponent(
-        <Alert variant="filled" sx={{ width: "100%" }} severity="success">
-          Message succesfully sent to agent
+        <Alert icon={<WhatsAppIcon/>} variant="filled" sx={{ width: "100%" }} severity="success">
+          Opening whatsapp
         </Alert>
       );
       s.toggleSnackbar();
@@ -122,24 +140,38 @@ export const ContactForm: React.FC<ContactFormProps> = ({
           </Typography>
         </Card>
         {openSignIn && (
-          <Card  variant="elevation" elevation={10} sx={{ p: 1, mb: 1 }}>
-            <Typography color='warning' variant="caption" sx={{ ml: 1 }}>
-              Sign in to send your request to the agent.
+          <Card variant="elevation" elevation={10} sx={{ p: 1, mb: 1 }}>
+            <Typography
+              color="warning"
+              fontWeight="bold"
+              variant="caption"
+              sx={{ ml: 1 }}
+            >
+              You must sign in to send a message to the agent.
             </Typography>
           </Card>
         )}
-        {openSignIn? <Button
-        onClick={onSignIn}
-         variant='contained' size="large"
-        >Sign in with Google</Button>:<Button
-          onClick={() => {
-            onSendContact();
-          }}
-          size="large"
-          variant="contained"
-        >
-          Send
-        </Button>}
+        {openSignIn ? (
+          <Button
+            onClick={async () => await onSignIn()}
+            variant="contained"
+            size="large"
+            sx={{ textTransform: "capitalize" }}
+          >
+            1. Sign in with Google 2. Whatsapp
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              openWhatsappChat();
+            }}
+            size="large"
+            variant="contained"
+            href={user ? whatsappLink : undefined}
+          >
+            Message
+          </Button>
+        )}
       </Box>
     </>
   );

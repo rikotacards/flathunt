@@ -31,6 +31,7 @@ export const addUser = async (args: NewUser) => {
     }
 }
 
+
 export const getUser = async (userId: string) => {
     const docRef = doc(db, "users", userId)
     try {

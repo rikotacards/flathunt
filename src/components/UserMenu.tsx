@@ -48,8 +48,8 @@ export const UserMenu: React.FC = () => {
           sx={{
             ml: "auto",
             p: 0,
-            boxShadow:
-              "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+            // boxShadow:
+            //   "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
           }}
         >
           {user ? (
@@ -103,19 +103,7 @@ export const UserMenu: React.FC = () => {
             </ListItemIcon>
             <Typography sx={{ textAlign: "center" }}>Home</Typography>
           </MenuItem>
-          {user && (
-            <MenuItem
-              onClick={() => {
-                handleCloseUserMenu();
-                nav("profile");
-              }}
-            >
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <Typography sx={{ textAlign: "center" }}>Profile</Typography>
-            </MenuItem>
-          )}
+          
           {settings.map((setting) => (
             <MenuItem
               key={setting.path}
@@ -130,6 +118,19 @@ export const UserMenu: React.FC = () => {
               </Typography>
             </MenuItem>
           ))}
+          {user && (
+            <MenuItem
+              onClick={() => {
+                handleCloseUserMenu();
+                nav("profile");
+              }}
+            >
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <Typography sx={{ textAlign: "center" }}>Profile</Typography>
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
     </>

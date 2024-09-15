@@ -99,9 +99,7 @@ export const RequestsPage: React.FC = () => {
             </Typography>
             <Box sx={{ ml: "auto", display: "flex", alignItems: "center" }}>
                 <Typography> {userMessages[selectedUserId]?.[0].contactNumber}</Typography>
-                <Button endIcon={<WhatsAppIcon/>} sx={{textTransform: 'capitalize'}}>
-                    Message in whatsapp
-                </Button>
+              
          
               <Typography>
               </Typography>

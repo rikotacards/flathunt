@@ -12,6 +12,8 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ForumIcon from "@mui/icons-material/Forum";
 import { ListingImage } from "./ListingImage";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -29,11 +31,16 @@ import { addContactRequest, saveListing } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { ContactForm } from "./ContactForm";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "../firebase/user";
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
   const [number, setNumber] = React.useState("");
   const [openContactForm, setOpenContactForm] = React.useState(false);
-
+  const { data, isLoading } = useQuery({
+    queryKey: ["getUser"],
+    queryFn: () => getUser(props.userId || ""),
+  });
   const toggleContactForm = () => {
     setOpenContactForm(!openContactForm);
   };
@@ -58,17 +65,18 @@ export const ListingTile: React.FC<IListing> = (props) => {
       alert(e);
     }
   };
+  const ref = React.useRef<HTMLElement | null>(null);
   const imgs = images?.map((image) => (
     <SwiperSlide style={{ height: "auto", width: "100%" }} key={image}>
-      <ListingImage
-        imageName={image}
-        listingId={listingId}
-        userId={userId}
-      />
+      <ListingImage imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
   ));
+  const scroll = React.useCallback(() => {
+    alert(ref?.current.id);
+    ref.current?.scrollIntoView({ block: "center", behavior: "instant" });
+  }, []);
   return (
-    <>
+    <div id={listingId} ref={ref}>
       <Card
         elevation={isNarrow ? 5 : 0}
         sx={{
@@ -284,6 +292,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
             </Box>
           </Box>
         </Link>
+
         <Box
           position={"absolute"}
           sx={{
@@ -294,7 +303,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
         >
           {isNarrow && (
             <IconButton
-            size="large"
+              size="large"
               sx={{
                 borderRadius: 10,
                 color: "white",
@@ -304,18 +313,24 @@ export const ListingTile: React.FC<IListing> = (props) => {
                 e.stopPropagation();
               }}
             >
-              <EmailOutlinedIcon />
+              <ForumIcon />
             </IconButton>
           )}
         </Box>
       </Card>
       <Drawer
+        keepMounted
         open={openContactForm}
         anchor="bottom"
         onClose={onCloseContactForm}
       >
-        <ContactForm onClose={onCloseContactForm} listingId={listingId} />
+        <ContactForm
+          listingOwnerUid={props.userId}
+          toggle={toggleContactForm}
+          onClose={onCloseContactForm}
+          listingId={listingId}
+        />
       </Drawer>
-    </>
+    </div>
   );
 };

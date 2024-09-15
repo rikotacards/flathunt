@@ -1,6 +1,7 @@
 import { onAuthStateChanged, User } from "firebase/auth";
 import React from "react";
 import { auth } from "../firebase/firebaseConfig";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AuthContextProps {
   user: User | null;
@@ -15,6 +16,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const [user, setUser] = React.useState<User | null>({} as User);
  
+  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -23,6 +25,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsLoading(false);
         setUser(user);
       } else {
+        queryClient.invalidateQueries({ queryKey: ["getUser"], exact: true});
+
         setUser(null);
       }
     });
