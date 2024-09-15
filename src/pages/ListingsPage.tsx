@@ -7,7 +7,6 @@ import {
   CardActionArea,
   Dialog,
   Drawer,
-  Fab,
   IconButton,
   Toolbar,
   Typography,
@@ -79,13 +78,13 @@ export const ListingsPage: React.FC = () => {
           aria-describedby="modal-modal-description"
         >
           <Box>
-            <AddListingForm onClose={handleClose} />
+            <AddListingForm userId={user?.uid || ""} onClose={handleClose} />
           </Box>
         </Dialog>
       )}
       {isNarrow && (
         <Drawer open={open} anchor="bottom" onClose={handleClose}>
-          <AddListingForm onClose={handleClose} />
+          <AddListingForm userId={user?.uid || ""} onClose={handleClose} />
         </Drawer>
       )}
   

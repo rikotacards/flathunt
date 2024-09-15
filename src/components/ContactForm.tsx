@@ -26,14 +26,12 @@ interface ContactFormProps {
   onClose: () => void;
   listingId: string;
   listingOwnerUid: string;
-  toggle: () => void;
 }
 const auth = getAuth();
 
 export const ContactForm: React.FC<ContactFormProps> = ({
   onClose,
   listingId,
-  toggle,
   listingOwnerUid,
 }) => {
   const provider = new GoogleAuthProvider();

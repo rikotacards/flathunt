@@ -4,13 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import { ListingTile } from "../components/ListingTile";
 import { getAllListings } from "../firebase/listings";
 import Grid from "@mui/material/Grid2";
-import { useFilterContext } from "../Providers/contextHooks";
+import { useAppBarContext, useFilterContext } from "../Providers/contextHooks";
 import { SearchBarWide } from "../components/SearchBarWide";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { useNavigate } from "react-router";
+import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 export const SearchResultPage: React.FC = () => {
   const {setFilters, filters } = useFilterContext();
   const nav = useNavigate();
+  const {setAppBarChildComponent} = useAppBarContext();
+
+  React.useEffect(() => {
+    setAppBarChildComponent(<SearchbarNarrow2/>)
+  }, []);
   const { data, isLoading, isFetching } = useQuery({
     queryKey: [
       "getAllListingsWithResult",

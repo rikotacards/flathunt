@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import {
   AppBar,
   Autocomplete,
@@ -32,7 +33,11 @@ import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import ClearIcon from "@mui/icons-material/Clear";
 import { additionalFeatures, hkLocations } from "../listingConfig";
 import { IListing } from "../firebase/types";
-import { AddPhotoAlternate, AddToPhotosRounded, KeyboardArrowDownOutlined } from "@mui/icons-material";
+import {
+  AddPhotoAlternate,
+  AddToPhotosRounded,
+  KeyboardArrowDownOutlined,
+} from "@mui/icons-material";
 import ErrorIcon from "@mui/icons-material/Error";
 import { getUser, updateUser } from "../firebase/user";
 import { useIsNarrow } from "../utils/useIsNarrow";
@@ -278,9 +283,13 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               cursor: "pointer",
             }}
           >
-            {isNarrow ? <AddPhotoAlternate color='action'/> : <Typography variant="body2">
-              Drag & Drop photos here or click to select photos
-            </Typography>}
+            {isNarrow ? (
+              <AddPhotoAlternate color="action" />
+            ) : (
+              <Typography variant="body2">
+                Drag & Drop photos here or click to select photos
+              </Typography>
+            )}
           </div>
 
           <input
@@ -312,7 +321,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             })}
           </div>
         </div>
-        <FormControl sx={{ mb: 1, mt: 2 }} fullWidth>
+        <FormControl sx={{ mb: 2, mt: 0 }} fullWidth>
           <Typography variant="h6" fontWeight={"bold"}>
             Property Type
           </Typography>
@@ -338,7 +347,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             </Button>
           </Box>
           <Box>
-            <Box display={"flex"} sx={{mt:1}}>
+            <Box display={"flex"} sx={{ mt: 1 }}>
               <Button
                 onClick={() => onClick("rentBuy", "rent")}
                 fullWidth
@@ -449,7 +458,6 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               onChange={onChange}
             />
 
- 
             <Typography variant="h5" fontWeight={"bold"} sx={{ mb: 2, mt: 2 }}>
               Your Information
             </Typography>
@@ -534,12 +542,13 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
 
           <Button
             size="large"
-            sx={{ m: 0 }}
+            sx={{ m: 0, textTransform: 'capitalize' }}
             variant="contained"
             onClick={onAdd}
+            startIcon={<AddIcon/>}
             endIcon={isAdding ? <CircularProgress /> : null}
           >
-            Add
+            Add Listing
           </Button>
         </FormControl>
       </Box>

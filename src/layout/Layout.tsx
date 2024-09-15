@@ -43,7 +43,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           background: "white",
           display: "flex",
           justifyContent: "center",
-          height: isListingPage && isNarrow ? 0 : undefined,
           overflow: "hidden",
         }}
         position="fixed"
@@ -85,7 +84,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       </AppBar>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         {!isListingPage && !isNarrow && <Toolbar />}
-        {!isListingPage && isNarrow && <Toolbar />}
+        {  isNarrow && <Toolbar />}
         {children}
       </Box>
     </Box>

@@ -58,7 +58,6 @@ function App() {
                     <Route path="/listings" element={<ListingsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/sign-up" element={<SignUpPage />} />
-
                     <Route
                       path="/listing/:listingId"
                       element={<ListingPage />}

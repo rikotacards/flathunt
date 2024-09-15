@@ -1,4 +1,3 @@
-import { CarCrash, Menu } from "@mui/icons-material";
 import {
   Autocomplete,
   Box,
@@ -7,8 +6,6 @@ import {
   Chip,
   MenuItem,
   MenuList,
-  Paper,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -25,7 +22,7 @@ const locations = [
   "Admirality",
   "Lohas Park",
 ];
-
+const popularLocations = ["Central", "Sheung wan", "Kennedy Town"];
 interface LocationFilterNew2Props {
   onClick: (location: string) => void;
   onClose: () => void;
@@ -34,12 +31,12 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
   onClick,
   onClose,
 }) => {
-const {setFilters} = useFilterContext();
-const onClear = () => {
-    setFilters((p) => ({...p, location: undefined}))
+  const { setFilters, filters } = useFilterContext();
+  const onClear = () => {
+    setFilters((p) => ({ ...p, location: undefined }));
     onClose();
-}
-  const [value, setValue] = React.useState();
+  };
+  const [value, setValue] = React.useState<string|undefined>(filters.location);
   const onMenuItemClick = (l: string) => {
     setValue(l);
     onClick(l);
@@ -49,18 +46,33 @@ const onClear = () => {
       textAlign={"left"}
       sx={{
         p: 2,
+        pt: 0,
+        pb: 1,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
       }}
     >
-      <Typography sx={{ mb: 1 }} variant="body1" fontWeight={"bold"}>
+      <Typography
+        sx={{ pb: 1, display: "flex", alignSelf: "center" }}
+        variant="h6"
+        fontWeight={"bold"}
+      >
         Location
       </Typography>
 
       <Autocomplete
-        onClick={() => {onClick(value); setValue(value)}}
+        onClick={() => {
+            if(!value){
+                return
+            }
+          onClick(value);
+          setValue(value);
+        }}
         onChange={(event, newValue) => {
+            if(!newValue){
+                return;
+            }
           setValue(newValue);
           onClick(newValue);
         }}
@@ -80,20 +92,28 @@ const onClear = () => {
         variant="outlined"
       >
         <Typography sx={{ mb: 1 }}>Popular locations</Typography>
-        <Chip label={"central"} sx={{ mr: 1 }} />
-        <Chip label={"Causeway Bay"} />
+        {popularLocations.map((l) => (
+          <Chip
+            onClick={() => onClick(l.toLocaleLowerCase())}
+            label={l}
+            sx={{ textTransform: "capitalize", mr: 1 }}
+          />
+        ))}
       </Card>
       <Card variant="outlined">
-          <MenuList sx={{maxHeight:300, overflowY:'scroll', textTransform: "capitalize" }}>
-            {locations.map((l) => (
-              <MenuItem
-                onClick={() => onMenuItemClick(l)}
-                selected={value === l}
-              >
-                {l}
-              </MenuItem>
-            ))}
-          </MenuList>
+        <MenuList
+          sx={{
+            maxHeight: 300,
+            overflowY: "scroll",
+            textTransform: "capitalize",
+          }}
+        >
+          {locations.map((l) => (
+            <MenuItem onClick={() => onMenuItemClick(l)} selected={value === l}>
+              {l}
+            </MenuItem>
+          ))}
+        </MenuList>
       </Card>
       <Button onClick={onClear} variant="outlined" sx={{ mt: 1 }}>
         Clear filter

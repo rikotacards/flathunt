@@ -26,8 +26,8 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
   const isNarrow = useIsNarrow();
 
   const [range, setRange] = React.useState([
-    filters.minPrice || 5000,
-    filters.maxPrice || 40000,
+    filters.minPrice || MIN,
+    filters.maxPrice || MAX,
   ]);
   const onChange = (event, newValue) => {
     // setFilters((p) => ({ ...p, minPrice: newValue[0], maxPrice: newValue[1] }))
@@ -65,9 +65,11 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
         p: 1,
         m: 0,
         width: isNarrow ? undefined : "500px",
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
-      <Typography sx={{alignSelft: 'center'}} variant="body1" fontWeight={"bold"}>
+      <Typography sx={{alignSelf: 'center', display: 'flex'}} variant="h6" fontWeight={"bold"}>
         Price
       </Typography>
       <Box sx={{ mr: 4, ml: 4, mt: 4 }}>

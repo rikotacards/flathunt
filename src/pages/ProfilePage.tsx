@@ -166,7 +166,7 @@ export const ProfilePage: React.FC = () => {
           </>
         );
       })}
-
+      <Divider sx={{mb:2}}/>
       <Typography sx={{ mb: 3 }} variant="h6">
         For Agents
       </Typography>
