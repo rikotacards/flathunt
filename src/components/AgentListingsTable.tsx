@@ -102,7 +102,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
   const [open, setOpen] = React.useState(false);
   const s = useSnackbarContext();
   const [onDeleteClick, setDeleteClick] = React.useState(false);
-
+  const {user} = useAuthContext();
   const queryClient = useQueryClient();
   const isNarrow = useIsNarrow();
   const { handleOpen, listingId } = row;
@@ -216,7 +216,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <IconButton size="small" onClick={toggleDeleteDialog}>
+                  <IconButton disabled={!user} size="small" onClick={toggleDeleteDialog}>
                     <DeleteIcon />
                   </IconButton>
                   <Typography variant="caption">Delete</Typography>
@@ -228,7 +228,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                     alignItems: "center",
                   }}
                 >
-                  <IconButton onClick={() => handleOpen(listingId)}>
+                  <IconButton disabled={!user} onClick={() => handleOpen(listingId)}>
                     <EditIcon />
                   </IconButton>
                   <Typography variant="caption">Edit</Typography>

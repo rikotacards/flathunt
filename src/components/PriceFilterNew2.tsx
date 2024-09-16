@@ -4,6 +4,7 @@ import {
   OutlinedInput,
   Paper,
   Slider,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -24,7 +25,7 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
 }) => {
   const { filters, setFilters } = useFilterContext();
   const isNarrow = useIsNarrow();
-
+  const disableInput = true;
   const [range, setRange] = React.useState([
     filters.minPrice || MIN,
     filters.maxPrice || MAX,
@@ -65,14 +66,20 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
         p: 1,
         m: 0,
         width: isNarrow ? undefined : "500px",
-        display: 'flex',
-        flexDirection: 'column'
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <Typography sx={{alignSelf: 'center', display: 'flex'}} variant="h6" fontWeight={"bold"}>
+      <Typography
+        sx={{ alignSelf: "center", display: "flex" }}
+        variant="h6"
+        fontWeight={"bold"}
+      >
         Price
       </Typography>
+      <Typography sx={{alignSelf:'center'}} color='textSecondary'>Selected your desired budget range</Typography>
       <Box sx={{ mr: 4, ml: 4, mt: 4 }}>
+        <Toolbar/>
         <Slider
           min={MIN}
           max={MAX}
@@ -82,7 +89,7 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
           value={range}
         />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      {!disableInput && <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box
           sx={{
             display: "flex",
@@ -159,12 +166,15 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
             }}
           />
         </Box>
-      </Box>
-      <Button onClick={onDone} sx={{ mt: 2 }} fullWidth variant="contained">
+      </Box>}
+      <Button
+        onClick={onDone}
+        sx={{ mt: 2, borderRadius: 5 }}
+        fullWidth
+        variant="contained"
+        size='large'
+      >
         done
-      </Button>
-      <Button onClick={onCancel} sx={{ mt: 1 }} fullWidth variant="outlined">
-        Cancel
       </Button>
     </Box>
   );

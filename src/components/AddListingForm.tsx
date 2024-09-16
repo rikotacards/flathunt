@@ -1,4 +1,4 @@
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import {
   AppBar,
   Autocomplete,
@@ -9,7 +9,7 @@ import {
   Collapse,
   FormControl,
   IconButton,
-  Paper,
+  Tabs,
   TextField,
   Toolbar,
   Typography,
@@ -22,6 +22,7 @@ import {
   getDownloadURL,
   getStorage,
 } from "firebase/storage";
+import Tab from "@mui/material/Tab";
 
 import update from "immutability-helper";
 import { Card } from "./draggableImage";
@@ -35,7 +36,6 @@ import { additionalFeatures, hkLocations } from "../listingConfig";
 import { IListing } from "../firebase/types";
 import {
   AddPhotoAlternate,
-  AddToPhotosRounded,
   KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -58,7 +58,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     queryKey: ["getUser"],
     queryFn: () => getUser(userId || ""),
   });
-
+  const [tabIndex, setTabIndex] = React.useState(0)
   const [files, setFiles] = React.useState([] as File[]);
   const onUpdateRealEstateCompany = async () => {
     if (!form.realEstateCompany) {
@@ -81,9 +81,10 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
   const [contactNumber, setContactNumber] = React.useState<
     string | undefined
   >();
-  const onChangeContactNumber = (e) => {
+  const onChangeContactNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContactNumber(e.target.value);
   };
+  const imageUrlsForPreview = [];
   const [form, setForm] = React.useState({
     rentBuy: "rent",
     propertyType: "residential",
@@ -137,9 +138,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     (image: { id: string; src: string; fileName: string }, index: number) => {
       return (
         <Box sx={{ position: "relative" }}>
-          <Box sx={{ position: "absolute", right: 8 }}>
-            <IconButton onClick={() => removeImage(image.fileName, index)}>
-              <CancelIcon />
+          <Box sx={{ position: "absolute", right: 0 }}>
+            <IconButton   onClick={() => removeImage(image.fileName, index)}>
+              <CancelIcon sx={{color:'white'}}/>
             </IconButton>
           </Box>
           <Card
@@ -218,7 +219,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       const docRef = doc(collection(db, "listings"));
 
       const fileNames = files.map((file) => file.name);
-      await handleUpload(USER_ID, docRef.id);
+      await handleUpload(userId || USER_ID, docRef.id);
       await setDoc(docRef, {
         ...form,
         rentBuy: form.rentBuy || "rent",
@@ -227,8 +228,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
         price: parseInt(form.price),
         netArea: parseInt(form.netArea),
         grossArea: parseInt(form.grossArea),
-        agentId: USER_ID,
-        userId: USER_ID,
+        userId: userId || USER_ID,
         images: fileNames,
         dateAdded: serverTimestamp(),
       });
@@ -247,21 +247,42 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
   const onCloseMoreFeatures = () => {
     setMoreFeatures(false);
   };
+  const handleChange = (event, newValue) => {
+    setTabIndex(newValue);
+  };
 
   const outlinedOrContained = (condition: boolean) => {
     return condition ? "contained" : "outlined";
   };
   return (
     <DndProvider backend={HTML5Backend}>
-      <AppBar sx={{}} position="relative">
-        <Toolbar>
-          <Typography>Add Listing</Typography>
-          <IconButton onClick={onClose} color="inherit" sx={{ ml: "auto" }}>
-            <ClearIcon />
-          </IconButton>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button sx={{ textTransform: "capitalize" }} onClick={onClose}>
+            Cancel
+          </Button>
+          <Typography sx={{ textTransform: "capitalize" }} fontWeight={"bold"}>
+            Add Listing
+          </Typography>
+          <Button sx={{ textTransform: "capitalize", fontWeight: 'bold'}} startIcon={<AddIcon />}>
+            Add
+          </Button>
         </Toolbar>
-      </AppBar>
-      <Box
+
+        <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
+          <Tab label="edit" />
+          {/* <Tab label="Preview" /> */}
+        </Tabs>
+      </Box>
+        {tabIndex == 0 && <>
+          <Box
         sx={{
           maxHeight: "600px",
           display: "flex",
@@ -302,11 +323,12 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             style={{ display: "none", marginBottom: "20px" }}
           />
 
-          <div>
+          <div id={"photo-grid"} style={{borderRadius:5,  display: 'flex', flexWrap:'nowrap', overflowX: 'auto'}}>
             {files.map((file, i) => {
               const url = URL?.createObjectURL(file);
+              imageUrlsForPreview.push(url)
               return (
-                <div key={file.name}>
+                <div  key={file.name}>
                   {renderCard(
                     { src: url, id: file.name, fileName: file.name },
                     i
@@ -322,10 +344,11 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
           </div>
         </div>
         <FormControl sx={{ mb: 2, mt: 0 }} fullWidth>
-          <Typography variant="h6" fontWeight={"bold"}>
-            Property Type
+          <Typography variant="h5" fontWeight={"bold"}>
+            Property Information
           </Typography>
-          <Box sx={{ display: "flex" }}>
+
+          <Box sx={{ display: "flex", }}>
             <Button
               onClick={() => onClick("propertyType", "residential")}
               name="residential"
@@ -346,7 +369,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               Commercial
             </Button>
           </Box>
-          <Box>
+          <Box sx={{mb:1}}>
             <Box display={"flex"} sx={{ mt: 1 }}>
               <Button
                 onClick={() => onClick("rentBuy", "rent")}
@@ -411,7 +434,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
           <Autocomplete
             autoHighlight
             onChange={(e, newValue) => {
-              console.log(newValue);
+              if (!newValue) {
+                return;
+              }
               setForm((p) => ({ ...p, location: newValue }));
             }}
             sx={{ mb: 1 }}
@@ -426,6 +451,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             label="Price"
             required
             name="price"
+            
             type="tel"
             placeholder="Monthly rent (HKD)"
             onChange={onChange}
@@ -445,8 +471,8 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               required
               name="netArea"
               type="tel"
-              placeholder="Net Area"
-              label="Net area"
+              placeholder="Net Area (sqft)"
+              label="Net Area (sqft)"
               onChange={onChange}
             />
             <TextField
@@ -540,18 +566,11 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             </Collapse>
           </Box>
 
-          <Button
-            size="large"
-            sx={{ m: 0, textTransform: 'capitalize' }}
-            variant="contained"
-            onClick={onAdd}
-            startIcon={<AddIcon/>}
-            endIcon={isAdding ? <CircularProgress /> : null}
-          >
-            Add Listing
-          </Button>
         </FormControl>
       </Box>
+        </>}
+        {tabIndex ==1 && <ListingTile {...form} images={imageUrlsForPreview}/>}
+      
     </DndProvider>
   );
 };

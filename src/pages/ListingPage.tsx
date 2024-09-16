@@ -40,11 +40,11 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
       <IconButton onClick={goBack}>
         <ChevronLeft />
       </IconButton>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography fontWeight={"bold"} color="textPrimary">
+      <Box sx={{ display: "flex", flexDirection: "column", pb:1 }}>
+        <Typography variant='body2' fontWeight={"bold"} color="textPrimary">
           {price} HKD - {netArea} sqft
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="caption">
           {location} / {address}
         </Typography>
       </Box>

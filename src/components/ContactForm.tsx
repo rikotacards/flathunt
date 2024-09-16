@@ -38,17 +38,23 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   const { user } = useAuthContext();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["getUser"],
+    queryKey: ["getListingOwner"],
     queryFn: () => getUser(listingOwnerUid || ""),
   });
-  const [number, setNumber] = React.useState(data?.contactNumber);
-  const nav = useNavigate();
+  const { data: myData, isLoading: isMyDataLoading } = useQuery({
+    queryKey: ["getMyUserInfo"],
+    queryFn: () => getUser(user.uid || ""),
+  });
+  const [number, setNumber] = React.useState<string | undefined>();
   
 
   React.useEffect(() => {
-    setNumber(data?.contactNumber);
+    if(!myData?.contactNumber){
+        return;
+    }
+    setNumber(myData?.contactNumber);
     
-  }, [isLoading, data?.contactNumber]);
+  }, [isMyDataLoading, myData?.contactNumber]);
   const [openSignIn, setOpenSignIn] = React.useState(false);
   const s = useSnackbarContext();
 

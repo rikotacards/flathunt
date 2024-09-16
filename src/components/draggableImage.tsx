@@ -5,7 +5,7 @@ import { useDrag, useDrop } from 'react-dnd'
 
 
 const style = {
-    border: '1px dashed gray',
+    // border: '1px dashed gray',
     backgroundColor: 'white',
     cursor: 'move',
     width: '100%',
@@ -13,7 +13,8 @@ const style = {
     overflow: 'hidden',
     alignItems: 'center',
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginRight:4,
 }
 
 const ItemTypes = {
@@ -112,7 +113,14 @@ export const Card: FC<CardProps> = ({ id, src, index, moveCard }) => {
     return (
         <div ref={ref} style={{ ...style, opacity }} data-handler-id={handlerId}>
             <img
-                style={{ maxHeight: 300, objectFit: 'fill' }}
+            onContextMenu={e => e.preventDefault}
+                style={{
+                    // to prevent longhold options
+                    pointerEvents: 'none',
+                    WebkitUserSelect: 'none',
+                    userSelect:'none',
+                    margin:0,
+                    borderRadius:5, maxHeight: 150, width:150, objectFit: 'cover' }}
                 src={src} />
         </div>
     )

@@ -1,15 +1,13 @@
 import React from "react";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 import {
-  AppBar,
-  Avatar,
   Box,
   Button,
   Card,
   Chip,
   Drawer,
   IconButton,
-  TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import ForumIcon from "@mui/icons-material/Forum";
@@ -58,7 +56,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     }
   };
   const imgs = images?.map((image) => (
-    <SwiperSlide style={{ height: "auto", width: "100%" }} key={image}>
+    <SwiperSlide style={{ height: "auto", width: "100%", maxHeight:'450px' }} key={image}>
       <ListingImage imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
   ));
@@ -91,17 +89,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
               position: "relative",
             }}
           >
-            {/* <IconButton
-              sx={{
-                zIndex: 1,
-                position: "absolute",
-                top: 16,
-                right: 8,
-              }}
-              onClick={onLike}
-            >
-              <FavoriteBorderIcon sx={{ color: "white" }} />
-            </IconButton> */}
+            
 
             <Swiper
               modules={[Navigation, Pagination]}
@@ -200,13 +188,13 @@ export const ListingTile: React.FC<IListing> = (props) => {
                       backdropFilter: "blur(0px)",
                     }}
                   />
-                  {!!bedrooms && (
+                 
                     <Chip
                       size="medium"
                       variant="outlined"
                       label={
                         <Typography variant="caption" fontWeight={"bold"}>
-                          {bedrooms} br
+                         {bedrooms == 0 ? 'Studio' : `${bedrooms} Br`}
                         </Typography>
                       }
                       sx={{
@@ -221,7 +209,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                         backdropFilter: "blur(0px)",
                       }}
                     />
-                  )}
+                  
                 </Card>
               )}
             </Swiper>
@@ -290,6 +278,13 @@ export const ListingTile: React.FC<IListing> = (props) => {
             right: 8,
           }}
         >
+          <IconButton
+             
+              
+              onClick={onLike}
+            >
+              <FavoriteBorderIcon sx={{ color: "white" }} />
+            </IconButton>
           {isNarrow && (
             <IconButton
               size="large"

@@ -7,6 +7,7 @@ import {
   MenuItem,
   MenuList,
   TextField,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -60,8 +61,8 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
       >
         Location
       </Typography>
-
       <Autocomplete
+      sx={{mb:1}}
         onClick={() => {
             if(!value){
                 return
@@ -80,10 +81,10 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
         value={value}
         options={locations}
         renderInput={(params) => (
-          <TextField placeholder="Choose a location" {...params} />
+          <TextField placeholder="Search" {...params} />
         )}
       />
-      <Card
+      {/* <Card
         sx={{
           p: 1,
           mb: 1,
@@ -99,7 +100,7 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
             sx={{ textTransform: "capitalize", mr: 1 }}
           />
         ))}
-      </Card>
+      </Card> */}
       <Card variant="outlined">
         <MenuList
           sx={{
@@ -115,11 +116,8 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
           ))}
         </MenuList>
       </Card>
-      <Button onClick={onClear} variant="outlined" sx={{ mt: 1 }}>
+      <Button size='large' onClick={onClear} variant="outlined" sx={{ mt: 1 , borderRadius:5}}>
         Clear filter
-      </Button>
-      <Button onClick={onClose} variant="outlined" sx={{ mt: 1 }}>
-        Cancel
       </Button>
     </Box>
   );

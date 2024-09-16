@@ -52,7 +52,7 @@ export const ListingsPage: React.FC = () => {
   };
   const { data, isLoading } = useQuery({
     queryKey: ["getAgentListings"],
-    queryFn: () => getAgentListings(USER_ID),
+    queryFn: () => getAgentListings(user?.uid || USER_ID),
   });
 
   const shareText = data?.map(

@@ -24,6 +24,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Note: this logic should be added in your signin process and not here.
         setIsLoading(false);
         setUser(user);
+        queryClient.invalidateQueries({ queryKey: ["getAgentListings"], exact: true});
+
       } else {
         queryClient.invalidateQueries({ queryKey: ["getUser"], exact: true});
         setIsLoading(false);

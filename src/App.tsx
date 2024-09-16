@@ -24,7 +24,7 @@ function App() {
     palette: {
       mode: "light",
       background: {
-        // paper: "white",
+        paper: "white",
       },
     },
     typography: {

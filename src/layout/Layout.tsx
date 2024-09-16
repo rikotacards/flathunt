@@ -18,7 +18,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [filterToOpen, setFilterToOpen] = React.useState(1);
-
+  const isInsta = window.navigator.userAgent.includes('Instagram')
   const nav = useNavigate();
   const isNarrow = useIsNarrow();
   const [isFiltersOpen, setFiltersOpen] = React.useState(false);

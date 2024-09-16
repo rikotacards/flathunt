@@ -25,7 +25,9 @@ import { IFilters } from "../firebase/types";
 interface SearchbarNarrow2Props {
   disableRedirect?: boolean;
 }
-export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({disableRedirect}) => {
+export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
+  disableRedirect,
+}) => {
   const urlLocation = useLocation();
   const nav = useNavigate();
   const goHome = () => nav("/");
@@ -60,7 +62,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({disableRedire
       maxPrice: priceRange[1],
     }));
     onCloseDrawer();
-   !disableRedirect &&  nav("/search-results");
+    !disableRedirect && nav("/search-results");
   };
   const onMoreFiltersDone = (filters: IFilters) => {
     setFilters((p) => ({
@@ -70,11 +72,16 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({disableRedire
     }));
     onCloseDrawer();
     !disableRedirect && nav("/search-results");
-  }
+  };
   const priceLabel = getRangeLabel(filters.minPrice, filters.maxPrice, "HKD");
   const location = (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Typography fontWeight={500} color='textSecondary' sx={{ textTransform: "capitalize" }} variant="body2">
+      <Typography
+        fontWeight={500}
+        // color="textSecondary"
+        sx={{ textTransform: "capitalize" }}
+        variant="body2"
+      >
         {filters.location || "Location"}
       </Typography>
       {filters.location ? null : (
@@ -84,9 +91,12 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({disableRedire
   );
   const price = (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Typography fontWeight={500} color='textSecondary'  variant="body2">{priceLabel}</Typography>
-      {filters.maxPrice ? null :        <KeyboardArrowDown fontSize="small" color="action" />
-      }
+      <Typography fontWeight={500} color="textPrimary" variant="body2">
+        {priceLabel}
+      </Typography>
+      {filters.maxPrice ? null : (
+        <KeyboardArrowDown fontSize="small" color="action" />
+      )}
     </Box>
   );
   const profilePage = (
@@ -101,9 +111,9 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({disableRedire
   );
   const searchPage = (
     <>
-      <IconButton onClick={() => onFilterClick(2)}>
+      {/* <IconButton onClick={() => onFilterClick(2)}>
         <TuneRoundedIcon />
-      </IconButton>
+      </IconButton> */}
       <MenuList
         sx={{
           display: "flex",
@@ -115,21 +125,14 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({disableRedire
       >
         <Chip
           onClick={() => onFilterClick(0)}
-          sx={{
-            boxShadow:
-              "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-          }}
-          variant="outlined"
+          sx={{mr:1}}
+          variant="filled"
           label={location}
         />
         <Chip
           onClick={() => onFilterClick(1)}
-          sx={{
-            ml: 1,
-            boxShadow:
-              "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-          }}
-          variant="outlined"
+        
+          variant="filled"
           label={price}
         />
       </MenuList>

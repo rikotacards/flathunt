@@ -6,6 +6,7 @@ import { ListingImage } from "./ListingImage";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShowerIcon from "@mui/icons-material/Shower";
 import {
+  Alert,
   AppBar,
   Box,
   Button,
@@ -25,6 +26,8 @@ import { USER_ID } from "../firebase/firebaseConfig";
 import { addContactRequest, saveListing } from "../firebase/listings";
 import {
   ChevronLeft,
+  DirectionsSubwayFilledOutlined,
+  InsertLink,
   KeyboardArrowDownOutlined,
   PlaceOutlined,
   ShowerOutlined,
@@ -36,9 +39,11 @@ import PlaceIcon from "@mui/icons-material/Place";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndividualSuite";
 import { ContactForm } from "./ContactForm";
+import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
+import { copy } from "../utils/copy";
 export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const [open, setOpen] = React.useState(false);
-
+    const {user,} = useAuthContext();
   const nav = useNavigate();
   const [number, setNumber] = React.useState("");
   const [openContactForm, setOpenContactForm] = React.useState(false);
@@ -59,6 +64,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const s = useSnackbarContext();
 
   const photos = images?.map((image) => (
     <ListingImage
@@ -78,22 +84,20 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const onShare = (listingId: string) => {
+    copy(`flathunt.com/listing/${listingId}`)
+    s.setSnackbarChildComponent(<Alert icon={<InsertLink/>}>Link copied!</Alert>)
+    s.toggleSnackbar()
+  }
   const onSaveListing = async () => {
     try {
-      await saveListing({ userId: USER_ID, listingId });
-    } catch (e) {
-      alert(e);
-    }
-  };
-  const onSendContact = async () => {
-    try {
-      await addContactRequest({
-        contactNumber: number,
-        sendingUserId: USER_ID,
-        receivingUserId: USER_ID,
-        listingId,
-        message: "",
-      });
+      await saveListing({ userId: user?.uid || '', listingId });
+      s.setSnackbarChildComponent(
+        <Alert icon={<FavoriteBorderIcon />} severity="success">
+          Saved
+        </Alert>
+      );
+      s.toggleSnackbar();
     } catch (e) {
       alert(e);
     }
@@ -112,7 +116,8 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   ));
 
   return (
-    <Box sx={{ maxWidth: "400px", position: "relative" }}>
+    <Box sx={{ maxWidth: "400px", position: "relative", mt:1 }}>
+        <meta content={`${price}`} property="og:price"/>
       <IconButton
         size="small"
         onClick={() => nav(-1)}
@@ -137,6 +142,8 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             flexDirection: "column",
             borderRadius: 5,
             overflow: "hidden",
+            // maxHeight:'500px',
+
           }}
         >
           {photos}
@@ -175,12 +182,23 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
         }}
       >
         <Box sx={{ display: "flex", pt: 2, pb: 2 }}>
-          <PlaceOutlined />
+          <DirectionsSubwayFilledOutlined />
           <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-            {address}
+            {location}
           </Typography>
         </Box>
         <Divider />
+        {!!address && (
+          <>
+            <Box sx={{ display: "flex", pt: 2, pb: 2 }}>
+              <PlaceOutlined />
+              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
+                {address}
+              </Typography>
+            </Box>
+            <Divider />
+          </>
+        )}
         <Box sx={{ display: "flex", pt: 2, pb: 2 }}>
           <HotelOutlinedIcon />
           <Typography variant="body2" sx={{ fontWeight: 500, ml: 1 }}>
@@ -211,7 +229,16 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
         sx={{ top: "auto", bottom: 0, background: "white" }}
       >
         <Toolbar>
-          <IconButton sx={{ ml: "auto", mb: 0.5 }}>
+          <Box sx={{ textAlign: "left" }}>
+            <Typography fontWeight={"600"} color="textPrimary">
+              {price}HKD / month{" "}
+            </Typography>
+            <Typography variant="caption" color="textPrimary">
+              {location}
+            </Typography>
+          </Box>
+
+          <IconButton onClick={() => onShare(listingId)} sx={{ ml: "auto", mb: 0.5 }}>
             <IosShareIcon />
           </IconButton>
 
