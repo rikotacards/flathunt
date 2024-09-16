@@ -51,7 +51,7 @@ export const ListingsPage: React.FC = () => {
     setOpenDrawer(false);
   };
   const { data, isLoading } = useQuery({
-    queryKey: ["getAgentListings"],
+    queryKey: ["getAgentListings", user?.uid],
     queryFn: () => getAgentListings(user?.uid || USER_ID),
   });
 
@@ -82,11 +82,8 @@ export const ListingsPage: React.FC = () => {
           </Box>
         </Dialog>
       )}
-      {isNarrow && (
-        <Drawer open={open} anchor="bottom" onClose={handleClose}>
-          <AddListingForm userId={user?.uid || ""} onClose={handleClose} />
-        </Drawer>
-      )}
+     
+      
   
       <Drawer anchor="bottom" open={openDrawer} onClose={closeDrawer}>
         <AppBar position="relative">

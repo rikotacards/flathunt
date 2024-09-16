@@ -438,7 +438,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           <AddIcon />
         </Fab>
       </Box>
-      {isNarrow && (
+      { (
         <Drawer open={openAddNewDrawer} anchor="bottom" onClose={handleClose}>
           <AddListingForm userId={user?.uid || ''} onClose={onCloseAddNewDrawer} />
         </Drawer>

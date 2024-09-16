@@ -606,20 +606,21 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
                 <>
                   <Typography variant="h5" fontWeight={"bold"}>
-                    Admin
+                    Admin Options
                   </Typography>
-                  <Typography>Used for adding on behalf of agents.</Typography>
+                  <Typography variant='caption'>Used for adding on behalf of agents.</Typography>
                   <OutlinedInput
                     name="listingSpecificContact"
                     onChange={onChange}
                     type="tel"
-                    placeholder="listing specific contact"
+                    sx={{mb:1}}
+                    placeholder="Listing-specific Whatsapp contact"
                   />
-                  <OutlinedInput
+                  <TextField
                     name="listingSpecificRealEstateCompany"
                     onChange={onChange}
-                    type="tel"
-                    placeholder="listing specific real estate company"
+                    type="text"
+                    placeholder="Listing-specific real estate company name"
                   />
                 </>
               )}

@@ -16,7 +16,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 
 import { ListingVerticalLayout } from "../components/ListingVerticalLayout";
 import { useAppBarContext } from "../Providers/contextHooks";
-import { ChevronLeft, ForumOutlined } from "@mui/icons-material";
+import { ChevronLeft, ForumOutlined, HolidayVillageRounded } from "@mui/icons-material";
 interface ListingPageAppBarProps {
   price: number;
   netArea: number;
@@ -26,7 +26,9 @@ interface ListingPageAppBarProps {
 const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
   const { price, netArea, location, address } = props;
   const nav = useNavigate();
-  const goBack = () => nav(-1);
+  const urlLocation = useLocation();
+    console.log(urlLocation)
+  const goBack = () => nav('/');
   return (
     <Box
       component={Paper}
@@ -37,8 +39,8 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
         alignItems: "center",
       }}
     >
-      <IconButton onClick={goBack}>
-        <ChevronLeft />
+      <IconButton size='large' color='primary' onClick={goBack}>
+        <HolidayVillageRounded />
       </IconButton>
       <Box sx={{ display: "flex", flexDirection: "column", pb:1 }}>
         <Typography variant='body2' fontWeight={"bold"} color="textPrimary">

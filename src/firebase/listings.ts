@@ -9,7 +9,7 @@ import { IFilters, IListing } from "./types";
 type NewListingProps = Omit<IListing, "listingId">
 
 export const getAgentListings = async (agentId: string) => {
-    const q = query(collection(db, "listings"), where('agentId', '==', agentId), orderBy('dateAdded', 'desc'));
+    const q = query(collection(db, "listings"), where('userId', '==', agentId), orderBy('dateAdded', 'desc'));
     const res: IListing[] = [];
     try {
         const querySnapshot = await getDocs(q);

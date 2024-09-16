@@ -5,7 +5,8 @@ import { IListing } from "../firebase/types";
 import { ListingImage } from "./ListingImage";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShowerIcon from "@mui/icons-material/Shower";
-import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';import {
+import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
+import {
   Alert,
   AppBar,
   Box,
@@ -22,7 +23,7 @@ import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';import {
   Typography,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { USER_ID } from "../firebase/firebaseConfig";
+import { auth, USER_ID } from "../firebase/firebaseConfig";
 import { addContactRequest, saveListing } from "../firebase/listings";
 import {
   ChevronLeft,
@@ -41,9 +42,10 @@ import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndiv
 import { ContactForm } from "./ContactForm";
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { copy } from "../utils/copy";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const [open, setOpen] = React.useState(false);
-    const {user,} = useAuthContext();
+  const { user } = useAuthContext();
   const nav = useNavigate();
   const [number, setNumber] = React.useState("");
   const [openContactForm, setOpenContactForm] = React.useState(false);
@@ -60,9 +62,9 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
     bathrooms,
     bedrooms,
     location,
-    listingSpecificContact, 
+    listingSpecificContact,
     realEstateCompany,
-    listingSpecificRealEstateCompany
+    listingSpecificRealEstateCompany,
   } = props;
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,14 +89,34 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const provider = new GoogleAuthProvider();
+
+  const onLogin = async () => {
+    await signInWithPopup(auth, provider);
+  };
   const onShare = (listingId: string) => {
-    copy(`flathunt.com/listing/${listingId}`)
-    s.setSnackbarChildComponent(<Alert icon={<InsertLink/>}>Link copied!</Alert>)
-    s.toggleSnackbar()
-  }
+    copy(`flathunt.co/listing/${listingId}`);
+    s.setSnackbarChildComponent(
+      <Alert icon={<InsertLink />}>Link copied!</Alert>
+    );
+    s.toggleSnackbar();
+  };
   const onSaveListing = async () => {
     try {
-      await saveListing({ userId: user?.uid || '', listingId });
+      if (!user) {
+        s.setSnackbarChildComponent(
+          <Alert
+            action={<Button onClick={onLogin}>Login</Button>}
+            icon={<FavoriteBorderIcon />}
+            severity="info"
+          >
+            Login to save.
+          </Alert>
+        );
+        s.toggleSnackbar();
+        return;
+      }
+      await saveListing({ userId: user?.uid || "", listingId });
       s.setSnackbarChildComponent(
         <Alert icon={<FavoriteBorderIcon />} severity="success">
           Saved
@@ -119,8 +141,8 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   ));
 
   return (
-    <Box sx={{ maxWidth: "400px", position: "relative", mt:1 }}>
-        <meta content={`${price}`} property="og:price"/>
+    <Box sx={{ maxWidth: "400px", position: "relative", mt: 1 }}>
+      <meta content={`${price}`} property="og:price" />
       <IconButton
         size="small"
         onClick={() => nav(-1)}
@@ -146,7 +168,6 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             borderRadius: 5,
             overflow: "hidden",
             // maxHeight:'500px',
-
           }}
         >
           {photos}
@@ -228,17 +249,15 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
 
         <Box sx={{ display: "flex", pt: 2, pb: 2 }}>
           <StoreOutlinedIcon />
-          <Box sx={{display: 'flex', flexDirection: 'column', ml:1}}>
-        <Typography variant='caption'>
-            Real Estate Company
-        </Typography>
-          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-            {listingSpecificRealEstateCompany || realEstateCompany}
-          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
+            <Typography variant="caption">Real Estate Company</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+              {listingSpecificRealEstateCompany || realEstateCompany}
+            </Typography>
           </Box>
         </Box>
       </Box>
-      
+
       <Toolbar />
       <AppBar
         position="fixed"
@@ -252,7 +271,10 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             </Typography>
           </Box>
 
-          <IconButton onClick={() => onShare(listingId)} sx={{ ml: "auto", mb: 0.5 }}>
+          <IconButton
+            onClick={() => onShare(listingId)}
+            sx={{ ml: "auto", mb: 0.5 }}
+          >
             <IosShareIcon />
           </IconButton>
 
@@ -270,8 +292,10 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
       </AppBar>
       <Dialog fullScreen open={open} onClose={handleClose}>
         <Box sx={{ overflowY: "scroll", position: "relative" }}>
-          <Box sx={{ position: "absolute", top: 16, right: 16 }}>
-            <Button onClick={handleClose}>close</Button>
+          <Box sx={{ position: "sticky", top: 16, right: 16 }}>
+            <Button sx={{ color: "white" }} onClick={handleClose}>
+              close
+            </Button>
           </Box>
 
           {imgWithoutGrid}
@@ -288,7 +312,6 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
           listingId={listingId}
           listingOwnerUid={userId}
           listingSpecificContact={listingSpecificContact}
-
         />
       </Drawer>
     </Box>
