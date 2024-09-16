@@ -5,7 +5,7 @@ import { IListing } from "../firebase/types";
 import { ListingImage } from "./ListingImage";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShowerIcon from "@mui/icons-material/Shower";
-import {
+import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';import {
   Alert,
   AppBar,
   Box,
@@ -60,6 +60,9 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
     bathrooms,
     bedrooms,
     location,
+    listingSpecificContact, 
+    realEstateCompany,
+    listingSpecificRealEstateCompany
   } = props;
   const handleClickOpen = () => {
     setOpen(true);
@@ -221,7 +224,21 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             {netArea} sqft (net)
           </Typography>
         </Box>
+        <Divider />
+
+        <Box sx={{ display: "flex", pt: 2, pb: 2 }}>
+          <StoreOutlinedIcon />
+          <Box sx={{display: 'flex', flexDirection: 'column', ml:1}}>
+        <Typography variant='caption'>
+            Real Estate Company
+        </Typography>
+          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+            {listingSpecificRealEstateCompany || realEstateCompany}
+          </Typography>
+          </Box>
+        </Box>
       </Box>
+      
       <Toolbar />
       <AppBar
         position="fixed"
@@ -232,9 +249,6 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
           <Box sx={{ textAlign: "left" }}>
             <Typography fontWeight={"600"} color="textPrimary">
               {price}HKD / month{" "}
-            </Typography>
-            <Typography variant="caption" color="textPrimary">
-              {location}
             </Typography>
           </Box>
 
@@ -273,6 +287,8 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
           onClose={() => setOpenContactForm(false)}
           listingId={listingId}
           listingOwnerUid={userId}
+          listingSpecificContact={listingSpecificContact}
+
         />
       </Drawer>
     </Box>

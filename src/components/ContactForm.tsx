@@ -19,13 +19,15 @@ import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
 import { addUser, getUser, updateUser } from "../firebase/user";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 interface ContactFormProps {
   onClose: () => void;
   listingId: string;
   listingOwnerUid: string;
+  message?: string;
+  listingSpecificContact?: string;
 }
 const auth = getAuth();
 
@@ -33,22 +35,28 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   onClose,
   listingId,
   listingOwnerUid,
+  message,
+  listingSpecificContact,
 }) => {
   const provider = new GoogleAuthProvider();
   const { user } = useAuthContext();
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["getListingOwner"],
+    const queryClient = useQueryClient();
+  const { data: listingOwnerData, isLoading } = useQuery({
+    queryKey: ['listingId'],
     queryFn: () => getUser(listingOwnerUid || ""),
   });
   const { data: myData, isLoading: isMyDataLoading } = useQuery({
     queryKey: ["getMyUserInfo"],
-    queryFn: () => getUser(user.uid || ""),
+    queryFn: () => getUser(user?.uid || ""),
   });
   const [number, setNumber] = React.useState<string | undefined>();
   
-
+  console.log('listingownerdata', listingOwnerData)
   React.useEffect(() => {
+    queryClient.invalidateQueries({
+        queryKey: ["getListingOwner"],
+        exact: true,
+      });
     if(!myData?.contactNumber){
         return;
     }
@@ -88,7 +96,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   const onOpenSignIn = () => {
     setOpenSignIn(true);
   };
-  const whatsappLink = `whatsapp://send?phone=${data?.contactNumber}&text=Hi, I'm interested in \n flathunt.co/listing/${listingId}`;
+  console.log('data', listingOwnerData?.contactNumber)
+  const fallback = `Hi, I'm interested this flat \n flathunt.co/listing/${listingId}`
+  const whatsappLink = `whatsapp://send?phone=${listingSpecificContact || listingOwnerData?.contactNumber}&text=${message || fallback}`;
   const openWhatsappChat = async () => {
     if (number?.length === 0) {
       return;

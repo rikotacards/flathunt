@@ -131,7 +131,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
         />
         <Chip
           onClick={() => onFilterClick(1)}
-        
+          
           variant="filled"
           label={price}
         />

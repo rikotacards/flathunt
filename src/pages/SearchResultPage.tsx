@@ -1,4 +1,12 @@
-import { Box, Button, Card, Chip, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Chip,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ListingTile } from "../components/ListingTile";
@@ -9,13 +17,14 @@ import { SearchBarWide } from "../components/SearchBarWide";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { useNavigate } from "react-router";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 export const SearchResultPage: React.FC = () => {
-  const {setFilters, filters } = useFilterContext();
+  const { setFilters, filters } = useFilterContext();
   const nav = useNavigate();
-  const {setAppBarChildComponent} = useAppBarContext();
+  const { setAppBarChildComponent } = useAppBarContext();
 
   React.useEffect(() => {
-    setAppBarChildComponent(<SearchbarNarrow2/>)
+    setAppBarChildComponent(<SearchbarNarrow2 />);
   }, []);
   const { data, isLoading, isFetching } = useQuery({
     queryKey: [
@@ -29,8 +38,8 @@ export const SearchResultPage: React.FC = () => {
   });
   const onClear = () => {
     setFilters({});
-    nav('/')
-  }
+    nav("/");
+  };
   const isNarrow = useIsNarrow();
 
   return (
@@ -44,12 +53,14 @@ export const SearchResultPage: React.FC = () => {
             display: "flex",
             justifyContent: "center",
             textAlign: "center",
-            alignItems: 'center',
-            flexDirection: 'row',
+            alignItems: "center",
+            flexDirection: "row",
             borderRadius: 10,
           }}
         >
-          <Typography color='textSecondary' variant='body2' fontWeight={"bold"}>{data?.length} places</Typography>
+          <Typography color="textSecondary" variant="body2" fontWeight={"bold"}>
+            {data?.length} places
+          </Typography>
           <Button onClick={onClear} sx={{ textTransform: "capitalize" }}>
             Clear filters
           </Button>
@@ -58,7 +69,8 @@ export const SearchResultPage: React.FC = () => {
 
       {data?.length === 0 && !isFetching && !isLoading && (
         <Card variant="outlined" sx={{ p: 2 }}>
-          Try to broaden your search or <Button onClick={onClear}>clear filters</Button>
+          Try to broaden your search or{" "}
+          <Button onClick={onClear}>clear filters</Button>
         </Card>
       )}
 

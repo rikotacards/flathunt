@@ -23,14 +23,14 @@ import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
 
 import { useIsNarrow } from "../utils/useIsNarrow";
-import {  saveListing } from "../firebase/listings";
+import { saveListing } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { ContactForm } from "./ContactForm";
 
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
   const [openContactForm, setOpenContactForm] = React.useState(false);
- 
+
   const toggleContactForm = () => {
     setOpenContactForm(!openContactForm);
   };
@@ -47,6 +47,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     userId,
     location,
     dateAdded,
+    listingSpecificContact
   } = props;
   const onLike = async () => {
     try {
@@ -56,11 +57,16 @@ export const ListingTile: React.FC<IListing> = (props) => {
     }
   };
   const imgs = images?.map((image) => (
-    <SwiperSlide style={{ height: "auto", width: "100%", maxHeight:'450px' }} key={image}>
+    <SwiperSlide
+      style={{ height: "auto", width: "100%", maxHeight: "450px" }}
+      key={image}
+    >
       <ListingImage imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
   ));
- 
+  const message = `Hi, I'm interested this flat:\n flathunt.co/listing/${listingId}
+  \n${bedrooms} bedroom, \naddress: ${address}, ${location}, \nasking: ${price} HKD`;
+
   return (
     <>
       <Card
@@ -89,8 +95,6 @@ export const ListingTile: React.FC<IListing> = (props) => {
               position: "relative",
             }}
           >
-            
-
             <Swiper
               modules={[Navigation, Pagination]}
               // navigation
@@ -188,28 +192,27 @@ export const ListingTile: React.FC<IListing> = (props) => {
                       backdropFilter: "blur(0px)",
                     }}
                   />
-                 
-                    <Chip
-                      size="medium"
-                      variant="outlined"
-                      label={
-                        <Typography variant="caption" fontWeight={"bold"}>
-                         {bedrooms == 0 ? 'Studio' : `${bedrooms} Br`}
-                        </Typography>
-                      }
-                      sx={{
-                        display: "flex",
-                        pl: 0,
-                        alignItems: "center",
-                        pr: 0,
-                        mr: 0.5,
-                        borderRadius: 5,
-                        backgroundColor: "rgba(0,0,0,0.4)",
-                        color: "white",
-                        backdropFilter: "blur(0px)",
-                      }}
-                    />
-                  
+
+                  <Chip
+                    size="medium"
+                    variant="outlined"
+                    label={
+                      <Typography variant="caption" fontWeight={"bold"}>
+                        {bedrooms == 0 ? "Studio" : `${bedrooms} Br`}
+                      </Typography>
+                    }
+                    sx={{
+                      display: "flex",
+                      pl: 0,
+                      alignItems: "center",
+                      pr: 0,
+                      mr: 0.5,
+                      borderRadius: 5,
+                      backgroundColor: "rgba(0,0,0,0.4)",
+                      color: "white",
+                      backdropFilter: "blur(0px)",
+                    }}
+                  />
                 </Card>
               )}
             </Swiper>
@@ -278,13 +281,9 @@ export const ListingTile: React.FC<IListing> = (props) => {
             right: 8,
           }}
         >
-          <IconButton
-             
-              
-              onClick={onLike}
-            >
-              <FavoriteBorderIcon sx={{ color: "white" }} />
-            </IconButton>
+          <IconButton onClick={onLike}>
+            <FavoriteBorderIcon sx={{ color: "white" }} />
+          </IconButton>
           {isNarrow && (
             <IconButton
               size="large"
@@ -303,14 +302,14 @@ export const ListingTile: React.FC<IListing> = (props) => {
         </Box>
       </Card>
       <Drawer
-        keepMounted
         open={openContactForm}
         anchor="bottom"
         onClose={onCloseContactForm}
       >
         <ContactForm
+          message={message}
+          listingSpecificContact={listingSpecificContact}
           listingOwnerUid={props.userId}
-          toggle={toggleContactForm}
           onClose={onCloseContactForm}
           listingId={listingId}
         />

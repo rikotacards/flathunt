@@ -20,6 +20,8 @@ export interface IListing {
     propertyType: string; 
     realEstateCompany: string;
     licenseNumber?: string;
+    listingSpecificContact?: string;
+    listingSpecificRealEstateCompany?: string;
 }
 
 export interface IFilters {
