@@ -222,14 +222,7 @@ export const EditListingForm: React.FC<IListing& {onClose: () => void}> = (props
                 </Box>
 
 
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography>Other features</Typography>
-
-                    {otherProperties.map((p) => <FormControlLabel name={p} 
-                    onChange={onChange} 
-                    sx={{ textTransform: 'capitalize' }} 
-                    control={<Checkbox />} label={p} />)}
-                </Box>
+                
 
                 <Button sx={{ m: 1 }} variant='contained' onClick={onUpdate}>Update</Button>
 

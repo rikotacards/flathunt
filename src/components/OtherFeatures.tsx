@@ -1,6 +1,7 @@
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { Box, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import React from "react";
+import { IListing } from "../firebase/types";
 interface OtherFeaturesProps {
   openMoreFeatures: boolean;
   onCloseMoreFeatures: () => void;
@@ -8,33 +9,50 @@ interface OtherFeaturesProps {
   onClick: (fieldName: string, value: string | number | boolean) => void;
 }
 const features = {
-    outdoors: [{name: 'hasRooftop', label: 'Rooftop'}, 
-        {name: 'hasBalcony', label: 'balcony'},
-        {name: 'hasGarden', label: 'garden'}
-    ],
-    building: [
-        {name: 'isWalkup', label: 'walkup'}, 
-        {name: 'hasElevator', label: 'elevator'},
-        {name: 'hasPool', label: 'pool'},
-        {name: 'hasParking', label: 'parking'},
-        {name: 'hasGym', label: 'gym'},
-        {name: 'hasClubhouse', label: 'clubhouse'},
-        {name: 'isPetFriendly', label: 'pet friendly'},]
-}
-export const OtherFeatures: React.FC<OtherFeaturesProps> = ({
+  outdoors: [
+    { name: "hasRooftop", label: "Rooftop" },
+    { name: "hasBalcony", label: "balcony" },
+    { name: "hasGarden", label: "garden" },
+  ],
+  building: [
+    { name: "hasWalkup", label: "walkup" },
+    { name: "hasElevator", label: "elevator" },
+    { name: "hasPool", label: "pool" },
+    { name: "hasParking", label: "parking" },
+    { name: "hasGym", label: "gym" },
+    { name: "hasClubhouse", label: "clubhouse" },
+    { name: "hasPetFriendly", label: "pet friendly" },
+  ],
+};
+export const OtherFeatures: React.FC<OtherFeaturesProps & IListing> = ({
   openMoreFeatures,
   onCloseMoreFeatures,
   onOpenMoreFeatures,
-  onClick
+  onClick,
+  hasGarden,
+  hasBalcony,
+  hasElevator,
+  hasGym,
+  hasPetFriendly,
+  hasRooftop,
+  hasWalkup,
 }) => {
-   const [otherFeatures, setOtherFeatures] = React.useState({} as {[key: string]: boolean})
-   const onToggle = (fieldName: string) => {
-    setOtherFeatures((p) => ({...p, [fieldName]: !p?.[fieldName]}))
-   }
-   const click = (fieldName: string) => {
-    onToggle(fieldName)
-    onClick(fieldName, !otherFeatures[fieldName])
-   }
+  const [otherFeatures, setOtherFeatures] = React.useState({
+    hasBalcony,
+    hasGarden,
+    hasElevator,
+    hasPetFriendly,
+    hasRooftop,
+    hasGym,
+    hasWalkup
+  } as { [key: string]: boolean });
+  const onToggle = (fieldName: string) => {
+    setOtherFeatures((p) => ({ ...p, [fieldName]: !p?.[fieldName] }));
+  };
+  const click = (fieldName: string) => {
+    onToggle(fieldName);
+    onClick(fieldName, !otherFeatures[fieldName]);
+  };
   return (
     <Box>
       <Box
@@ -49,14 +67,32 @@ export const OtherFeatures: React.FC<OtherFeaturesProps> = ({
         </IconButton>
       </Box>
       <Collapse in={openMoreFeatures}>
-        <Typography variant='body1' sx={{mb:1}} fontWeight={'bold'}>Outdoor space</Typography>
-        <Box sx={{display: 'flex', mb:3}}>
-
-        {features.outdoors.map((f) => <Chip onClick={() => click(f.name)} variant={otherFeatures[f.name] ? 'filled' : 'outlined'} color={otherFeatures[f.name] ? 'primary' : undefined}  sx={{mr:1}} label={f.label}/>)}
+        <Typography variant="body1" sx={{ mb: 1 }} fontWeight={"bold"}>
+          Outdoor space
+        </Typography>
+        <Box sx={{ display: "flex", mb: 3 }}>
+          {features.outdoors.map((f) => (
+            <Chip
+              onClick={() => click(f.name)}
+              variant={otherFeatures[f.name] ? "filled" : "outlined"}
+              color={otherFeatures[f.name] ? "primary" : undefined}
+              sx={{ mr: 1 }}
+              label={f.label}
+            />
+          ))}
         </Box>
-        <Typography sx={{mb:1}} fontWeight={'bold'}>Building</Typography>
-        {features.building.map((f) => <Chip onClick={() => click(f.name)} variant={otherFeatures[f.name] ? 'filled' : 'outlined'} color={otherFeatures[f.name] ? 'primary' : undefined} sx={{mr:1, mb:1}} label={f.label}/>)}
-
+        <Typography sx={{ mb: 1 }} fontWeight={"bold"}>
+          Building
+        </Typography>
+        {features.building.map((f) => (
+          <Chip
+            onClick={() => click(f.name)}
+            variant={otherFeatures[f.name] ? "filled" : "outlined"}
+            color={otherFeatures[f.name] ? "primary" : undefined}
+            sx={{ mr: 1, mb: 1 }}
+            label={f.label}
+          />
+        ))}
       </Collapse>
     </Box>
   );

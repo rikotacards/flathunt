@@ -19,9 +19,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-  AppBar,
-  Card,
-  CardActionArea,
+
   Toolbar,
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -33,17 +31,13 @@ import { auth, USER_ID } from "../firebase/firebaseConfig";
 import EditIcon from "@mui/icons-material/Edit";
 import { EditListing } from "./EditListing";
 
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { IFilters, IListing } from "../firebase/types";
 import {
-  CheckBox,
   CloseOutlined,
   InsertLink,
-  MoreVertOutlined,
   OpenInNew,
 } from "@mui/icons-material";
 import { useIsNarrow } from "../utils/useIsNarrow";
-import SendIcon from "@mui/icons-material/Send";
 import AddIcon from "@mui/icons-material/Add";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -319,8 +313,8 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   };
   const handleClose = () => setOpen(false);
   const { data, isLoading } = useQuery({
-    queryKey: ["getAgentListings"],
-    queryFn: () => getAgentListings(USER_ID),
+    queryKey: ["getAgentListings", user?.uid],
+    queryFn: () => getAgentListings(user?.uid || USER_ID),
   });
 
   const filteredData = data?.filter(
@@ -393,18 +387,20 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         </Table>
       </TableContainer>
 
-      <Dialog
+      <Drawer
         open={open}
+        anchor="bottom"
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+
         <EditListing
           userId={USER_ID}
           onClose={handleClose}
           listingId={editingListingId}
-        />
-      </Dialog>
+          />
+      </Drawer>
       <Box
         sx={{
           display: "flex",

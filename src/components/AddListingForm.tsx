@@ -1,5 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import {
+  Alert,
   AppBar,
   Autocomplete,
   Box,
@@ -44,26 +45,41 @@ import {
 import ErrorIcon from "@mui/icons-material/Error";
 import { getUser, updateUser } from "../firebase/user";
 import { useIsNarrow } from "../utils/useIsNarrow";
-import { useAuthContext } from "../Providers/contextHooks";
+import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { OtherFeatures } from "./OtherFeatures";
+import { updateListing } from "../firebase/listings";
 const bedrooms = [0, 1, 2, 3, 4];
 const bathrooms = [1, 2, 3];
 
 interface AddListingFormProps {
   onClose: () => void;
   userId: string;
+  listing?: IListing;
 }
 export const AddListingForm: React.FC<AddListingFormProps> = ({
   onClose,
   userId,
+  listing,
 }) => {
   const queryClient = useQueryClient();
   const isNarrow = useIsNarrow();
+  const s = useSnackbarContext();
   const { user } = useAuthContext();
+  const isEdit = !!listing;
   const { data, isLoading } = useQuery({
     queryKey: ["getUser"],
     queryFn: () => getUser(userId || ""),
   });
+  const [form, setForm] = React.useState({
+    ...listing,
+    rentBuy: listing?.rentBuy || "rent",
+    propertyType: listing?.propertyType || "residential",
+    realEstateCompany: data?.realEstateCompany,
+    licenseNumber: data?.licenseNumber,
+  } as IListing);
+  console.log("form", form);
+  const canAdd =
+    form.licenseNumber && form.realEstateCompany && data?.contactNumber;
   const [tabIndex, setTabIndex] = React.useState(0);
   const [files, setFiles] = React.useState([] as File[]);
   const onUpdateRealEstateCompany = async () => {
@@ -82,6 +98,42 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       alert(e);
     }
   };
+  const onUpdate = async () => {
+    try {
+      // get download URLS,
+      // add them to the listing
+      // const docRef = doc(collection(db, "listings"));
+      setIsAdding(true);
+      // const fileNames = files.map((file) => file.name)
+      // await handleUpload(USER_ID, docRef.id)
+      if (!listing) {
+        alert("Please supply listing ID to edit");
+        return;
+      }
+      await updateListing(listing.listingId, {
+        ...form,
+        price: parseInt(form.price),
+      });
+      // await addListing()
+      queryClient.invalidateQueries({
+        queryKey: ["getAgentListings"],
+        exact: true,
+      });
+      s.setSnackbarChildComponent(
+        <Alert severity="success" variant="filled">
+          Updated
+        </Alert>
+      );
+      s.toggleSnackbar();
+      onClose();
+    } catch (e) {
+      setIsAdding(false);
+      onClose();
+      s.setSnackbarChildComponent(
+        <Alert severity="error">Error updating</Alert>
+      );
+    }
+  };
   const storage = getStorage();
   const [isAdding, setIsAdding] = React.useState(false);
   const [contactNumber, setContactNumber] = React.useState<
@@ -91,22 +143,18 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     setContactNumber(e.target.value);
   };
   const imageUrlsForPreview = [];
-  const [form, setForm] = React.useState({
-    rentBuy: "rent",
-    propertyType: "residential",
-    realEstateCompany: data?.realEstateCompany,
-    licenseNumber: data?.licenseNumber,
-  } as IListing);
+
   React.useEffect(() => {
     setContactNumber(data?.contactNumber);
     setForm({
-      rentBuy: "rent",
-      propertyType: "residential",
+      rentBuy: listing?.rentBuy || "rent",
+      propertyType: listing?.propertyType || "residential",
       realEstateCompany: data?.realEstateCompany,
       licenseNumber: data?.licenseNumber,
+      ...listing,
     } as IListing);
-  }, [isLoading]);
- 
+  }, [isLoading, listing]);
+
   const [uploadProgress, setUploadProgress] = useState(
     {} as { [key: string]: string | number | readonly string[] | undefined }
   );
@@ -174,7 +222,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       inputRef.current.click();
     }
   };
-
+  const disableTabs = true
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (!e.dataTransfer) {
@@ -243,6 +291,12 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       setIsAdding(false);
       queryClient.invalidateQueries({ queryKey: ["getAgentListings"] });
       onClose();
+      s.setSnackbarChildComponent(
+        <Alert severity="success" variant="filled">
+          Listing for {form.address}, asking {form.price}, added.
+        </Alert>
+      );
+      s.toggleSnackbar();
     } catch (e) {
       alert(e);
       onClose();
@@ -273,31 +327,25 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             justifyContent: "space-between",
           }}
         >
-          <Button sx={{ textTransform: "capitalize" }} onClick={onClose}>
+          <Button sx={{flexBasis: 1, flexGrow:1, textTransform: "capitalize", textAlign: 'left', justifyContent: 'flex-start' }} onClick={onClose}>
             Cancel
           </Button>
-          <Typography sx={{ textTransform: "capitalize" }} fontWeight={"bold"}>
-            Add Listing
+          <Typography sx={{flexGrow: 1,flexBasis:1, textTransform: "capitalize" }} fontWeight={"bold"}>
+            {isEdit ? "Edit Listing" : "Add Listing"}
           </Typography>
-          <Button
-            onClick={onAdd}
-            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
-            startIcon={isAdding ? <Box sx={{  alignItems: 'center'}}><CircularProgress size='small'  sx={{height:20, width:20}}/></Box> :<AddIcon />}
-          >
-            Add
-          </Button>
+          <Box sx={{flexGrow:1, flexBasis: 1}} />
         </Toolbar>
 
-        <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
+     {!disableTabs &&    <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
           <Tab label="edit" />
-          {/* <Tab label="Preview" /> */}
-        </Tabs>
+          <Tab label="Preview" />
+        </Tabs>}
       </Box>
       {tabIndex == 0 && (
         <>
           <Box
             sx={{
-              maxHeight: "600px",
+              // maxHeight: "600px",
               display: "flex",
               flexDirection: "column",
               p: 2,
@@ -315,6 +363,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   textAlign: "center",
                   marginBottom: "20px",
                   cursor: "pointer",
+                  display: isEdit ? "none" : "visible",
                 }}
               >
                 {isNarrow ? (
@@ -389,7 +438,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   For Sale
                 </Button>
               </Box>
-              <Box sx={{ display: "flex", mb:2 }}>
+              <Box sx={{ display: "flex", mb: 2 }}>
                 <Button
                   onClick={() => onClick("propertyType", "residential")}
                   name="residential"
@@ -419,7 +468,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 <Typography fontWeight={"bold"} variant="h6">
                   Bedrooms
                 </Typography>
-                <Box sx={{ display: "flex", mb:1 }}>
+                <Box sx={{ display: "flex", mb: 1 }}>
                   {bedrooms.map((br, i) => (
                     <Button
                       value={form["bedrooms"]}
@@ -460,6 +509,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
 
               <Autocomplete
                 autoHighlight
+                value={form.location}
                 onChange={(e, newValue) => {
                   if (!newValue) {
                     return;
@@ -481,6 +531,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 type="tel"
                 placeholder="Monthly rent (HKD)"
                 onChange={onChange}
+                value={form.price}
               />
               <TextField
                 label="Building name or address"
@@ -490,12 +541,14 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 type="text"
                 placeholder="building name or address"
                 onChange={onChange}
+                value={form.address}
               />
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <TextField
                   sx={{ mb: 1 }}
                   required
                   name="netArea"
+                  value={form.netArea}
                   type="tel"
                   placeholder="Net Area (sqft)"
                   label="Net Area (sqft)"
@@ -503,6 +556,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 />
                 <TextField
                   sx={{ mb: 1 }}
+                  value={form.grossArea}
                   name="grossArea"
                   type="tel"
                   placeholder="Gross Area"
@@ -513,6 +567,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   multiline
                   minRows={3}
                   name={"desc"}
+                  value={form.desc}
                   onChange={onChange}
                   placeholder="Tell us more, eg. Located near many restaurants, 5 min walk to..."
                 />
@@ -521,6 +576,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   onCloseMoreFeatures={onCloseMoreFeatures}
                   onOpenMoreFeatures={onOpenMoreFeatures}
                   onClick={onClick}
+                  {...form}
                 />
 
                 <Typography
@@ -582,7 +638,12 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
 
               <Divider sx={{ mb: 1 }} />
               {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
-                <Box component={Paper} sx={{p:2,}} color={'primary'} variant="outlined">
+                <Box
+                  component={Paper}
+                  sx={{ p: 2 }}
+                  color={"primary"}
+                  variant="outlined"
+                >
                   <Typography variant="h5" fontWeight={"bold"}>
                     Admin Options
                   </Typography>
@@ -602,21 +663,28 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                     onChange={onChange}
                     type="text"
                     fullWidth
-
                     sx={{ mb: 1 }}
                     placeholder="Listing-specific real estate company name"
                   />
-                   <TextField
+                  <TextField
                     name="listingSpecificLicenseNumber"
                     onChange={onChange}
                     type="text"
                     fullWidth
-
                     sx={{ mb: 1 }}
                     placeholder="Listing-specific License Number"
                   />
                 </Box>
               )}
+              <Button
+                onClick={isEdit ? onUpdate : onAdd}
+                disabled={!canAdd}
+                sx={{ position: "sticky", bottom: 0, zIndex:3 }}
+                variant="contained"
+                
+              >
+                {isEdit ? isAdding ? "Saving" : "Save Changes" : isAdding ? "Adding" : "Add Listing"}
+              </Button>
             </FormControl>
           </Box>
         </>

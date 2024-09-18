@@ -1,7 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
 export interface IListing {
-    agentId: string;
     userId: string;
     address: string;
     netArea: number;
@@ -24,6 +23,13 @@ export interface IListing {
     listingSpecificRealEstateCompany?: string;
     listingSpecificLicenseNumber?: string;
     otherFeatures?: string[]
+    hasWalkup?: boolean;
+    hasRooftop?: boolean;
+    hasBalcony?: boolean;
+    hasPetFriendly?: boolean;
+    hasGarden: boolean;
+    hasElevator?: boolean;
+    hasGym?: boolean;
 }
 
 export interface IFilters {
