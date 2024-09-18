@@ -33,6 +33,8 @@ export const SearchResultPage: React.FC = () => {
       filters.maxPrice,
       filters.minPrice,
       filters.bedrooms,
+      filters.minNetArea,
+      filters.maxNetArea
     ],
     queryFn: () => getAllListings(filters),
   });
@@ -40,7 +42,6 @@ export const SearchResultPage: React.FC = () => {
     setFilters({});
     nav("/");
   };
-  const isNarrow = useIsNarrow();
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>

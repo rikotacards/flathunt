@@ -110,7 +110,7 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
           }}
         >
           {locations.map((l) => (
-            <MenuItem onClick={() => onMenuItemClick(l)} selected={value === l}>
+            <MenuItem key={l} onClick={() => onMenuItemClick(l)} selected={value === l}>
               {l}
             </MenuItem>
           ))}

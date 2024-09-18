@@ -45,6 +45,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import { getUser, updateUser } from "../firebase/user";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { useAuthContext } from "../Providers/contextHooks";
+import { OtherFeatures } from "./OtherFeatures";
 const bedrooms = [0, 1, 2, 3, 4];
 const bathrooms = [1, 2, 3];
 
@@ -105,6 +106,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       licenseNumber: data?.licenseNumber,
     } as IListing);
   }, [isLoading]);
+ 
   const [uploadProgress, setUploadProgress] = useState(
     {} as { [key: string]: string | number | readonly string[] | undefined }
   );
@@ -209,7 +211,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     return downloadUrls;
   };
 
-  const onClick = (fieldName: string, value: number | string) => {
+  const onClick = (fieldName: string, value: number | string | boolean) => {
     setForm((prev) => ({ ...prev, [fieldName]: value }));
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,7 +248,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       onClose();
     }
   };
-  const [openMoreFeatures, setMoreFeatures] = React.useState(false);
+  const [openMoreFeatures, setMoreFeatures] = React.useState(true);
   const onOpenMoreFeatures = () => {
     setMoreFeatures(true);
   };
@@ -280,7 +282,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
           <Button
             onClick={onAdd}
             sx={{ textTransform: "capitalize", fontWeight: "bold" }}
-            startIcon={<AddIcon />}
+            startIcon={isAdding ? <Box sx={{  alignItems: 'center'}}><CircularProgress size='small'  sx={{height:20, width:20}}/></Box> :<AddIcon />}
           >
             Add
           </Button>
@@ -363,11 +365,31 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               </div>
             </div>
             <FormControl sx={{ mb: 2, mt: 0 }} fullWidth>
-              <Typography variant="h5" fontWeight={"bold"}>
+              <Typography variant="h6" fontWeight={"bold"}>
                 Property Information
               </Typography>
-
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: "flex", mb: 1 }}>
+                <Button
+                  onClick={() => onClick("rentBuy", "rent")}
+                  name="rent"
+                  fullWidth
+                  sx={{
+                    mr: 1,
+                  }}
+                  variant={outlinedOrContained(form.rentBuy === "rent")}
+                >
+                  For Rent
+                </Button>
+                <Button
+                  onClick={() => onClick("rentBuy", "sale")}
+                  name="sale"
+                  fullWidth
+                  variant={outlinedOrContained(form.rentBuy === "sale")}
+                >
+                  For Sale
+                </Button>
+              </Box>
+              <Box sx={{ display: "flex", mb:2 }}>
                 <Button
                   onClick={() => onClick("propertyType", "residential")}
                   name="residential"
@@ -392,32 +414,12 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   Commercial
                 </Button>
               </Box>
-              <Box sx={{ mb: 1 }}>
-                <Box display={"flex"} sx={{ mt: 1 }}>
-                  <Button
-                    onClick={() => onClick("rentBuy", "rent")}
-                    fullWidth
-                    sx={{
-                      mr: 1,
-                    }}
-                    variant={outlinedOrContained(form.rentBuy == "rent")}
-                  >
-                    Rent
-                  </Button>
-                  <Button
-                    onClick={() => onClick("rentBuy", "buy")}
-                    fullWidth
-                    variant={outlinedOrContained(form.rentBuy === "buy")}
-                  >
-                    Buy
-                  </Button>
-                </Box>
-              </Box>
+
               <Box>
                 <Typography fontWeight={"bold"} variant="h6">
                   Bedrooms
                 </Typography>
-                <Box sx={{ display: "flex" }}>
+                <Box sx={{ display: "flex", mb:1 }}>
                   {bedrooms.map((br, i) => (
                     <Button
                       value={form["bedrooms"]}
@@ -514,6 +516,12 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   onChange={onChange}
                   placeholder="Tell us more, eg. Located near many restaurants, 5 min walk to..."
                 />
+                <OtherFeatures
+                  openMoreFeatures={openMoreFeatures}
+                  onCloseMoreFeatures={onCloseMoreFeatures}
+                  onOpenMoreFeatures={onOpenMoreFeatures}
+                  onClick={onClick}
+                />
 
                 <Typography
                   variant="h5"
@@ -571,49 +579,21 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   onBlur={onUpdateLicenseNumber}
                 />
               </Box>
-              <Box>
-                <Box
-                  onClick={
-                    openMoreFeatures ? onCloseMoreFeatures : onOpenMoreFeatures
-                  }
-                  sx={{ display: "flex", pt: 1, pb: 1 }}
-                >
-                  <Typography
-                    sx={{ pt: 1, pb: 1 }}
-                    variant="h5"
-                    fontWeight={"bold"}
-                  >
-                    Additional Features
-                  </Typography>
-                  <IconButton sx={{ ml: "auto" }}>
-                    <KeyboardArrowDownOutlined />
-                  </IconButton>
-                </Box>
-                <Collapse in={openMoreFeatures}>
-                  {additionalFeatures.map((feature) => {
-                    return (
-                      <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Checkbox name={feature} />
-                        <Typography sx={{ textTransform: "capitalize" }}>
-                          {feature}
-                        </Typography>
-                      </Box>
-                    );
-                  })}
-                </Collapse>
-              </Box>
+
               <Divider sx={{ mb: 1 }} />
               {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
                 <>
                   <Typography variant="h5" fontWeight={"bold"}>
                     Admin Options
                   </Typography>
-                  <Typography variant='caption'>Used for adding on behalf of agents.</Typography>
+                  <Typography variant="caption">
+                    Used for adding on behalf of agents.
+                  </Typography>
                   <OutlinedInput
                     name="listingSpecificContact"
                     onChange={onChange}
                     type="tel"
-                    sx={{mb:1}}
+                    sx={{ mb: 1 }}
                     placeholder="Listing-specific Whatsapp contact"
                   />
                   <TextField

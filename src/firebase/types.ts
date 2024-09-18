@@ -13,7 +13,7 @@ export interface IListing {
     bathrooms: number;
     location: string;
     desc?: string;
-    rentBuy: 'buy' | 'rent'
+    rentBuy: 'sale' | 'rent'
     status?: 'live' | 'draft'
     dateAdded: Timestamp;
     //@desc 1, rental, 2, commercial, 3, eventspace

@@ -33,9 +33,11 @@ export const getAllListings = async (filters: IFilters) => {
 
     const priceConstraints = and(where('price', '<=', Number(filters.maxPrice || 999999)), where('price', '>=', Number(filters.minPrice || 0)))
     const locationConstraint = where('location', filters.location ? '==' : '!=', filters.location ? filters.location : '')
+    const areaConstraints = and(where('netArea', '<=', Number(filters.maxNetArea || 999999)), where('netArea', '>=', Number(filters.minNetArea || 0)))
     const q = query(collection(db, "listings"), and(
         priceConstraints,
-        locationConstraint
+        locationConstraint,
+        areaConstraints
     )
 
 
