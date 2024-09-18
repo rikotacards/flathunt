@@ -566,7 +566,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   onBlur={onUpdateRealEstateCompany}
                 />
 
-                <Typography variant="body2">License Number</Typography>
+                <Typography variant="body2">Company License Number</Typography>
 
                 <TextField
                   sx={{ mb: 1 }}
@@ -582,7 +582,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
 
               <Divider sx={{ mb: 1 }} />
               {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
-                <>
+                <Box component={Paper} sx={{p:2,}} color={'primary'} variant="outlined">
                   <Typography variant="h5" fontWeight={"bold"}>
                     Admin Options
                   </Typography>
@@ -594,15 +594,28 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                     onChange={onChange}
                     type="tel"
                     sx={{ mb: 1 }}
+                    fullWidth
                     placeholder="Listing-specific Whatsapp contact"
                   />
                   <TextField
                     name="listingSpecificRealEstateCompany"
                     onChange={onChange}
                     type="text"
+                    fullWidth
+
+                    sx={{ mb: 1 }}
                     placeholder="Listing-specific real estate company name"
                   />
-                </>
+                   <TextField
+                    name="listingSpecificLicenseNumber"
+                    onChange={onChange}
+                    type="text"
+                    fullWidth
+
+                    sx={{ mb: 1 }}
+                    placeholder="Listing-specific License Number"
+                  />
+                </Box>
               )}
             </FormControl>
           </Box>

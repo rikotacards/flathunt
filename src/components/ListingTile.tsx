@@ -26,7 +26,7 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 import { saveListing } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { ContactForm } from "./ContactForm";
-import { WhatsApp } from "@mui/icons-material";
+import { BookmarkAddOutlined, WhatsApp } from "@mui/icons-material";
 
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
@@ -259,6 +259,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
               {!isNarrow && (
                 <Button
                   size="small"
+                  onClick={toggleContactForm}
                   sx={{
                     ml: "auto",
                     textTransform: "capitalize",
@@ -283,11 +284,12 @@ export const ListingTile: React.FC<IListing> = (props) => {
           }}
         >
           <IconButton onClick={onLike}>
-            <FavoriteBorderIcon sx={{ color: "white" }} />
+            <BookmarkAddOutlined sx={{ color: "white" }} />
           </IconButton>
           {isNarrow && (
             <Chip
               size="medium"
+              onClick={toggleContactForm}
               label="Contact"
               variant="outlined"
               // icon={<WhatsApp/>}

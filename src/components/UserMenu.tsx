@@ -22,12 +22,13 @@ import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
 import MenuIcon from "@mui/icons-material/Menu";
 import { KeyboardArrowDownRounded } from "@mui/icons-material";
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 const settings = [
   { path: "listings", name: "My Listings", icon: <ViewListIcon /> },
   {
     path: "saved-listings",
     name: "Saved Listings",
-    icon: <FavoriteBorderIcon />,
+    icon: <BookmarkBorderRoundedIcon />,
   },
   //   { path: "requests", name: "requests", icon: <ForumIcon /> },
 ];
@@ -56,11 +57,12 @@ export const UserMenu: React.FC = () => {
         >
           {!!user ? (
             <>
-              <Avatar
+            <MenuIcon/>
+              {/* <Avatar
                 sx={{ height: 35, width: 35 }}
                 src={user?.photoURL || undefined}
               />
-                <MoreVertIcon  />
+                <MoreVertIcon  /> */}
             </>
           ) : (
             <MenuIcon />

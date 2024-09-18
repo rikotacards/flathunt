@@ -213,7 +213,7 @@ export const ProfilePage: React.FC = () => {
       <Box sx={{ display: "flex", mb: 4 }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography variant="body2" fontWeight={"bold"}>
-            Real Estate License No.
+            Company License No.
           </Typography>
           <Typography variant="body1">{data?.licenseNumber}</Typography>
         </Box>
