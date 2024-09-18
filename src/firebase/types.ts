@@ -22,6 +22,7 @@ export interface IListing {
     licenseNumber?: string;
     listingSpecificContact?: string;
     listingSpecificRealEstateCompany?: string;
+    otherFeatures?: string[]
 }
 
 export interface IFilters {

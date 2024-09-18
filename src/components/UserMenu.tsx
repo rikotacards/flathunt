@@ -20,6 +20,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HolidayVillageRoundedIcon from "@mui/icons-material/HolidayVillageRounded";
 import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
+import MenuIcon from "@mui/icons-material/Menu";
+import { KeyboardArrowDownRounded } from "@mui/icons-material";
 const settings = [
   { path: "listings", name: "My Listings", icon: <ViewListIcon /> },
   {
@@ -27,7 +29,7 @@ const settings = [
     name: "Saved Listings",
     icon: <FavoriteBorderIcon />,
   },
-//   { path: "requests", name: "requests", icon: <ForumIcon /> },
+  //   { path: "requests", name: "requests", icon: <ForumIcon /> },
 ];
 export const UserMenu: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -52,13 +54,16 @@ export const UserMenu: React.FC = () => {
             //   "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
           }}
         >
-          {user ? (
-            <Avatar
-              sx={{ height: 35, width: 35 }}
-              src={user?.photoURL || undefined}
-            />
+          {!!user ? (
+            <>
+              <Avatar
+                sx={{ height: 35, width: 35 }}
+                src={user?.photoURL || undefined}
+              />
+                <MoreVertIcon  />
+            </>
           ) : (
-            <AccountCircleIcon fontSize="large" />
+            <MenuIcon />
           )}
         </IconButton>
       </Tooltip>
@@ -91,19 +96,17 @@ export const UserMenu: React.FC = () => {
             </Button>
           )}
           <MenuItem
-           onClick={() => {
-            handleCloseUserMenu();
-            nav("/");
-          }}
+            onClick={() => {
+              handleCloseUserMenu();
+              nav("/");
+            }}
           >
-            <ListItemIcon
-             
-            >
+            <ListItemIcon>
               <HolidayVillageRoundedIcon />
             </ListItemIcon>
             <Typography sx={{ textAlign: "center" }}>Home</Typography>
           </MenuItem>
-          
+
           {settings.map((setting) => (
             <MenuItem
               key={setting.path}

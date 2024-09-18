@@ -26,6 +26,7 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 import { saveListing } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { ContactForm } from "./ContactForm";
+import { WhatsApp } from "@mui/icons-material";
 
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
@@ -47,7 +48,8 @@ export const ListingTile: React.FC<IListing> = (props) => {
     userId,
     location,
     dateAdded,
-    listingSpecificContact
+    listingSpecificContact,
+    desc,
   } = props;
   const onLike = async () => {
     try {
@@ -69,9 +71,8 @@ export const ListingTile: React.FC<IListing> = (props) => {
 
   return (
     <>
-      <Card
+      <Box
         id={listingId}
-        elevation={isNarrow ? 5 : 0}
         sx={{
           background: "transparent",
           borderRadius: 4,
@@ -285,22 +286,64 @@ export const ListingTile: React.FC<IListing> = (props) => {
             <FavoriteBorderIcon sx={{ color: "white" }} />
           </IconButton>
           {isNarrow && (
-            <IconButton
-              size="large"
+            <Chip
+              size="medium"
+              label="Contact"
+              variant="outlined"
+              // icon={<WhatsApp/>}
               sx={{
                 borderRadius: 10,
-                color: "white",
+                color:'white',
+                m:1,
+                fontWeight:'bold',
+                borderColor:'white',
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(10px)",
               }}
-              onClick={(e) => {
-                toggleContactForm();
-                e.stopPropagation();
-              }}
-            >
-              <ForumIcon />
-            </IconButton>
+            />
+
+            // <IconButton
+            //   size="large"
+            //   sx={{
+            //     color: "white",
+            //     backdropFilter:'blur(1px)',
+                
+            //   }}
+            //   onClick={(e) => {
+            //     toggleContactForm();
+            //     e.stopPropagation();
+            //   }}
+            // >
+            //   <WhatsApp />
+            // </IconButton>
           )}
         </Box>
-      </Card>
+      </Box>
+      {!!desc && (
+        <Box
+          sx={{
+            mb: 0,
+            textAlign: "left",
+            mt: 1,
+            display: "flex",
+            ml: 1,
+            mr: 1,
+            overflow: "hidden",
+          }}
+        >
+          <Typography
+            sx={{
+              textAlign: "left",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+            variant="body2"
+          >
+            {desc}
+          </Typography>
+        </Box>
+      )}
       <Drawer
         open={openContactForm}
         anchor="bottom"

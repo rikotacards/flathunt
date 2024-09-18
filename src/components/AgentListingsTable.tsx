@@ -134,7 +134,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
         <TableCell
           sx={{ display: "flex", flexDirection: "column", border: "none" }}
         >
-          <Typography sx={{ mr: 1 }} fontWeight={"bold"} variant="body2">
+          <Typography sx={{ mr: 1, textTransform: 'capitalize' }} fontWeight={"bold"} variant="body2">
             {row.location}
           </Typography>
           <Typography variant="caption">{row.address}</Typography>
@@ -190,8 +190,8 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
       </TableRow>
 
       <TableRow sx={{ border: "unset" }}>
-        <TableCell sx={{ pb: 0, pt: 0 }} colSpan={6}>
-          <Collapse sx={{ display: "flex" }} unmountOnExit in={open}>
+        <TableCell sx={{ pb: 0, pt: 0,  }} colSpan={5}>
+          <Collapse sx={{ display: "flex", justifyContent: 'center' }} unmountOnExit in={open}>
             <Box
               sx={{
                 pb: 2,
@@ -202,7 +202,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 overflow: "hidden",
               }}
             >
-              <Box sx={{ display: "flex", maxWidth: "350px", mt: 2 }}>
+              <Box sx={{ maxWidth: "350px", mt: 2, justifyContent: 'center', display: 'block', objectFit: 'cover'}}>
                 <ListingTile {...row} />
               </Box>
             </Box>
@@ -210,7 +210,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-end",
                   justifyContent: "space-around",
                   p: 1,
                 }}
@@ -292,12 +292,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const { setFilters } = useFilterContext();
   const { user } = useAuthContext();
   const [openDrawer, setOpenDrawer] = React.useState(false);
-  const onOpenDrawer = () => {
-    setOpenDrawer(true);
-  };
-  const closeDrawer = () => {
-    setOpenDrawer(false);
-  };
+ 
   const [open, setOpen] = React.useState(false);
   const [openAddNewDrawer, setAddNewDrawer] = React.useState(false);
   const [isSignInDrawerOpen, setSignInDrawer] = React.useState(false);
@@ -351,7 +346,14 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   };
   const onCopy = () => copy(copyText || "");
   const provider = new GoogleAuthProvider();
-
+  const onOpenDrawer = () => {
+    setOpenDrawer(true);
+    onCopy()
+    setTimeout(closeDrawer, 2000)
+  };
+  const closeDrawer = () => {
+    setOpenDrawer(false);
+  };
   const rows = filteredData?.map((row) => (
     <Row key={row.listingId} {...row} handleOpen={handleOpen} />
   ));
@@ -369,17 +371,17 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         <Table size="small" stickyHeader>
           <TableHead sx={{ position: "sticy" }}>
             <TableRow>
-              <TableCell component={"th"} sx={{ fontWeight: "bold" }}>
+              <TableCell component={"th"} sx={{ fontWeight: "bold", textTransform: 'capitalize' }}>
                 {isNarrow ? "📍" : "Location"}
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} component={"th"}>
+              <TableCell sx={{ fontWeight: "bold", textTransform: 'capitalize' }} component={"th"}>
                 Price
               </TableCell>
-              <TableCell component={"th"} sx={{ fontWeight: "bold" }}>
+              <TableCell component={"th"} sx={{ fontWeight: "bold", textTransform: 'capitalize' }}>
                 {isNarrow ? "Area" : "Net Area"}
               </TableCell>
 
-              <TableCell sx={{ fontWeight: "bold" }}>
+              <TableCell sx={{ fontWeight: "bold", textTransform: 'capitalize' }}>
                 {isNarrow ? "Br" : "Bedrooms"}
               </TableCell>
               {!isNarrow && <TableCell></TableCell>}
@@ -422,7 +424,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           color={"secondary"}
         >
           <Typography sx={{ mr: 1 }} variant="body2">
-            {filteredData?.length} listings
+            {filteredData?.length} listings {openDrawer ? <b>copied</b>: null}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <IosShareIcon sx={{ mb: 0.5 }} />
@@ -443,35 +445,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           <AddListingForm userId={user?.uid || ''} onClose={onCloseAddNewDrawer} />
         </Drawer>
       )}
-      <Drawer anchor="bottom" open={openDrawer} onClose={closeDrawer}>
-        <AppBar position="relative">
-          <Toolbar>
-            Share {filteredData?.length} listings
-            <IconButton sx={{ ml: "auto" }} onClick={closeDrawer}>
-              <CloseOutlined />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Box>
-          <Card sx={{ p: 1, m: 1 }} variant="outlined">
-            Tap the below to copy text and share on Whatsapp.
-          </Card>
-          <Card variant="outlined" sx={{ p: 0, m: 1 }}>
-            <CardActionArea
-              sx={{ p: 1, display: "flex", flexDirection: "column" }}
-              onClick={() => {
-                closeDrawer();
-                onCopy();
-              }}
-            >
-              <Box sx={{ position: "relative", ml: "auto" }}>
-                <ContentCopyIcon />
-              </Box>
-              {shareText?.map((text) => <Typography>{text}</Typography>)}
-            </CardActionArea>
-          </Card>
-        </Box>
-      </Drawer>
+
       <Drawer
         anchor="bottom"
         sx={{ display: "flex", flexDirection: "column" }}

@@ -1,3 +1,8 @@
 export const copy = (text: string) => {
-    navigator?.clipboard?.writeText(text)
+        try {
+
+            navigator?.clipboard?.writeText(text)
+        } catch(e){
+            alert(e)
+        }
 }

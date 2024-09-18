@@ -5,6 +5,7 @@ import {
 } from "@mui/icons-material";
 import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import {
+  Avatar,
   Box,
   Chip,
   Drawer,
@@ -13,6 +14,7 @@ import {
   MenuList,
   Paper,
   Typography,
+  Zoom,
 } from "@mui/material";
 import React from "react";
 import { LocationFilterNew2 } from "./LocationFilterNew2";
@@ -111,31 +113,38 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   );
   const searchPage = (
     <>
-      {/* <IconButton onClick={() => onFilterClick(2)}>
+
+    {filters.location &&   <IconButton onClick={() => onFilterClick(2)}>
         <TuneRoundedIcon />
-      </IconButton> */}
-      <MenuList
+      </IconButton>}
+ 
+      <Box
         sx={{
+    
           display: "flex",
           overflowX: "auto",
-          pl: 1,
-          pr: 1,
+          pl: 0,
+          pr: 2,
           borderRadius: 10,
         }}
       >
-        <Chip
-          onClick={() => onFilterClick(0)}
-          sx={{mr:1}}
-          variant="filled"
-          label={location}
-        />
-        <Chip
-          onClick={() => onFilterClick(1)}
-          
-          variant="filled"
-          label={price}
-        />
-      </MenuList>
+       
+        <Zoom in={true}>
+          <Chip
+            onClick={() => onFilterClick(0)}
+            sx={{ mr: 1 }}
+            variant="filled"
+            label={location}
+          />
+        </Zoom>
+        <Zoom in>
+          <Chip
+            onClick={() => onFilterClick(1)}
+            variant="filled"
+            label={price}
+          />
+        </Zoom>
+      </Box>
     </>
   );
   return (
