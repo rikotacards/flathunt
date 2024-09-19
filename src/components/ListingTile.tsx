@@ -180,7 +180,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
               }}
             >
               {imgs}
-              {isNarrow && (
+              {true && (
                 <Card
                   elevation={0}
                   color=""
@@ -202,7 +202,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                   }}
                 >
                   <Chip
-                    size="medium"
+                    size={isNarrow ? "medium": "small"}
                     variant="outlined"
                     label={
                       <Typography variant="caption" fontWeight={"bold"}>
@@ -224,7 +224,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
 
                   {location && (
                     <Chip
-                      size="medium"
+                      size={isNarrow ? "medium": "small"}
                       variant="outlined"
                       label={
                         <Typography variant="caption" fontWeight={"bold"}>
@@ -245,7 +245,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                     />
                   )}
                   <Chip
-                    size="medium"
+                    size={isNarrow ? "medium": "small"}
                     variant="outlined"
                     label={
                       <Typography variant="caption" fontWeight={"bold"}>
@@ -266,7 +266,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                   />
 
                   <Chip
-                    size="medium"
+                    size={isNarrow ? "medium": "small"}
                     variant="outlined"
                     label={
                       <Typography variant="caption" fontWeight={"bold"}>
@@ -294,54 +294,8 @@ export const ListingTile: React.FC<IListing> = (props) => {
                 alignItems: "flex-start",
               }}
             >
-              {!isNarrow && (
-                <Box
-                  sx={{
-                    ml: 0,
-                    mt: 1,
-                    textAlign: "left",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <Typography variant="body2" fontWeight={"bold"}>
-                      ${price} HKD
-                    </Typography>
-                    <Typography variant="caption" sx={{ ml: 0.5 }}>
-                      month
-                    </Typography>
-                  </div>
-                  <Typography
-                    sx={{ textTransform: "capitalize" }}
-                    fontWeight={"bold"}
-                    variant="body2"
-                  >
-                    {location}
-                  </Typography>
-                  <Typography variant="body2" fontWeight={"bold"}>
-                    {netArea} sqft
-                  </Typography>
-                  <Typography variant="body2">{bedrooms} Bedroom</Typography>
-                  <Typography variant="body2">{address}</Typography>
-                  <Typography variant="body2">{dateAdded?.seconds}</Typography>
-                </Box>
-              )}
-              {!isNarrow && (
-                <Button
-                  size="small"
-                  onClick={toggleContactForm}
-                  sx={{
-                    ml: "auto",
-                    textTransform: "capitalize",
-                    borderRadius: 5,
-                    mt: 1,
-                  }}
-                  variant="outlined"
-                >
-                  contact
-                </Button>
-              )}
+      
+              
             </Box>
           </Box>
         </Link>
@@ -366,9 +320,9 @@ export const ListingTile: React.FC<IListing> = (props) => {
               <BookmarkAddOutlined sx={{ color: "white" }} />
             )}
           </IconButton>
-          {isNarrow && (
+          { (
             <Chip
-              size="medium"
+              size={isNarrow ? "medium": "small"}
               onClick={toggleContactForm}
               label="Contact"
               id={listingId + "contact"}

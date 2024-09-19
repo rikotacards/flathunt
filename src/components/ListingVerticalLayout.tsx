@@ -181,7 +181,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   ));
 
   return (
-    <Box sx={{ maxWidth: "400px", position: "relative", mt: 1, }}>
+    <Box sx={{ maxWidth: "400px", position: "relative", mt: 1 }}>
       <meta content={`${price}`} property="og:price" />
       <IconButton
         size="small"
@@ -208,7 +208,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
               flexDirection: "column",
               borderRadius: 5,
               overflow: "hidden",
-              // maxHeight:'500px',
+              maxHeight:'500px',
             }}
           >
             {photos}
@@ -242,6 +242,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             position: "relative",
             borderRadius: 16,
             zIndex: 0,
+            height:'auto',
             overflow: "hidden",
             boxShadow:
               "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
@@ -266,7 +267,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
           </Button>
         </Swiper>
       )}
-      <Card
+      {!!desc && <Card
         elevation={0}
         sx={{
           borderRadius: 3,
@@ -277,10 +278,10 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
           mt: 1,
         }}
       >
-        <Typography fontWeight={500} variant="body2">
+      {  <Typography fontWeight={500} variant="body2">
           {desc}
-        </Typography>
-      </Card>
+        </Typography>}
+      </Card>}
       <Box
         component={Paper}
         elevation={0}

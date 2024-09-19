@@ -40,7 +40,7 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
       }}
     >
       <IconButton size='large' sx={{color: 'black'}} onClick={goBack}>
-        <HolidayVillageRounded />
+        <ChevronLeft />
       </IconButton>
       <Box sx={{ display: "flex", flexDirection: "column", pb:0 }}>
         <Typography variant='body2' fontWeight={"bold"} color="textPrimary">
@@ -75,7 +75,7 @@ export const ListingPage: React.FC = () => {
     <LinearProgress />;
   }
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, border:'1px solid red', justifyContent: 'center', display: 'flex' }}>
       <ListingVerticalLayout {...data} />
     </Box>
   );

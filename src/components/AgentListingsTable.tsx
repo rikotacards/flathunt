@@ -112,7 +112,6 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
       await deleteListings([listingId], USER_ID);
       queryClient.invalidateQueries({
         queryKey: ["getAgentListings"],
-        exact: true,
       });
     } catch (e) {
       alert(e);
@@ -124,14 +123,15 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
         <TableCell
           sx={{ display: "flex", flexDirection: "column", border: "none" }}
         >
+          <Typography fontWeight={"bold"} variant="body2">
+            {row.address}
+          </Typography>
           <Typography
             sx={{ mr: 1, textTransform: "capitalize" }}
-            fontWeight={"bold"}
-            variant="body2"
+            variant="caption"
           >
             {row.location}
           </Typography>
-          <Typography variant="caption">{row.address}</Typography>
         </TableCell>
         <TableCell sx={{ border: "none" }} scope="">
           <Typography fontWeight={"bold"} variant="body2">
