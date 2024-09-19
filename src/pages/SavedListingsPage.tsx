@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { getSavedListings } from "../firebase/listings";
 import { ListingTile } from "../components/ListingTile";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, LinearProgress, Typography } from "@mui/material";
 import { SavedListing } from "../components/SavedListing";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { useAppBarContext, useAuthContext } from "../Providers/contextHooks";
@@ -25,7 +25,7 @@ const SavedListingAppBar: React.FC = () => {
 export const SavedListingsPage: React.FC = () => {
     const {user, isUserLoading} = useAuthContext();
   const { data, isLoading } = useQuery({
-    queryKey: ["getSavedListings"],
+    queryKey: ["getSavedListings", isUserLoading],
     queryFn: () => !user ? [] : getSavedListings(user?.uid),
   });
   const {setAppBarChildComponent} = useAppBarContext();
@@ -33,6 +33,9 @@ export const SavedListingsPage: React.FC = () => {
   React.useEffect(() => {
     setAppBarChildComponent(<SavedListingAppBar/>)
 },[])
+if(isLoading || isUserLoading){
+  return <LinearProgress/>
+}
   return (
     <Box>
       <Typography color={'textSecondary'} sx={{ m: 2 }} fontWeight={"bold"}>

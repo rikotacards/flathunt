@@ -40,7 +40,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
   message,
   listingSpecificContact,
   toggleForm,
-  onClose
+  onClose,
 }) => {
   const queryClient = useQueryClient();
   const s = useSnackbarContext();
@@ -81,10 +81,10 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
         await addUser({ userId: res.user.uid });
       }
       document
-      .getElementById(listingId)
-      ?.scrollIntoView({ block: "center", behavior: "instant" });
-      toggleForm()
-      document.getElementById(listingId+'contact')?.click()
+        .getElementById(listingId)
+        ?.scrollIntoView({ block: "center", behavior: "instant" });
+      toggleForm();
+      document.getElementById(listingId + "contact")?.click();
     } catch (e) {}
   };
   const onMessage = () => {
@@ -116,29 +116,30 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
   };
   return (
     <Box>
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography>Contact Agent</Typography>
-          <IconButton onClick={onClose} sx={{ ml: "auto" }} color="inherit">
-            <KeyboardArrowDown />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      <Toolbar sx={{ textAlign: "center", display: "flex" }}>
+        <Box sx={{ display: "flex", flexBasis: 1, flexGrow:1}} />
+        <Typography fontWeight={"bold"} sx={{flexBasis: 1, display: 'flex', flexGrow:1}}>
+          Contact Agent
+        </Typography>
+        <IconButton onClick={onClose} sx={{flexBasis: 1, display: 'flex', flexGrow:1, justifyContent: 'flex-end' }} color="inherit">
+          <KeyboardArrowDown />
+        </IconButton>
+      </Toolbar>
       <Box sx={{ p: 1 }}>
         {user && (
           <OutlinedInput
             value={number}
             fullWidth
             disabled={!!myData?.contactNumber}
-            sx={{ mt: 1, mb:1 }}
+            sx={{ mt: 1, mb: 1 }}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="Your whatsapp number"
             endAdornment={<Button>Edit</Button>}
           />
         )}
-        {user &&  (
+        {user && (
           <Card variant="outlined" sx={{ p: 1, mt: 0, mb: 1 }}>
-            <Typography>
+            <Typography color='textSecondary'>
               Your contact will be sent to the agent. The agent will reach out
               to you as soon as possible. In addition, your contact will be
               saved for future agent requests.
@@ -146,11 +147,22 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
           </Card>
         )}
         {!user ? (
-          <Button sx={{textTransform: 'capitalize'}} size='large' fullWidth variant="contained" onClick={onSignIn}>
+          <Button
+            sx={{ textTransform: "capitalize" }}
+            size="large"
+            fullWidth
+            variant="contained"
+            onClick={onSignIn}
+          >
             Sign In with Google to message
           </Button>
         ) : (
-          <Button startIcon={<WhatsAppIcon/>} fullWidth variant="contained" onClick={onMessage}>
+          <Button
+            startIcon={<WhatsAppIcon />}
+            fullWidth
+            variant="contained"
+            onClick={onMessage}
+          >
             Message
           </Button>
         )}

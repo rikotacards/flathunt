@@ -1,18 +1,16 @@
 import {
-  ArrowDropDownCircleOutlined,
+
   HolidayVillageRounded,
   KeyboardArrowDown,
 } from "@mui/icons-material";
 import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import {
-  Avatar,
+
   Box,
   Chip,
   Drawer,
   IconButton,
-  MenuItem,
-  MenuList,
-  Paper,
+
   Typography,
   Zoom,
 } from "@mui/material";
@@ -92,7 +90,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     </Box>
   );
   const price = (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Box sx={{ display: "flex", alignItems: "center",ml:0.5}}>
       <Typography fontWeight={500} color="textPrimary" variant="body2">
         {priceLabel}
       </Typography>
@@ -103,8 +101,8 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   );
   const profilePage = (
     <>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <IconButton onClick={goHome}>
+    <Box sx={{ display: "flex", alignItems: "center",ml:0.5}}>
+    <IconButton onClick={goHome}>
           <HolidayVillageRounded />
         </IconButton>
         <Typography fontWeight={"bold"}>Profile</Typography>
@@ -113,14 +111,14 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   );
   const searchPage = (
     <>
+      {filters.location && (
+        <IconButton onClick={() => onFilterClick(2)}>
+          <TuneRoundedIcon />
+        </IconButton>
+      )}
 
-    {filters.location &&   <IconButton onClick={() => onFilterClick(2)}>
-        <TuneRoundedIcon />
-      </IconButton>}
- 
       <Box
         sx={{
-    
           display: "flex",
           overflowX: "auto",
           pl: 0,
@@ -128,11 +126,10 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
           borderRadius: 10,
         }}
       >
-       
         <Zoom in={true}>
           <Chip
             onClick={() => onFilterClick(0)}
-            sx={{ mr: 1 }}
+            sx={{ mr: 1}}
             variant="filled"
             label={location}
           />
@@ -141,6 +138,8 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
           <Chip
             onClick={() => onFilterClick(1)}
             variant="filled"
+            sx={{ mr: 1}}
+
             label={price}
           />
         </Zoom>
@@ -148,10 +147,10 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     </>
   );
   return (
-    <Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Box sx={{pb:0}}>
+    
+      <Box sx={{ display: "flex", alignItems: 'center',  }}>
         {(isHomePage || isSearchResults || isAgentListings) && searchPage}
-        {isProfilePage && profilePage}
       </Box>
       <Drawer
         PaperProps={{

@@ -70,7 +70,7 @@ const {user} = useAuthContext();
         queryClient.invalidateQueries({ queryKey: ["getSavedListings"], exact: true });
       } else {
         await saveListing({ userId: user?.uid || USER_ID, listingId });
-        s.setSnackbarChildComponent(<Alert icon={<BookmarkAddedIcon/>} severity="success" variant='filled' >Listing saved!</Alert>)
+        s.setSnackbarChildComponent(<Alert icon={<BookmarkAddedIcon/>} severity="success" variant='filled' >Listing saved</Alert>)
         s.toggleSnackbar();
         queryClient.invalidateQueries({ queryKey: ["getSavedListings"], exact: true });
       }
@@ -376,6 +376,12 @@ const {user} = useAuthContext();
         open={openContactForm}
         anchor="bottom"
         onClose={onCloseContactForm}
+        PaperProps={{
+          style: {
+            borderTopLeftRadius: 25,
+            borderTopRightRadius: 25,
+          },
+        }}
       >
         <ContactFormNew
           message={message}
