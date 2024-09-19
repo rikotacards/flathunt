@@ -72,8 +72,13 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
 
   const fallback = `Hi, I'm interested this flat \n flathunt.co/listing/${listingId}`;
   const whatsappLink = `whatsapp://send?phone=${listingSpecificContact || listingOwnerData?.contactNumber}&text=${message || fallback}`;
-
+  const userAgent = window.navigator.userAgent;
+  const url = window.location.href;
   const onSignIn = async () => {
+    if (userAgent.includes("Instagram")) {
+      window.location.href = "x-safari-" + url;
+      return;
+    }
     try {
       const res = await signInWithPopup(auth, provider);
       const user = await getUser(res.user.uid);
@@ -117,11 +122,23 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
   return (
     <Box>
       <Toolbar sx={{ textAlign: "center", display: "flex" }}>
-        <Box sx={{ display: "flex", flexBasis: 1, flexGrow:1}} />
-        <Typography fontWeight={"bold"} sx={{flexBasis: 1, display: 'flex', flexGrow:1}}>
+        <Box sx={{ display: "flex", flexBasis: 1, flexGrow: 1 }} />
+        <Typography
+          fontWeight={"bold"}
+          sx={{ flexBasis: 1, display: "flex", flexGrow: 1 }}
+        >
           Contact Agent
         </Typography>
-        <IconButton onClick={onClose} sx={{flexBasis: 1, display: 'flex', flexGrow:1, justifyContent: 'flex-end' }} color="inherit">
+        <IconButton
+          onClick={onClose}
+          sx={{
+            flexBasis: 1,
+            display: "flex",
+            flexGrow: 1,
+            justifyContent: "flex-end",
+          }}
+          color="inherit"
+        >
           <KeyboardArrowDown />
         </IconButton>
       </Toolbar>
@@ -134,12 +151,12 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
             sx={{ mt: 1, mb: 1 }}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="Your whatsapp number"
-            endAdornment={<Button onClick={() => nav('/profile')}>Edit</Button>}
+            endAdornment={<Button onClick={() => nav("/profile")}>Edit</Button>}
           />
         )}
         {user && (
           <Card variant="outlined" sx={{ p: 1, mt: 0, mb: 1 }}>
-            <Typography color='textSecondary'>
+            <Typography color="textSecondary">
               Your contact will be sent to the agent. The agent will reach out
               to you as soon as possible. In addition, your contact will be
               saved for future agent requests.

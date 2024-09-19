@@ -3,7 +3,6 @@ import React from "react";
 import HotelOutlinedIcon from "@mui/icons-material/HotelOutlined";
 import { IListing } from "../firebase/types";
 import { ListingImage } from "./ListingImage";
-import ShowerIcon from "@mui/icons-material/Shower";
 import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
 import {
   Alert,
@@ -11,21 +10,16 @@ import {
   Box,
   Button,
   Card,
-  Chip,
   Dialog,
   Divider,
   Drawer,
-  Fab,
   IconButton,
   Paper,
-  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
 import { auth, USER_ID } from "../firebase/firebaseConfig";
 import {
-  addContactRequest,
   getSavedListings,
   removeSavedListings,
   saveListing,
@@ -36,15 +30,11 @@ import {
   BookmarkRemoveOutlined,
   ChevronLeft,
   DirectionsSubwayFilledOutlined,
-  Fullscreen,
   InsertLink,
-  KeyboardArrowDownOutlined,
   PlaceOutlined,
   ShowerOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-
-import IosShareIcon from "@mui/icons-material/IosShare";
 
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { copy } from "../utils/copy";
@@ -58,7 +48,6 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const { user } = useAuthContext();
   const nav = useNavigate();
   const enableSwipe = true;
-  const [number, setNumber] = React.useState("");
   const [openContactForm, setOpenContactForm] = React.useState(false);
   const toggleContactForm = () => {
     setOpenContactForm(!openContactForm);
@@ -173,6 +162,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
 
   const imgWithoutGrid = images?.map((image, i) => (
     <Box
+      key={image}
       sx={{
         mb: 0.5,
         maxWidth: "600px",
@@ -349,9 +339,8 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
         <Divider />
 
         <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-          <Box sx={{display:'flex', alignSelf: 'flex-start'}}>
-
-          <StoreOutlinedIcon />
+          <Box sx={{ display: "flex", alignSelf: "flex-start" }}>
+            <StoreOutlinedIcon />
           </Box>
           <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
             <Typography variant="caption">Real Estate Company</Typography>
@@ -383,7 +372,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
 
           <IconButton
             onClick={() => onShare(listingId)}
-            sx={{ ml: "auto", mb: 0.5, transform: 'rotate(-45deg)' }}
+            sx={{ ml: "auto", mb: 0.5, transform: "rotate(-45deg)" }}
           >
             <InsertLink />
           </IconButton>
