@@ -83,7 +83,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   );
   const imgs = images?.map((image) => (
     <SwiperSlide
-      style={{ height: "auto", width: "100%", maxHeight: "450px" }}
+      style={{ height: "auto", width: "100%", minHeight: "450px" }}
       key={image}
     >
       <ListingImage imageName={image} listingId={listingId} userId={userId} />
@@ -181,7 +181,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   ));
 
   return (
-    <Box sx={{ maxWidth: "400px", position: "relative", mt: 1 }}>
+    <Box sx={{p:2, maxWidth: "400px", position: "relative", mt: 1 }}>
       <meta content={`${price}`} property="og:price" />
       <IconButton
         size="small"
@@ -240,8 +240,8 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
           pagination={true}
           style={{
             position: "relative",
-            borderRadius: 16,
             zIndex: 0,
+            borderRadius:16,
             height:'auto',
             overflow: "hidden",
             boxShadow:

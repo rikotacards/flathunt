@@ -129,7 +129,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
   };
   const imgs = images?.map((image) => (
     <SwiperSlide
-      style={{ height: "auto", width: "100%", maxHeight: "450px" }}
+      style={{minHeight:400, height: "auto", width: "100%", maxHeight: "450px" }}
       key={image}
     >
       <ListingImage imageName={image} listingId={listingId} userId={userId} />
@@ -174,6 +174,8 @@ export const ListingTile: React.FC<IListing> = (props) => {
                 borderRadius: 16,
                 zIndex: 0,
                 overflow: "hidden",
+                height:'auto',
+
                 "--swiper-pagination-color": "white",
                 boxShadow:
                   "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
@@ -181,7 +183,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
             >
               {imgs}
               {true && (
-                <Card
+                <Box
                   elevation={0}
                   color=""
                   sx={{
@@ -285,7 +287,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                       backdropFilter: "blur(0px)",
                     }}
                   />
-                </Card>
+                </Box>
               )}
             </Swiper>
             <Box

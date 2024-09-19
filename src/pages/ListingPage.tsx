@@ -16,7 +16,11 @@ import ForumIcon from "@mui/icons-material/Forum";
 
 import { ListingVerticalLayout } from "../components/ListingVerticalLayout";
 import { useAppBarContext } from "../Providers/contextHooks";
-import { ChevronLeft, ForumOutlined, HolidayVillageRounded } from "@mui/icons-material";
+import {
+  ChevronLeft,
+  ForumOutlined,
+  HolidayVillageRounded,
+} from "@mui/icons-material";
 interface ListingPageAppBarProps {
   price: number;
   netArea: number;
@@ -27,8 +31,8 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
   const { price, netArea, location, address } = props;
   const nav = useNavigate();
   const urlLocation = useLocation();
-    console.log(urlLocation)
-  const goBack = () => nav('/');
+  console.log(urlLocation);
+  const goBack = () => nav("/");
   return (
     <Box
       component={Paper}
@@ -39,11 +43,11 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
         alignItems: "center",
       }}
     >
-      <IconButton size='large' sx={{color: 'black'}} onClick={goBack}>
+      <IconButton size="large" sx={{ color: "black" }} onClick={goBack}>
         <ChevronLeft />
       </IconButton>
-      <Box sx={{ display: "flex", flexDirection: "column", pb:0 }}>
-        <Typography variant='body2' fontWeight={"bold"} color="textPrimary">
+      <Box sx={{ display: "flex", flexDirection: "column", pb: 0 }}>
+        <Typography variant="body2" fontWeight={"bold"} color="textPrimary">
           {price} HKD - {netArea} sqft
         </Typography>
         <Typography variant="caption">
@@ -59,7 +63,7 @@ export const ListingPage: React.FC = () => {
     queryKey: ["getListing"],
     queryFn: () => getListing(params.listingId || ""),
   });
-  
+
   const { setAppBarChildComponent } = useAppBarContext();
   React.useEffect(() => {
     setAppBarChildComponent(
@@ -75,7 +79,17 @@ export const ListingPage: React.FC = () => {
     <LinearProgress />;
   }
   return (
-    <Box sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
+    <Box
+      sx={{
+        position: "relative",
+        justifyContent: "center",
+        display: "flex",
+        m: 1,
+        flexDirection: "column",
+        alignItems: 'center',
+
+      }}
+    >
       <ListingVerticalLayout {...data} />
     </Box>
   );
