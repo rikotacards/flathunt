@@ -51,7 +51,6 @@ export const SearchPage: React.FC = () => {
     savedListingsTransformed[listing.listingId] = listing.docId
   })
 
-  console.log("saved", savedListingsData);
   return (
     <Box
       sx={{

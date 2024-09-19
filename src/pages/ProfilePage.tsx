@@ -39,7 +39,8 @@ export const ProfilePage: React.FC = () => {
     licenseNumber: data?.licenseNumber,
   });
   React.useEffect(() => {
-    setForm({...data,   name: user?.displayName,
+    setForm({...data,   
+      name: user?.displayName,
       email: user?.email})
   }, [isLoading])
   const queryClient = useQueryClient();

@@ -1,15 +1,13 @@
 import AddIcon from "@mui/icons-material/Add";
 import {
   Alert,
-  AppBar,
   Autocomplete,
   Box,
   Button,
-  Checkbox,
+  Chip,
   CircularProgress,
   Collapse,
   Divider,
-  FormControl,
   IconButton,
   OutlinedInput,
   Paper,
@@ -27,6 +25,7 @@ import {
   getStorage,
 } from "firebase/storage";
 import Tab from "@mui/material/Tab";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import update from "immutability-helper";
 import { Card } from "./draggableImage";
@@ -40,6 +39,7 @@ import { additionalFeatures, hkLocations } from "../listingConfig";
 import { IListing } from "../firebase/types";
 import {
   AddPhotoAlternate,
+  CheckCircleOutlineOutlined,
   KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -48,7 +48,7 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { OtherFeatures } from "./OtherFeatures";
 import { updateListing } from "../firebase/listings";
-const bedrooms = [0, 1, 2, 3, 4];
+const bedrooms = [0, 1, 2, 3, 4, 5];
 const bathrooms = [1, 2, 3];
 
 interface AddListingFormProps {
@@ -56,6 +56,70 @@ interface AddListingFormProps {
   userId: string;
   listing?: IListing;
 }
+interface HeaderWithCheckProps {
+  isChecked: boolean;
+  text: string;
+}
+const HeaderWithCheck: React.FC<HeaderWithCheckProps> = ({
+  isChecked,
+  text,
+}) => {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+      <Box sx={{ alignItems: "center", display: "flex", mr: 0.5 }}>
+        {isChecked ? (
+          <CheckCircleIcon fontSize="small" color="success" />
+        ) : (
+          <CheckCircleOutlineOutlined  fontSize="small" color="error" />
+        )}
+      </Box>
+      <Typography
+        sx={{ mb: 0, textTransform: "capitalize" }}
+        fontWeight={"bold"}
+        variant="body1"
+      >
+        {text}
+      </Typography>
+    </Box>
+  );
+};
+interface FieldLayoutProps {
+  children: React.ReactNode;
+}
+const FieldLayout: React.FC<FieldLayoutProps> = ({ children }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        aligntItems: "center",
+        flexDirection: "column",
+        width: "100%",
+        mb: 2,
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
+interface WithCheckWrapperProps {
+  children: React.ReactNode;
+  isChecked: boolean;
+}
+const WithCheckWrapper: React.FC<WithCheckWrapperProps> = ({
+  children,
+  isChecked,
+}) => {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+      {isChecked ? (
+        <CheckCircleIcon color="success" />
+      ) : (
+        <CheckCircleOutlineOutlined sx={{ mr: 0.5 }} color="action" />
+      )}
+      {children}
+    </Box>
+  );
+};
 export const AddListingForm: React.FC<AddListingFormProps> = ({
   onClose,
   userId,
@@ -222,7 +286,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       inputRef.current.click();
     }
   };
-  const disableTabs = true
+  const disableTabs = true;
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (!e.dataTransfer) {
@@ -286,7 +350,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
         userId: userId || USER_ID,
         images: fileNames,
         dateAdded: serverTimestamp(),
-        desc: form.desc || '',
+        desc: form.desc || "",
       });
       setIsAdding(false);
       queryClient.invalidateQueries({ queryKey: ["getAgentListings"] });
@@ -314,7 +378,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
   };
 
   const outlinedOrContained = (condition: boolean) => {
-    return condition ? "contained" : "outlined";
+    return condition ? "filled" : "outlined";
   };
   return (
     <DndProvider backend={HTML5Backend}>
@@ -327,19 +391,33 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             justifyContent: "space-between",
           }}
         >
-          <Button sx={{flexBasis: 1, flexGrow:1, textTransform: "capitalize", textAlign: 'left', justifyContent: 'flex-start' }} onClick={onClose}>
+          <Button
+            sx={{
+              flexBasis: 1,
+              flexGrow: 1,
+              textTransform: "capitalize",
+              textAlign: "left",
+              justifyContent: "flex-start",
+            }}
+            onClick={onClose}
+          >
             Cancel
           </Button>
-          <Typography sx={{flexGrow: 1,flexBasis:1, textTransform: "capitalize" }} fontWeight={"bold"}>
+          <Typography
+            sx={{ flexGrow: 1, flexBasis: 1, textTransform: "capitalize" }}
+            fontWeight={"bold"}
+          >
             {isEdit ? "Edit Listing" : "Add Listing"}
           </Typography>
-          <Box sx={{flexGrow:1, flexBasis: 1}} />
+          <Box sx={{ flexGrow: 1, flexBasis: 1 }} />
         </Toolbar>
 
-     {!disableTabs &&    <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
-          <Tab label="edit" />
-          <Tab label="Preview" />
-        </Tabs>}
+        {!disableTabs && (
+          <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
+            <Tab label="edit" />
+            <Tab label="Preview" />
+          </Tabs>
+        )}
       </Box>
       {tabIndex == 0 && (
         <>
@@ -352,7 +430,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               overflowY: "scroll",
             }}
           >
-            <div>
+            <HeaderWithCheck isChecked={files.length > 0} text={"Add Photos"} />
+
+            <div style={{ marginBottom: "20px" }}>
               <div
                 onDrop={handleDrop}
                 onClick={onUploadIconClick}
@@ -413,102 +493,108 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 })}
               </div>
             </div>
-            <FormControl sx={{ mb: 2, mt: 0 }} fullWidth>
-              <Typography variant="h6" fontWeight={"bold"}>
-                Property Information
-              </Typography>
-              <Box sx={{ display: "flex", mb: 1 }}>
-                <Button
+            <FieldLayout>
+              <HeaderWithCheck
+                isChecked={!!form.rentBuy && !!form.propertyType}
+                text={"Property Info"}
+              />
+              <Box sx={{ display: "flex" }}>
+                <Chip
                   onClick={() => onClick("rentBuy", "rent")}
-                  name="rent"
-                  fullWidth
                   sx={{
                     mr: 1,
                   }}
+                  label="For Rent"
                   variant={outlinedOrContained(form.rentBuy === "rent")}
-                >
-                  For Rent
-                </Button>
-                <Button
+                />
+
+                <Chip
+                  label="Sale"
                   onClick={() => onClick("rentBuy", "sale")}
-                  name="sale"
-                  fullWidth
                   variant={outlinedOrContained(form.rentBuy === "sale")}
-                >
-                  For Sale
-                </Button>
+                />
               </Box>
-              <Box sx={{ display: "flex", mb: 2 }}>
-                <Button
+            </FieldLayout>
+            <FieldLayout>
+              <HeaderWithCheck
+                isChecked={!!form.propertyType}
+                text="Property Type"
+              />
+              <Box sx={{}}>
+                <Chip
                   onClick={() => onClick("propertyType", "residential")}
-                  name="residential"
-                  fullWidth
+                  label="residential"
                   sx={{
                     mr: 1,
                   }}
                   variant={outlinedOrContained(
                     form.propertyType === "residential"
                   )}
-                >
-                  Residential
-                </Button>
-                <Button
+                />
+
+                <Chip
                   onClick={() => onClick("propertyType", "commercial")}
-                  name="commercial"
-                  fullWidth
+                  label="commercial"
                   variant={outlinedOrContained(
                     form.propertyType === "commercial"
                   )}
-                >
-                  Commercial
-                </Button>
+                />
               </Box>
+            </FieldLayout>
 
-              <Box>
-                <Typography fontWeight={"bold"} variant="h6">
-                  Bedrooms
-                </Typography>
-                <Box sx={{ display: "flex", mb: 1 }}>
-                  {bedrooms.map((br, i) => (
-                    <Button
-                      value={form["bedrooms"]}
-                      name="bedrooms"
-                      onClick={() => onClick("bedrooms", br)}
-                      sx={{
-                        mb: 1,
-                        ml: i == 0 ? 0 : 1,
-                        textTransform: "capitalize",
-                      }}
-                      variant={
-                        form["bedrooms"] === br ? "contained" : "outlined"
-                      }
-                      fullWidth
-                    >
-                      {br === 0 ? "Studio" : br}
-                    </Button>
-                  ))}
-                </Box>
+            <Box
+              sx={{
+                display: "flex",
+                aligntItems: "center",
+                flexDirection: "column",
+                width: "100%",
+                mb: 3,
+              }}
+            >
+              <HeaderWithCheck
+                isChecked={form.bedrooms !== undefined}
+                text={"Bedrooms"}
+              />
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                {bedrooms.map((br, i) => (
+                  <Chip
+                    onClick={() => onClick("bedrooms", br)}
+                    label={br === 0 ? "Studio" : br}
+                    sx={{
+                      mb: 0,
+                      ml: i == 0 ? 0 : 0,
+                      mr: 1,
+                      width: "100%",
+                      textTransform: "capitalize",
+                      fontWeight: form["bedrooms"] === br ? "bold" : undefined,
+                    }}
+                    variant={form["bedrooms"] === br ? "filled" : "outlined"}
+                  />
+                ))}
               </Box>
-              <Box>
-                <Typography fontWeight={"bold"} variant="h6">
-                  Bathrooms
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  {bathrooms.map((br, i) => (
-                    <Button
-                      sx={{ mb: 1, ml: i == 0 ? 0 : 1 }}
-                      onClick={() => setForm((p) => ({ ...p, bathrooms: br }))}
-                      variant={form.bathrooms === br ? "contained" : "outlined"}
-                      fullWidth
-                    >
-                      {br}
-                    </Button>
-                  ))}
-                </Box>
+            </Box>
+            <FieldLayout>
+              <HeaderWithCheck
+                isChecked={form.bathrooms !== undefined}
+                text={"Bathrooms"}
+              />
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                {bathrooms.map((br, i) => (
+                  <Chip
+                    sx={{ mb: 0, ml: i == 0 ? 0 : 1, width: "100%" }}
+                    onClick={() => setForm((p) => ({ ...p, bathrooms: br }))}
+                    variant={form.bathrooms === br ? "filled" : "outlined"}
+                    label={br}
+                  />
+                ))}
               </Box>
-
+            </FieldLayout>
+            <FieldLayout>
+              <HeaderWithCheck text="location" isChecked={!!form.location} />
               <Autocomplete
                 autoHighlight
+                fullWidth
+                size="small"
                 value={form.location}
                 onChange={(e, newValue) => {
                   if (!newValue) {
@@ -516,177 +602,202 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   }
                   setForm((p) => ({ ...p, location: newValue }));
                 }}
-                sx={{ mb: 1 }}
+                sx={{}}
                 renderInput={(params) => (
                   <TextField placeholder="Select location" {...params} />
                 )}
                 options={["central", "wanchai"]}
               />
-
+            </FieldLayout>
+            <FieldLayout>
+              <HeaderWithCheck
+                text="Monthly rent (HKD)"
+                isChecked={!!form.price}
+              />
               <TextField
-                sx={{ mb: 1 }}
-                label="Price"
                 required
+                size="small"
+                fullWidth
                 name="price"
                 type="tel"
-                placeholder="Monthly rent (HKD)"
+                placeholder="80000"
                 onChange={onChange}
                 value={form.price}
               />
+            </FieldLayout>
+            <FieldLayout>
+              <HeaderWithCheck
+                text="Building name or address"
+                isChecked={!!form.address}
+              />
               <TextField
-                label="Building name or address"
-                sx={{ mb: 1 }}
                 required
                 name="address"
                 type="text"
-                placeholder="building name or address"
+                size="small"
+                fullWidth
+                placeholder="Million City, 28 Elgin street"
                 onChange={onChange}
                 value={form.address}
               />
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <TextField
-                  sx={{ mb: 1 }}
-                  required
-                  name="netArea"
-                  value={form.netArea}
-                  type="tel"
-                  placeholder="Net Area (sqft)"
-                  label="Net Area (sqft)"
-                  onChange={onChange}
-                />
-                <TextField
-                  sx={{ mb: 1 }}
-                  value={form.grossArea}
-                  name="grossArea"
-                  type="tel"
-                  placeholder="Gross Area"
-                  label="Gross Area"
-                  onChange={onChange}
-                />
+            </FieldLayout>
+            <FieldLayout>
+              <HeaderWithCheck
+                text="Net Area (sqft)"
+                isChecked={!!form.netArea}
+              />
+              <TextField
+                required
+                size="small"
+                fullWidth
+                name="netArea"
+                value={form.netArea}
+                type="tel"
+                placeholder="Net Area (sqft)"
+                label="Net Area (sqft)"
+                onChange={onChange}
+              />
+            </FieldLayout>
+            <FieldLayout>
+              <HeaderWithCheck
+                text="Gross Area (sqft)"
+                isChecked={!!form.grossArea}
+              />
+              <TextField
+                value={form.grossArea}
+                name="grossArea"
+                size="small"
+                fullWidth
+                type="tel"
+                placeholder="Gross Area"
+                label="Gross Area"
+                onChange={onChange}
+              />
+            </FieldLayout>
+            <FieldLayout>
+              <Typography fontWeight={'bold'} variant="body1" sx={{mb:1}}>Description</Typography>
+              <OutlinedInput
+                multiline
+                minRows={3}
+                name={"desc"}
+                value={form.desc}
+                onChange={onChange}
+                placeholder="Tell us more, eg. Located near many restaurants, 5 min walk to..."
+              />
+            </FieldLayout>
+            <OtherFeatures
+              openMoreFeatures={openMoreFeatures}
+              onCloseMoreFeatures={onCloseMoreFeatures}
+              onOpenMoreFeatures={onOpenMoreFeatures}
+              onClick={onClick}
+              {...form}
+            />
+
+            <Typography variant="h5" fontWeight={"bold"} sx={{ mb: 2, mt: 2 }}>
+              Your Information
+            </Typography>
+            {!isPersonalInfoComplete && (
+              <Typography
+                variant="caption"
+                color="error"
+                sx={{ mb: 2, alignItems: "center", display: "flex" }}
+              >
+                <ErrorIcon color="warning" sx={{ mr: 1 }} />
+                Your information is required before posting so users can contact
+                you directly.
+              </Typography>
+            )}
+            <Typography variant="body2">Whatsapp Number</Typography>
+
+            <TextField
+              sx={{ mb: 1 }}
+              name="contactNumber"
+              type="tel"
+              placeholder="Whatsap Number"
+              disabled={!!data?.contactNumber}
+              onChange={onChangeContactNumber}
+              value={contactNumber}
+            />
+            <Typography variant="body2">Real Estate Company Name</Typography>
+            <TextField
+              sx={{ mb: 1 }}
+              name="realEstateCompany"
+              type="string"
+              placeholder="Company Name"
+              disabled={!!data?.realEstateCompany}
+              onChange={onChange}
+              value={form.realEstateCompany}
+              onBlur={onUpdateRealEstateCompany}
+            />
+
+            <Typography variant="body2">Company License Number</Typography>
+
+            <TextField
+              sx={{ mb: 1 }}
+              name="licenseNumber"
+              type="string"
+              placeholder="License Number"
+              disabled={!!data?.licenseNumber}
+              onChange={onChange}
+              value={form.licenseNumber}
+              onBlur={onUpdateLicenseNumber}
+            />
+
+            <Divider sx={{ mb: 1 }} />
+            {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
+              <Box
+                component={Paper}
+                sx={{ p: 2 }}
+                color={"primary"}
+                variant="outlined"
+              >
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Admin Options
+                </Typography>
+                <Typography variant="caption">
+                  Used for adding on behalf of agents.
+                </Typography>
                 <OutlinedInput
-                  multiline
-                  minRows={3}
-                  name={"desc"}
-                  value={form.desc}
+                  name="listingSpecificContact"
                   onChange={onChange}
-                  placeholder="Tell us more, eg. Located near many restaurants, 5 min walk to..."
-                />
-                <OtherFeatures
-                  openMoreFeatures={openMoreFeatures}
-                  onCloseMoreFeatures={onCloseMoreFeatures}
-                  onOpenMoreFeatures={onOpenMoreFeatures}
-                  onClick={onClick}
-                  {...form}
-                />
-
-                <Typography
-                  variant="h5"
-                  fontWeight={"bold"}
-                  sx={{ mb: 2, mt: 2 }}
-                >
-                  Your Information
-                </Typography>
-                {!isPersonalInfoComplete && (
-                  <Typography
-                    variant="caption"
-                    color="error"
-                    sx={{ mb: 2, alignItems: "center", display: "flex" }}
-                  >
-                    <ErrorIcon color="warning" sx={{ mr: 1 }} />
-                    Your information is required before posting so users can
-                    contact you directly.
-                  </Typography>
-                )}
-                <Typography variant="body2">Whatsapp Number</Typography>
-
-                <TextField
-                  sx={{ mb: 1 }}
-                  name="contactNumber"
                   type="tel"
-                  placeholder="Whatsap Number"
-                  disabled={!!data?.contactNumber}
-                  onChange={onChangeContactNumber}
-                  value={contactNumber}
-                />
-                <Typography variant="body2">
-                  Real Estate Company Name
-                </Typography>
-                <TextField
                   sx={{ mb: 1 }}
-                  name="realEstateCompany"
-                  type="string"
-                  placeholder="Company Name"
-                  disabled={!!data?.realEstateCompany}
-                  onChange={onChange}
-                  value={form.realEstateCompany}
-                  onBlur={onUpdateRealEstateCompany}
+                  fullWidth
+                  placeholder="Listing-specific Whatsapp contact"
                 />
-
-                <Typography variant="body2">Company License Number</Typography>
-
                 <TextField
-                  sx={{ mb: 1 }}
-                  name="licenseNumber"
-                  type="string"
-                  placeholder="License Number"
-                  disabled={!!data?.licenseNumber}
+                  name="listingSpecificRealEstateCompany"
                   onChange={onChange}
-                  value={form.licenseNumber}
-                  onBlur={onUpdateLicenseNumber}
+                  type="text"
+                  fullWidth
+                  sx={{ mb: 1 }}
+                  placeholder="Listing-specific real estate company name"
+                />
+                <TextField
+                  name="listingSpecificLicenseNumber"
+                  onChange={onChange}
+                  type="text"
+                  fullWidth
+                  sx={{ mb: 1 }}
+                  placeholder="Listing-specific License Number"
                 />
               </Box>
-
-              <Divider sx={{ mb: 1 }} />
-              {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
-                <Box
-                  component={Paper}
-                  sx={{ p: 2 }}
-                  color={"primary"}
-                  variant="outlined"
-                >
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    Admin Options
-                  </Typography>
-                  <Typography variant="caption">
-                    Used for adding on behalf of agents.
-                  </Typography>
-                  <OutlinedInput
-                    name="listingSpecificContact"
-                    onChange={onChange}
-                    type="tel"
-                    sx={{ mb: 1 }}
-                    fullWidth
-                    placeholder="Listing-specific Whatsapp contact"
-                  />
-                  <TextField
-                    name="listingSpecificRealEstateCompany"
-                    onChange={onChange}
-                    type="text"
-                    fullWidth
-                    sx={{ mb: 1 }}
-                    placeholder="Listing-specific real estate company name"
-                  />
-                  <TextField
-                    name="listingSpecificLicenseNumber"
-                    onChange={onChange}
-                    type="text"
-                    fullWidth
-                    sx={{ mb: 1 }}
-                    placeholder="Listing-specific License Number"
-                  />
-                </Box>
-              )}
-              <Button
-                onClick={isEdit ? onUpdate : onAdd}
-                disabled={!canAdd}
-                sx={{ position: "sticky", bottom: 0, zIndex:3}}
-                variant="contained"
-                
-                
-              >
-                {isEdit ? isAdding ? "Saving" : "Save Changes" : isAdding ? "Adding" : "Add Listing"}
-              </Button>
-            </FormControl>
+            )}
+            <Button
+              onClick={isEdit ? onUpdate : onAdd}
+              disabled={!canAdd}
+              size='large'
+              sx={{ position: "relative", bottom: 0, zIndex: 3, opacity: 1 }}
+              variant="contained"
+            >
+              {isEdit
+                ? isAdding
+                  ? "Saving"
+                  : "Save Changes"
+                : isAdding
+                  ? "Adding"
+                  : "Add Listing"}
+            </Button>
           </Box>
         </>
       )}

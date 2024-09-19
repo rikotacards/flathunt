@@ -21,6 +21,7 @@ import {
   Typography,
 
   Toolbar,
+  LinearProgress,
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -358,8 +359,9 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
     }
   }
   return (
+    <>
+      {isLoading ? <LinearProgress /> : null}
     <Box sx={{ display: "relative" }} mb={1} mt={2}>
-      {isLoading ? <CircularProgress /> : null}
       <Button onClick={onClear}>Clear filters</Button>
       <TableContainer elevation={0} component={Paper}>
         <Table size="small" stickyHeader>
@@ -419,7 +421,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           onClick={onOpenDrawer}
           color={"secondary"}
         >
-          <Typography sx={{ mr: 1 }} variant="body2">
+          <Typography sx={{ mr: 1, textTransform: 'capitalize' }} variant="body2">
             {filteredData?.length} listings {openDrawer ? <b>copied</b>: null}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -428,11 +430,13 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         </Fab>
 
         <Fab
-          size="medium"
           color="primary"
           sx={{ m: 1 }}
+          variant='extended'
           onClick={onOpenAddNewDrawer}
+          
         >
+          Add Listing
           <AddIcon />
         </Fab>
       </Box>
@@ -461,5 +465,6 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         </Box>
       </Drawer>
     </Box>
+    </>
   );
 });

@@ -364,6 +364,7 @@ const {user} = useAuthContext();
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
+              fontWeight:'500'
             }}
             variant="body2"
           >
