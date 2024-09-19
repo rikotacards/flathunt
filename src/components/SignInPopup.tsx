@@ -51,7 +51,10 @@ export const SignInPopup: React.FC = () => {
           p: 1,
           // border: "1px solid white",
           borderRadius: 5,
+          fontWeight:'bold',
           color: "white",
+          background: "rgba(0, 0, 0, 0.8)",
+
         }}
       >
         Sign in with Google

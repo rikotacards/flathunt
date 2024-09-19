@@ -68,7 +68,7 @@ export const SearchPage: React.FC = () => {
         spacing={{ xs: 2, md: 3, lg: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {isFetching || isLoading
+        {isLoading
           ? [1, 2, 3, 4, 5, 6].map((l) => (
               <Grid size={{ lg: 3, md: 4, xs: 4 }} key={l}>
                 <ListingTileSkeleton />

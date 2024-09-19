@@ -181,7 +181,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   ));
 
   return (
-    <Box sx={{ maxWidth: "400px", position: "relative", mt: 1 }}>
+    <Box sx={{ maxWidth: "400px", position: "relative", mt: 1, }}>
       <meta content={`${price}`} property="og:price" />
       <IconButton
         size="small"
@@ -254,7 +254,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
               position: "absolute",
               bottom: 2,
               right: 2,
-              zIndex: 2,
+              zIndex: 3,
               color: "white",
               p: 2,
               textTransform: "capitalize",

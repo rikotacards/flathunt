@@ -26,7 +26,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     setFiltersOpen(false);
   };
   const location = useLocation();
-  const isListingPage = location.pathname.indexOf("/listing/") >= 0;
   const isHomePage = location.pathname === "/";
   const { getAppBar } = useAppBarContext();
   return (
@@ -42,36 +41,47 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         }}
         position="fixed"
       >
-        <Toolbar
-          sx={{ flexDirection: "row", display: "flex" }}
-        >
+        <Toolbar sx={{ flexDirection: "row", display: "flex" }}>
           {
-            <Collapse sx={{}} in={!hasFilters && isHomePage} orientation="horizontal">
+            <Collapse
+              sx={{}}
+              in={!hasFilters && isHomePage}
+              orientation="horizontal"
+            >
               <Typography
-                sx={{ cursor: "pointer", mr:1, flexBasis:1, display: 'flex', flexGrow:1}}
+                sx={{
+                  cursor: "pointer",
+                  mr: 1,
+                  flexBasis: 1,
+                  display: "flex",
+                  flexGrow: 1,
+                }}
                 onClick={() => nav("/")}
                 color="black"
                 fontWeight={"bold"}
-
               >
                 Flathunt.co
               </Typography>
-
             </Collapse>
           }
-          
-            <Box sx={{ flexGrow: 1, flexBasis: 1, overflow: "hidden" }}>
-              {getAppBar()}
-            </Box>
-          
-          <Box sx={{ flexBasis: 1, }}>
+
+          <Box sx={{ flexGrow: 1, flexBasis: 1, overflow: "hidden" }}>
+            {getAppBar()}
+          </Box>
+
+          <Box sx={{ flexBasis: 1 }}>
             <UserMenu />
           </Box>
         </Toolbar>
       </AppBar>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        {!isListingPage && !isNarrow && <Toolbar />}
-        {isNarrow && <Toolbar />}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        <Toolbar />
         {children}
       </Box>
     </Box>

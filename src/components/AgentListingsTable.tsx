@@ -19,7 +19,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-
   Toolbar,
   LinearProgress,
 } from "@mui/material";
@@ -33,11 +32,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { EditListing } from "./EditListing";
 
 import { IFilters, IListing } from "../firebase/types";
-import {
-  CloseOutlined,
-  InsertLink,
-  OpenInNew,
-} from "@mui/icons-material";
+import { CloseOutlined, InsertLink, OpenInNew } from "@mui/icons-material";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -97,7 +92,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
   const [open, setOpen] = React.useState(false);
   const s = useSnackbarContext();
   const [onDeleteClick, setDeleteClick] = React.useState(false);
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
   const queryClient = useQueryClient();
   const isNarrow = useIsNarrow();
   const { handleOpen, listingId } = row;
@@ -129,7 +124,11 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
         <TableCell
           sx={{ display: "flex", flexDirection: "column", border: "none" }}
         >
-          <Typography sx={{ mr: 1, textTransform: 'capitalize' }} fontWeight={"bold"} variant="body2">
+          <Typography
+            sx={{ mr: 1, textTransform: "capitalize" }}
+            fontWeight={"bold"}
+            variant="body2"
+          >
             {row.location}
           </Typography>
           <Typography variant="caption">{row.address}</Typography>
@@ -185,8 +184,12 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
       </TableRow>
 
       <TableRow sx={{ border: "unset" }}>
-        <TableCell sx={{ pb: 0, pt: 0,  }} colSpan={5}>
-          <Collapse sx={{ display: "flex", justifyContent: 'center' }} unmountOnExit in={open}>
+        <TableCell sx={{ pb: 0, pt: 0 }} colSpan={5}>
+          <Collapse
+            sx={{ display: "flex", justifyContent: "center" }}
+            unmountOnExit
+            in={open}
+          >
             <Box
               sx={{
                 pb: 2,
@@ -197,7 +200,15 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 overflow: "hidden",
               }}
             >
-              <Box sx={{ maxWidth: "350px", mt: 2, justifyContent: 'center', display: 'block', objectFit: 'cover'}}>
+              <Box
+                sx={{
+                  maxWidth: "350px",
+                  mt: 2,
+                  justifyContent: "center",
+                  display: "block",
+                  objectFit: "cover",
+                }}
+              >
                 <ListingTile {...row} />
               </Box>
             </Box>
@@ -211,7 +222,11 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <IconButton disabled={!user} size="small" onClick={toggleDeleteDialog}>
+                  <IconButton
+                    disabled={!user}
+                    size="small"
+                    onClick={toggleDeleteDialog}
+                  >
                     <DeleteIcon />
                   </IconButton>
                   <Typography variant="caption">Delete</Typography>
@@ -223,7 +238,10 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                     alignItems: "center",
                   }}
                 >
-                  <IconButton disabled={!user} onClick={() => handleOpen(listingId)}>
+                  <IconButton
+                    disabled={!user}
+                    onClick={() => handleOpen(listingId)}
+                  >
                     <EditIcon />
                   </IconButton>
                   <Typography variant="caption">Edit</Typography>
@@ -287,7 +305,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const { setFilters, filters } = useFilterContext();
   const { user } = useAuthContext();
   const [openDrawer, setOpenDrawer] = React.useState(false);
- 
+
   const [open, setOpen] = React.useState(false);
   const [openAddNewDrawer, setAddNewDrawer] = React.useState(false);
   const [isSignInDrawerOpen, setSignInDrawer] = React.useState(false);
@@ -343,8 +361,8 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const provider = new GoogleAuthProvider();
   const onOpenDrawer = () => {
     setOpenDrawer(true);
-    onCopy()
-    setTimeout(closeDrawer, 2000)
+    onCopy();
+    setTimeout(closeDrawer, 2000);
   };
   const closeDrawer = () => {
     setOpenDrawer(false);
@@ -352,120 +370,148 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const rows = filteredData?.map((row) => (
     <Row key={row.listingId} {...row} handleOpen={handleOpen} />
   ));
-  const onSignIn = async() => {
-    const res = await signInWithPopup(auth, provider)
-    if(res){
-      onCloseSignInDrawer()
+  const onSignIn = async () => {
+    const res = await signInWithPopup(auth, provider);
+    if (res) {
+      onCloseSignInDrawer();
     }
-  }
-  const hasFilters = filters.location || filters.maxPrice || filters.minPrice || filters.maxNetArea
+  };
+  const hasFilters =
+    filters.location ||
+    filters.maxPrice ||
+    filters.minPrice ||
+    filters.maxNetArea;
   return (
     <>
       {isLoading ? <LinearProgress /> : null}
-    <Box sx={{ display: "relative" }} mb={1} mt={2}>
-      {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
-      <TableContainer elevation={0} component={Paper}>
-        <Table size="small" stickyHeader>
-          <TableHead sx={{ position: "sticy" }}>
-            <TableRow>
-              <TableCell component={"th"} sx={{ fontWeight: "bold", textTransform: 'capitalize' }}>
-                {isNarrow ? "📍" : "Location"}
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", textTransform: 'capitalize' }} component={"th"}>
-                Price
-              </TableCell>
-              <TableCell component={"th"} sx={{ fontWeight: "bold", textTransform: 'capitalize' }}>
-                {isNarrow ? "Area" : "Net Area"}
-              </TableCell>
+      <Box sx={{ display: "relative" }} mb={1} mt={2}>
+        {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
+        <TableContainer elevation={0} component={Paper}>
+          <Table size="small" stickyHeader>
+            <TableHead sx={{ position: "sticy" }}>
+              <TableRow>
+                <TableCell
+                  component={"th"}
+                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                >
+                  {isNarrow ? "📍" : "Location"}
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  component={"th"}
+                >
+                  Price
+                </TableCell>
+                <TableCell
+                  component={"th"}
+                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                >
+                  {isNarrow ? "Area" : "Net Area"}
+                </TableCell>
 
-              <TableCell sx={{ fontWeight: "bold", textTransform: 'capitalize' }}>
-                {isNarrow ? "Br" : "Bedrooms"}
-              </TableCell>
-              {!isNarrow && <TableCell></TableCell>}
+                <TableCell
+                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                >
+                  {isNarrow ? "Br" : "Bedrooms"}
+                </TableCell>
+                {!isNarrow && <TableCell></TableCell>}
 
-              {isNarrow && <TableCell></TableCell>}
-            </TableRow>
-          </TableHead>
-          <TableBody>{rows}</TableBody>
-        </Table>
-      </TableContainer>
+                {isNarrow && <TableCell></TableCell>}
+              </TableRow>
+            </TableHead>
+            <TableBody>{rows}</TableBody>
+          </Table>
+        </TableContainer>
 
-      <Drawer
-        open={open}
-        anchor="bottom"
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-
-        <EditListing
-          userId={USER_ID}
+        <Drawer
+          open={open}
+          anchor="bottom"
           onClose={handleClose}
-          listingId={editingListingId}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <EditListing
+            userId={USER_ID}
+            onClose={handleClose}
+            listingId={editingListingId}
           />
-      </Drawer>
-      <Box
-        sx={{
-          display: "flex",
-          position: "sticky",
-          bottom: 1,
-          width: "100%",
-          justifyContent: "flex-end",
-          p: 2,
-          alignItems: "center",
-          zIndex: 99,
-        }}
-      >
-        <Fab
-          variant="extended"
-          sx={{ m: 0, p: 2, alignItems: "center" }}
-          onClick={onOpenDrawer}
-          color={"secondary"}
-        >
-          <Typography sx={{ mr: 1, textTransform: 'capitalize' }} variant="body2">
-            {filteredData?.length} listings {openDrawer ? <b>copied</b>: null}
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <IosShareIcon sx={{ mb: 0.5 }} />
-          </Box>
-        </Fab>
-
-        <Fab
-          color="primary"
-          sx={{ m: 1, textTransform: 'capitalize' }}
-          variant='extended'
-          onClick={onOpenAddNewDrawer}
-          
-        >
-          Add Listing
-          <AddIcon fontSize="medium" />
-        </Fab>
-      </Box>
-      { (
-        <Drawer open={openAddNewDrawer} anchor="bottom" onClose={handleClose}>
-          <AddListingForm userId={user?.uid || ''} onClose={onCloseAddNewDrawer} />
         </Drawer>
-      )}
+        <Box
+          sx={{
+            display: "flex",
+            position: "sticky",
+            bottom: 1,
+            width: "100%",
+            justifyContent: "flex-end",
+            p: 2,
+            alignItems: "center",
+            zIndex: 99,
+          }}
+        >
+          <Fab
+            variant="extended"
+            sx={{ m: 0, p: 2, alignItems: "center" }}
+            onClick={onOpenDrawer}
+            color={"secondary"}
+          >
+            <Typography
+              sx={{ mr: 1, textTransform: "capitalize" }}
+              variant="body2"
+            >
+              {filteredData?.length} listings{" "}
+              {openDrawer ? <b>copied</b> : null}
+            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <IosShareIcon sx={{ mb: 0.5 }} />
+            </Box>
+          </Fab>
 
-      <Drawer
-        anchor="bottom"
-        sx={{ display: "flex", flexDirection: "column" }}
-        onClose={onCloseSignInDrawer}
-        open={isSignInDrawerOpen}
-      >
-        <Toolbar>
-          <Typography fontWeight={"bold"}>Sign In</Typography>
-          <IconButton onClick={onCloseSignInDrawer} sx={{ml: 'auto'}}><CloseOutlined/></IconButton>
-
-        </Toolbar>
-        <Box sx={{ p: 2 }}>
-          <Typography sx={{mb:1}}>Sign in to add listings</Typography>
-          <Button onClick={onSignIn} fullWidth sx={{}} variant="contained">
-            Sign in with Google
-          </Button>
+          <Fab
+            color="primary"
+            sx={{ m: 1, textTransform: "capitalize" }}
+            variant="extended"
+            onClick={onOpenAddNewDrawer}
+          >
+            Add Listing
+            <AddIcon fontSize="medium" />
+          </Fab>
         </Box>
-      </Drawer>
-    </Box>
+        {
+          <Drawer open={openAddNewDrawer} anchor="bottom" onClose={handleClose}>
+            <AddListingForm
+              userId={user?.uid || ""}
+              onClose={onCloseAddNewDrawer}
+            />
+          </Drawer>
+        }
+
+        <Drawer
+          anchor="bottom"
+          sx={{ display: "flex", flexDirection: "column" }}
+          onClose={onCloseSignInDrawer}
+          open={isSignInDrawerOpen}
+        >
+          <Toolbar>
+            <Typography fontWeight={"bold"}>Sign In</Typography>
+            <IconButton onClick={onCloseSignInDrawer} sx={{ ml: "auto" }}>
+              <CloseOutlined />
+            </IconButton>
+          </Toolbar>
+          <Box sx={{ p: 2 }}>
+            <Typography sx={{ mb: 1 }}>Sign in to add listings</Typography>
+            <Button
+              onClick={onSignIn}
+              fullWidth
+              sx={{
+                textTransform: "capitalize",
+              }}
+              variant="contained"
+            >
+              Sign in with Google
+            </Button>
+          </Box>
+        </Drawer>
+      </Box>
     </>
   );
 });
