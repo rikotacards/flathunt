@@ -75,7 +75,7 @@ export const ListingPage: React.FC = () => {
     <LinearProgress />;
   }
   return (
-    <Box sx={{ p: 2, border:'1px solid red', justifyContent: 'center', display: 'flex' }}>
+    <Box sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
       <ListingVerticalLayout {...data} />
     </Box>
   );
