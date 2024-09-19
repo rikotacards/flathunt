@@ -1,6 +1,7 @@
 import { Box, Paper, Slider, Typography } from "@mui/material";
 import React from "react";
 import { useIsNarrow } from "../utils/useIsNarrow";
+import { useFilterContext } from "../Providers/contextHooks";
 const MIN = 200;
 const MAX = 2000;
 
@@ -11,8 +12,8 @@ export const AreaSlider: React.FC<AreaSliderProps> = ({
   setAreaRange: setAreaRange,
 }) => {
   const isNarrow = useIsNarrow();
-
-  const [range, setRange] = React.useState([MIN, MAX]);
+  const {filters} = useFilterContext();
+  const [range, setRange] = React.useState([filters.minNetArea || MIN, filters.maxNetArea || MAX]);
   const onChange = (event, newValue) => {
     // setFilters((p) => ({ ...p, minPrice: newValue[0], maxPrice: newValue[1] }))
     setRange(newValue);
