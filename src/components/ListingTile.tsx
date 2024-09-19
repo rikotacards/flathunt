@@ -1,7 +1,8 @@
 import React from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -10,7 +11,6 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import ForumIcon from "@mui/icons-material/Forum";
 import { ListingImage } from "./ListingImage";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -23,24 +23,30 @@ import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
 
 import { useIsNarrow } from "../utils/useIsNarrow";
-import { saveListing } from "../firebase/listings";
+import { removeSavedListings, saveListing } from "../firebase/listings";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { ContactForm } from "./ContactForm";
-import { BookmarkAddOutlined, WhatsApp } from "@mui/icons-material";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { Book, BookmarkAddedOutlined, BookmarkAddOutlined, BookmarkRemoveOutlined, Paid, WhatsApp } from "@mui/icons-material";
+import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
+import { ContactFormNew } from "./ContactFormNew";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
   const [openContactForm, setOpenContactForm] = React.useState(false);
-
+const {user} = useAuthContext();
   const toggleContactForm = () => {
     setOpenContactForm(!openContactForm);
   };
+  
   const onCloseContactForm = () => {
     setOpenContactForm(false);
   };
   const {
     netArea,
     price,
+    savedDocId,
     address,
     bedrooms,
     images,
@@ -50,10 +56,26 @@ export const ListingTile: React.FC<IListing> = (props) => {
     dateAdded,
     listingSpecificContact,
     desc,
+    isSaved,
   } = props;
-  const onLike = async () => {
+  const queryClient = useQueryClient();
+
+  const s = useSnackbarContext();
+  const onBookmark = async () => {
     try {
-      saveListing({ userId: USER_ID, listingId });
+      if(isSaved && savedDocId){
+        await removeSavedListings({ userId: user?.uid || USER_ID, docId: savedDocId });
+        s.setSnackbarChildComponent(<Alert icon={<BookmarkRemoveOutlined/>} sx={{bgcolor: 'grey.900'}} variant='filled' >Removed</Alert>)
+        s.toggleSnackbar();
+        queryClient.invalidateQueries({ queryKey: ["getSavedListings"], exact: true });
+      } else {
+        await saveListing({ userId: user?.uid || USER_ID, listingId });
+        s.setSnackbarChildComponent(<Alert icon={<BookmarkAddedIcon/>} severity="success" variant='filled' >Listing saved!</Alert>)
+        s.toggleSnackbar();
+        queryClient.invalidateQueries({ queryKey: ["getSavedListings"], exact: true });
+      }
+     
+
     } catch (e) {
       alert(e);
     }
@@ -106,6 +128,8 @@ export const ListingTile: React.FC<IListing> = (props) => {
                 zIndex: 0,
                 overflow: "hidden",
                 "--swiper-pagination-color": "white",
+                boxShadow:
+                "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
               }}
             >
               {imgs}
@@ -147,7 +171,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                       borderRadius: 5,
                       backgroundColor: "rgba(0,0,0,0.4)",
                       color: "white",
-                      backdropFilter: "blur(0px)",
+                      backdropFilter: "blur(5px)",
                     }}
                   />
 
@@ -283,14 +307,15 @@ export const ListingTile: React.FC<IListing> = (props) => {
             right: 8,
           }}
         >
-          <IconButton onClick={onLike}>
-            <BookmarkAddOutlined sx={{ color: "white" }} />
+          <IconButton onClick={(e) => {e.stopPropagation();onBookmark()}}>
+            {isSaved ?<BookmarkIcon sx={{color:'white'}}/> : <BookmarkAddOutlined sx={{ color: "white" }} />}
           </IconButton>
           {isNarrow && (
             <Chip
               size="medium"
               onClick={toggleContactForm}
               label="Contact"
+              id={listingId+'contact'}
               variant="outlined"
               // icon={<WhatsApp/>}
               sx={{
@@ -351,12 +376,13 @@ export const ListingTile: React.FC<IListing> = (props) => {
         anchor="bottom"
         onClose={onCloseContactForm}
       >
-        <ContactForm
+        <ContactFormNew
           message={message}
           listingSpecificContact={listingSpecificContact}
           listingOwnerUid={props.userId}
           onClose={onCloseContactForm}
           listingId={listingId}
+          toggleForm={toggleContactForm}
         />
       </Drawer>
     </>

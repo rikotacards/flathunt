@@ -286,7 +286,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
         userId: userId || USER_ID,
         images: fileNames,
         dateAdded: serverTimestamp(),
-        desc: form.desc,
+        desc: form.desc || '',
       });
       setIsAdding(false);
       queryClient.invalidateQueries({ queryKey: ["getAgentListings"] });
@@ -679,8 +679,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               <Button
                 onClick={isEdit ? onUpdate : onAdd}
                 disabled={!canAdd}
-                sx={{ position: "sticky", bottom: 0, zIndex:3 }}
+                sx={{ position: "sticky", bottom: 0, zIndex:3}}
                 variant="contained"
+                
                 
               >
                 {isEdit ? isAdding ? "Saving" : "Save Changes" : isAdding ? "Adding" : "Add Listing"}

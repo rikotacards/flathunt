@@ -18,6 +18,7 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 import { useNavigate } from "react-router";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
+import { Sort } from "@mui/icons-material";
 export const SearchResultPage: React.FC = () => {
   const { setFilters, filters } = useFilterContext();
   const nav = useNavigate();
@@ -34,7 +35,7 @@ export const SearchResultPage: React.FC = () => {
       filters.minPrice,
       filters.bedrooms,
       filters.minNetArea,
-      filters.maxNetArea
+      filters.maxNetArea,
     ],
     queryFn: () => getAllListings(filters),
   });
@@ -46,12 +47,15 @@ export const SearchResultPage: React.FC = () => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
       {!!data?.length && (
+        <Box sx={{display: 'flex', alignItems: 'center', mb:1}}>
         <Box
           component={Paper}
           variant="outlined"
           sx={{
-            mb: 2,
+            pl:1, 
+            pr:1,
             display: "flex",
+            width:'100%',
             justifyContent: "center",
             textAlign: "center",
             alignItems: "center",
@@ -65,7 +69,11 @@ export const SearchResultPage: React.FC = () => {
           <Button onClick={onClear} sx={{ textTransform: "capitalize" }}>
             Clear filters
           </Button>
+         
         </Box>
+ 
+        </Box>
+        
       )}
 
       {data?.length === 0 && !isFetching && !isLoading && (

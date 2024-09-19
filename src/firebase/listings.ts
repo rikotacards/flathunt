@@ -33,11 +33,9 @@ export const getAllListings = async (filters: IFilters) => {
 
     const priceConstraints = and(where('price', '<=', Number(filters.maxPrice || 999999)), where('price', '>=', Number(filters.minPrice || 0)))
     const locationConstraint = where('location', filters.location ? '==' : '!=', filters.location ? filters.location : '')
-    const areaConstraints = and(where('netArea', '<=', Number(filters.maxNetArea || 999999)), where('netArea', '>=', Number(filters.minNetArea || 0)))
     const q = query(collection(db, "listings"), and(
         priceConstraints,
-        locationConstraint,
-        areaConstraints
+        locationConstraint
     )
 
 
@@ -65,7 +63,6 @@ export const getAllListingsNoFilters = async () => {
             // doc.data() is never undefined for query doc snapshots
             res.push({ ...doc.data(), listingId: doc.id } as IListing)
         });
-        console.log('res', res)
         return res
     } catch (e) {
         console.error(e)
@@ -178,7 +175,10 @@ export interface SaveListingProps {
 }
 
 export const getSavedListings = async (userId: string) => {
-    const q = query(collection(db, "users", userId || "max", "savedListings"));
+    if(!userId){
+        return []
+    }
+    const q = query(collection(db, "users", userId, "savedListings"));
     const res: { docId: string, listingId: string }[] = [];
     try {
         const querySnapshot = await getDocs(q);
@@ -192,8 +192,6 @@ export const getSavedListings = async (userId: string) => {
     }
 }
 
-
-
 export const saveListing = async (args: SaveListingProps) => {
     // users/userId/savedListings/listingId
     try {
@@ -205,11 +203,11 @@ export const saveListing = async (args: SaveListingProps) => {
 
 interface RemoveListingProps {
     userId: string,
-    docIds: string[]
+    docId: string
 }
 export const removeSavedListings = async (args: RemoveListingProps) => {
-    args.docIds.map(async (docId) => {
-        await deleteDoc(doc(db, "users", args.userId, "savedListings", docId))
-    })
+    
+        await deleteDoc(doc(db, "users", args.userId, "savedListings", args.docId))
+
 }
 

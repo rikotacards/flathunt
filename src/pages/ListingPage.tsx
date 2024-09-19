@@ -34,7 +34,7 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
       component={Paper}
       sx={{
         display: "flex",
-        justifyContent: "flex-start",
+        justifyContent: "center",
         textAlign: "left",
         alignItems: "center",
       }}
@@ -42,7 +42,7 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
       <IconButton size='large' color='primary' onClick={goBack}>
         <HolidayVillageRounded />
       </IconButton>
-      <Box sx={{ display: "flex", flexDirection: "column", pb:1 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", pb:0 }}>
         <Typography variant='body2' fontWeight={"bold"} color="textPrimary">
           {price} HKD - {netArea} sqft
         </Typography>

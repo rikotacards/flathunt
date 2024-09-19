@@ -64,12 +64,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     
   }, [isMyDataLoading, myData?.contactNumber]);
   const [openSignIn, setOpenSignIn] = React.useState(false);
-  const s = useSnackbarContext();
 
   const onSignIn = async () => {
     try {
       const res = await signInWithPopup(auth, provider);
-      await addUser({ userId: res.user.uid, contactNumber: number });
+      const user = await getUser(res.user.uid);
+      if(!user?.contactNumber){
+        await addUser({ userId: res.user.uid, contactNumber: number });
+      }
       //   await addContactRequest({
       //     contactNumber: number,
       //     sendingUserId: USER_ID,
@@ -97,10 +99,13 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     setOpenSignIn(true);
   };
   console.log('data', listingOwnerData?.contactNumber)
+  const s = useSnackbarContext();
   const fallback = `Hi, I'm interested this flat \n flathunt.co/listing/${listingId}`
   const whatsappLink = `whatsapp://send?phone=${listingSpecificContact || listingOwnerData?.contactNumber}&text=${message || fallback}`;
   const openWhatsappChat = async () => {
-    if (number?.length === 0) {
+    if (!number?.length) {
+      s.setSnackbarChildComponent(<Alert severity="error">Whatsapp number required</Alert>)
+      s.toggleSnackbar()
       return;
     }
     try {
@@ -131,9 +136,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   return (
     <>
       <AppBar position="relative">
-        <Toolbar>
-          <Typography>Contact Agent</Typography>
-          <IconButton onClick={onClose} sx={{ ml: "auto" }}>
+        <Toolbar sx={{textAlign: 'center'}}>
+          <Typography fontWeight={'bold'}>Contact Agent</Typography>
+          <IconButton color='inherit' onClick={onClose} sx={{ ml: "auto" }}>
             <KeyboardArrowDownOutlined />
           </IconButton>
         </Toolbar>
@@ -143,7 +148,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
           onChange={(e) => setNumber(e.target.value)}
           type="tel"
           value={number}
-          placeholder="Whatsapp number: +85212345678"
+          placeholder="Your whatsapp number: +85212345678"
           sx={{ mb: 1 }}
         />
         <Card variant="outlined" sx={{ p: 1, mb: 1 }}>
@@ -170,7 +175,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             onClick={async () => await onSignIn()}
             variant="contained"
             size="large"
-            sx={{ textTransform: "capitalize" }}
+            sx={{ textTransform: "capitalize", fontWeight: 'bold' }}
           >
             Sign in
           </Button>
@@ -181,9 +186,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             }}
             size="large"
             variant="contained"
+            startIcon={<WhatsAppIcon/>}
             href={user ? whatsappLink : undefined}
           >
-            Message
+             
           </Button>
         )}
       </Box>

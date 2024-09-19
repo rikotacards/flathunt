@@ -28,25 +28,27 @@ import { addContactRequest, saveListing } from "../firebase/listings";
 import {
   ChevronLeft,
   DirectionsSubwayFilledOutlined,
+  Fullscreen,
   InsertLink,
   KeyboardArrowDownOutlined,
   PlaceOutlined,
   ShowerOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import { serverTimestamp } from "firebase/firestore";
-import ForumIcon from "@mui/icons-material/Forum";
-import PlaceIcon from "@mui/icons-material/Place";
+
 import IosShareIcon from "@mui/icons-material/IosShare";
-import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndividualSuite";
-import { ContactForm } from "./ContactForm";
+
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { copy } from "../utils/copy";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { ContactFormNew } from "./ContactFormNew";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
 export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const [open, setOpen] = React.useState(false);
   const { user } = useAuthContext();
   const nav = useNavigate();
+  const enableSwipe = true;
   const [number, setNumber] = React.useState("");
   const [openContactForm, setOpenContactForm] = React.useState(false);
   const toggleContactForm = () => {
@@ -65,12 +67,20 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
     listingSpecificContact,
     realEstateCompany,
     listingSpecificRealEstateCompany,
+    desc
   } = props;
   const handleClickOpen = () => {
     setOpen(true);
   };
   const s = useSnackbarContext();
-
+  const imgs = images?.map((image) => (
+    <SwiperSlide
+      style={{ height: "auto", width: "100%", maxHeight: "450px" }}
+      key={image}
+    >
+      <ListingImage imageName={image} listingId={listingId} userId={userId} />
+    </SwiperSlide>
+  ));
   const photos = images?.map((image) => (
     <ListingImage
       key={image}
@@ -160,46 +170,87 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
       >
         <ChevronLeft />
       </IconButton>
-      <Box sx={{ position: "relative" }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: 5,
-            overflow: "hidden",
-            // maxHeight:'500px',
-          }}
-        >
-          {photos}
-        </Box>
-
-        {photos?.length > 1 && (
-          <Button
-            size="small"
-            variant="outlined"
-            color="inherit"
-            onClick={handleClickOpen}
+      {!enableSwipe && (
+        <Box sx={{ position: "relative" }}>
+          <Box
             sx={{
-              backdropFilter: "blur(10px)",
-              position: "absolute",
-              right: 16,
-              bottom: 32,
-              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              borderRadius: 5,
+              overflow: "hidden",
+              // maxHeight:'500px',
             }}
           >
-            Show all photos
-          </Button>
-        )}
-      </Box>
+            {photos}
+          </Box>
 
+          {photos?.length > 1 && (
+            <Button
+              size="small"
+              variant="outlined"
+              color="inherit"
+              onClick={handleClickOpen}
+              sx={{
+                backdropFilter: "blur(10px)",
+                position: "absolute",
+                right: 16,
+                bottom: 32,
+                color: "white",
+              }}
+            >
+              Show all photos
+            </Button>
+          )}
+        </Box>
+      )}
+      {enableSwipe && (
+        <Swiper
+          modules={[Navigation, Pagination]}
+          // navigation
+          pagination={true}
+          style={{
+            position: "relative",
+            borderRadius: 16,
+            zIndex: 0,
+            overflow: "hidden",
+            boxShadow:
+            "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+            "--swiper-pagination-color": "white",
+          }}
+        >
+          {imgs}
+         <Button sx={{
+          position: 'absolute', 
+          bottom: 2, 
+          right: 2,
+          zIndex:2,
+          color: 'white',
+          p:2, 
+          textTransform: 'capitalize'
+         }}
+         onClick={handleClickOpen}
+         size='small'>View all</Button>
+        </Swiper>
+      )}
+      <Card 
+      elevation={0}
+      sx={{borderRadius: 3, 
+        boxShadow:
+        "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+        textAlign: 'left', p:2, mt:1}}>
+
+      <Typography fontWeight={500} variant="body2">{desc}</Typography>
+      </Card>
       <Box
         component={Paper}
         elevation={0}
         sx={{
           p: 2,
-          borderRadius: 5,
+
+          borderRadius: 3,
           textAlign: "left",
           m: 0,
+          mt: 1,
 
           boxShadow:
             "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
@@ -254,6 +305,10 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
               {listingSpecificRealEstateCompany || realEstateCompany}
             </Typography>
+            <Typography variant="caption">License Number</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+              {listingSpecificRealEstateCompany || realEstateCompany}
+            </Typography>
           </Box>
         </Box>
       </Box>
@@ -267,7 +322,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
         <Toolbar>
           <Box sx={{ textAlign: "left" }}>
             <Typography fontWeight={"600"} color="textPrimary">
-              {price}HKD / month{" "}
+              {price}HKD / month
             </Typography>
           </Box>
 
@@ -291,12 +346,11 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
         </Toolbar>
       </AppBar>
       <Dialog fullScreen open={open} onClose={handleClose}>
-        <Box sx={{ overflowY: "scroll", position: "relative" }}>
-          <Box sx={{ position: "sticky", top: 16, right: 16 }}>
-            <Button sx={{ color: "white" }} onClick={handleClose}>
-              close
-            </Button>
-          </Box>
+          <Toolbar>
+              <Button sx={{ml: 'auto'}} onClick={handleClose}>Close</Button>
+          </Toolbar>
+        <Box sx={{ overflowY: "auto", position: "relative" }}>
+          
 
           {imgWithoutGrid}
         </Box>
@@ -307,7 +361,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
         anchor="bottom"
         onClose={() => setOpenContactForm(false)}
       >
-        <ContactForm
+        <ContactFormNew
           onClose={() => setOpenContactForm(false)}
           listingId={listingId}
           listingOwnerUid={userId}

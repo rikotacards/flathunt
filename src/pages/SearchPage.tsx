@@ -1,28 +1,39 @@
-import { Box, Chip, CircularProgress, Drawer, Skeleton, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  CircularProgress,
+  Drawer,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ListingTile } from "../components/ListingTile";
-import { getAllListings, getAllListingsNoFilters } from "../firebase/listings";
+import {
+  getAllListings,
+  getAllListingsNoFilters,
+  getSavedListings,
+} from "../firebase/listings";
 import Grid from "@mui/material/Grid2";
-import { useAppBarContext, useAuthContext, useFilterContext } from "../Providers/contextHooks";
-import { SearchBarWide } from "../components/SearchBarWide";
+import {
+  useAppBarContext,
+  useAuthContext,
+  useFilterContext,
+} from "../Providers/contextHooks";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { ListingTileSkeleton } from "../components/ListingTileSkeleton";
-import { SignInWithGoogle } from "../components/SignInWithGoogle";
-import { getAuth } from "firebase/auth";
+
 import { SignInPopup } from "../components/SignInPopup";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
+import { USER_ID } from "../firebase/firebaseConfig";
 export const SearchPage: React.FC = () => {
   const { setFilters } = useFilterContext();
   const queryClient = useQueryClient();
-  const auth = getAuth()
-  console.log('AUTH', auth)
-  const {user, isUserLoading} = useAuthContext()
-  const {setAppBarChildComponent} = useAppBarContext();
-  console.log('user', user)
+  const { user, isUserLoading } = useAuthContext();
+  const { setAppBarChildComponent } = useAppBarContext();
   const isNarrow = useIsNarrow();
   React.useEffect(() => {
-    setAppBarChildComponent(<SearchbarNarrow2/>)
+    setAppBarChildComponent(<SearchbarNarrow2 />);
     setFilters({});
     queryClient.clear();
   }, []);
@@ -31,7 +42,16 @@ export const SearchPage: React.FC = () => {
     queryKey: ["getAllListingsNoFilters"],
     queryFn: () => getAllListingsNoFilters(),
   });
+  const { data: savedListingsData } = useQuery({
+    queryKey: ["getSavedListings"],
+    queryFn: () => getSavedListings(user?.uid || ''),
+  });
+  const savedListingsTransformed: {[key: string]: string} = {}
+  savedListingsData?.forEach((listing) => {
+    savedListingsTransformed[listing.listingId] = listing.docId
+  })
 
+  console.log("saved", savedListingsData);
   return (
     <Box
       sx={{
@@ -55,15 +75,18 @@ export const SearchPage: React.FC = () => {
                 <ListingTileSkeleton />
               </Grid>
             ))
-          : data?.map((l) => (
-              <Grid key={l.listingId} size={{ lg: 3, md: 4, xs: 4 }}>
-                <ListingTile {...l} />
-              </Grid>
-            ))}
+          : data?.map((l) => {
+              const savedDocId = savedListingsTransformed[l.listingId]
+
+              return (
+                <Grid key={l.listingId} size={{ lg: 3, md: 4, xs: 4 }}>
+                  <ListingTile savedDocId={savedDocId} isSaved={!!savedDocId} {...l} />
+                </Grid>
+              );
+            })}
       </Grid>
-      
-           {isNarrow && !isUserLoading && !user && <SignInPopup/>}
-      
+
+      {isNarrow && !isUserLoading && !user && <SignInPopup />}
     </Box>
   );
 };

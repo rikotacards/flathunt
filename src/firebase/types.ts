@@ -30,6 +30,8 @@ export interface IListing {
     hasGarden: boolean;
     hasElevator?: boolean;
     hasGym?: boolean;
+    isSaved?: boolean;
+    savedDocId?: string;
 }
 
 export interface IFilters {

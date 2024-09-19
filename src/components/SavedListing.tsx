@@ -1,33 +1,25 @@
 import React from 'react';
-import { getListing, SaveListingProps } from '../firebase/listings';
-import { useQuery } from '@tanstack/react-query';
+import { getListing} from '../firebase/listings';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ListingTile } from './ListingTile';
-import { Box, IconButton, Typography } from '@mui/material';
-import { useAppBarContext } from '../Providers/contextHooks';
-import { ChevronLeft } from '@mui/icons-material';
+import { Box,  LinearProgress } from '@mui/material';
+
 interface SavedListingProps {
     docId: string;
     listingId: string;
 }
-const SavedListingAppBar: React.FC = () => {
-    return (
-        <Box sx={{display:'flex', alignItems: 'center'}}>
-            <IconButton>
-                <ChevronLeft/>
-            </IconButton>
-            <Typography color='textPrimary'>Saved listings</Typography>
-        </Box>
-    )
-}
-export const SavedListing: React.FC<SavedListingProps> = ({ listingId, docId }) => {
+
+export const SavedListing: React.FC<SavedListingProps> = ({ listingId, docId, isSaved }) => {
     const { data, isLoading } = useQuery({ queryKey: [`${listingId}`], queryFn: () => getListing(listingId) })
-    const {setAppBarChildComponent} = useAppBarContext();
-    React.useEffect(() => {
-        setAppBarChildComponent(<SavedListingAppBar/>)
-    },[])
+   if(!data){
+    return
+   }
+   if(isLoading){
+    <LinearProgress sx={{width:'100%'}}/>
+   }
     return (
         <Box sx={{m:2}}>
-            <ListingTile {...data} />
+            <ListingTile isSaved={true} savedDocId={docId} {...data} />
         </Box>
     )
 }
