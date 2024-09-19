@@ -7,7 +7,11 @@ import {
   Collapse,
   Divider,
 
+  IconButton,
+
   OutlinedInput,
+
+  Toolbar,
 
   Typography,
 } from "@mui/material";
@@ -16,12 +20,16 @@ import { onSignOut } from "../utils/signOut";
 import { useNavigate } from "react-router";
 import { signIn } from "../utils/signInWithGoogle";
 
-import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
+import { useAppBarContext, useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { addUser, getUser, updateUser } from "../firebase/user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ChevronLeftRounded } from "@mui/icons-material";
 
 export const ProfilePage: React.FC = () => {
   const nav = useNavigate();
+  const onBack = () => {
+    nav(-1)
+  }
   const s = useSnackbarContext();
   const { user } = useAuthContext();
   const { data, isLoading } = useQuery({
@@ -36,6 +44,11 @@ export const ProfilePage: React.FC = () => {
     realEstateCompany: data?.realEstateCompany,
     licenseNumber: data?.licenseNumber,
   });
+  const a = useAppBarContext();
+  React.useEffect(() => {
+    a.setAppBarChildComponent(<Toolbar sx={{pl:0}}><IconButton onClick={onBack}><ChevronLeftRounded/></IconButton><Typography fontWeight={'bold'} color='textPrimary'>Profile</Typography></Toolbar>)
+    
+  }, [])
   React.useEffect(() => {
     setForm({...data,   
       name: user?.displayName,
@@ -109,7 +122,6 @@ export const ProfilePage: React.FC = () => {
         position: 'relative'
       }}
     >
-      <Typography variant='h4' sx={{mb:3}}>Profile</Typography>
       {settings.map((setting, i) => {
         return (
           <>

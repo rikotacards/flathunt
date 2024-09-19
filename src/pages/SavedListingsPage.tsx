@@ -9,43 +9,44 @@ import { useAppBarContext, useAuthContext } from "../Providers/contextHooks";
 import { ChevronLeft } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 const SavedListingAppBar: React.FC = () => {
-  const nav = useNavigate()
-  const goBack = () => nav(-1)
-
+  const nav = useNavigate();
+  const goBack = () => nav(-1);
 
   return (
-      <Box sx={{display:'flex', alignItems: 'center'}}>
-          <IconButton onClick={goBack}>
-              <ChevronLeft/>
-          </IconButton>
-          <Typography fontWeight={'bold'} color='textPrimary'>Saved listings</Typography>
-      </Box>
-  )
-}
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <IconButton onClick={goBack}>
+        <ChevronLeft />
+      </IconButton>
+      <Typography fontWeight={"bold"} color="textPrimary">
+        Saved listings
+      </Typography>
+    </Box>
+  );
+};
 export const SavedListingsPage: React.FC = () => {
-    const {user, isUserLoading} = useAuthContext();
+  const { user, isUserLoading } = useAuthContext();
   const { data, isLoading } = useQuery({
     queryKey: ["getSavedListings", isUserLoading],
-    queryFn: () => !user ? [] : getSavedListings(user?.uid),
+    queryFn: () => (!user ? [] : getSavedListings(user?.uid)),
   });
-  const {setAppBarChildComponent} = useAppBarContext();
-  
+  const { setAppBarChildComponent } = useAppBarContext();
+
   React.useEffect(() => {
-    setAppBarChildComponent(<SavedListingAppBar/>)
-},[])
-if(isLoading || isUserLoading){
-  return <LinearProgress/>
-}
+    setAppBarChildComponent(<SavedListingAppBar />);
+  }, []);
+  if (isLoading || isUserLoading) {
+    return <LinearProgress />;
+  }
   return (
     <Box>
-      <Typography color={'textSecondary'} sx={{ m: 2 }} fontWeight={"bold"}>
-        {data?.length} saved listings
-      </Typography>
-    
       {data?.map((savedListing) => {
-
-        return <SavedListing docId={savedListing.docId} listingId={savedListing.listingId} />
-})}
+        return (
+          <SavedListing
+            docId={savedListing.docId}
+            listingId={savedListing.listingId}
+          />
+        );
+      })}
     </Box>
   );
 };

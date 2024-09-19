@@ -44,7 +44,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
 }) => {
   const queryClient = useQueryClient();
   const s = useSnackbarContext();
-
+  const nav = useNavigate();
   const { data: listingOwnerData, isLoading } = useQuery({
     queryKey: ["listingId"],
     queryFn: () => getUser(listingOwnerUid || ""),
@@ -134,7 +134,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
             sx={{ mt: 1, mb: 1 }}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="Your whatsapp number"
-            endAdornment={<Button>Edit</Button>}
+            endAdornment={<Button onClick={() => nav('/profile')}>Edit</Button>}
           />
         )}
         {user && (

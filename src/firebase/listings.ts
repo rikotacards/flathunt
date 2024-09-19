@@ -195,7 +195,12 @@ export const getSavedListings = async (userId: string) => {
 export const saveListing = async (args: SaveListingProps) => {
     // users/userId/savedListings/listingId
     try {
-        await addDoc(collection(db, "users", args.userId, "savedListings"), { listingId: args.listingId })
+        const docRef = await setDoc(
+            doc(db, "users", args.userId, "savedListings", args.listingId), {
+            ...args,
+            dateAdded: serverTimestamp()
+        }, {merge: true});
+        // await addDoc(collection(db, "users", args.userId, "savedListings"), { listingId: args.listingId })
     } catch (e) {
         alert(e)
     }

@@ -34,12 +34,12 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
       component={Paper}
       sx={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         textAlign: "left",
         alignItems: "center",
       }}
     >
-      <IconButton size='large' color='primary' onClick={goBack}>
+      <IconButton size='large' sx={{color: 'black'}} onClick={goBack}>
         <HolidayVillageRounded />
       </IconButton>
       <Box sx={{ display: "flex", flexDirection: "column", pb:0 }}>
@@ -50,9 +50,6 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
           {location} / {address}
         </Typography>
       </Box>
-      <IconButton size="large" sx={{ ml: "auto", mr: 1 }} color="primary">
-        <ForumIcon />
-      </IconButton>
     </Box>
   );
 };
@@ -62,6 +59,7 @@ export const ListingPage: React.FC = () => {
     queryKey: ["getListing"],
     queryFn: () => getListing(params.listingId || ""),
   });
+  
   const { setAppBarChildComponent } = useAppBarContext();
   React.useEffect(() => {
     setAppBarChildComponent(

@@ -284,7 +284,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const { maxPrice, minPrice, maxNetArea, minNetArea, bedrooms, location } =
     props;
   const isNarrow = useIsNarrow();
-  const { setFilters } = useFilterContext();
+  const { setFilters, filters } = useFilterContext();
   const { user } = useAuthContext();
   const [openDrawer, setOpenDrawer] = React.useState(false);
  
@@ -358,11 +358,12 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
       onCloseSignInDrawer()
     }
   }
+  const hasFilters = filters.location || filters.maxPrice || filters.minPrice || filters.maxNetArea
   return (
     <>
       {isLoading ? <LinearProgress /> : null}
     <Box sx={{ display: "relative" }} mb={1} mt={2}>
-      <Button onClick={onClear}>Clear filters</Button>
+      {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
       <TableContainer elevation={0} component={Paper}>
         <Table size="small" stickyHeader>
           <TableHead sx={{ position: "sticy" }}>
@@ -431,13 +432,13 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
 
         <Fab
           color="primary"
-          sx={{ m: 1 }}
+          sx={{ m: 1, textTransform: 'capitalize' }}
           variant='extended'
           onClick={onOpenAddNewDrawer}
           
         >
           Add Listing
-          <AddIcon />
+          <AddIcon fontSize="medium" />
         </Fab>
       </Box>
       { (
