@@ -11,14 +11,15 @@ interface MoreFilterProps {
   onClose: () => void;
 }
 export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
-  const [bedrooms, setBedrooms] = React.useState([0, 5]);
   const { filters, setFilters } = useFilterContext();
+  const [bedrooms, setBedrooms] = React.useState(
+    [filters.minBedrooms || 0,
+    filters.maxBedrooms || 5]
+  );
   const nav = useNavigate();
   const [areaRange, setAreaRange] = React.useState([
     filters.minNetArea || MIN,
     filters.maxNetArea || MAX,
-    filters.minBedrooms || 0,
-    filters.maxBedrooms || 5
   ]);
 
   const onDone = () => {
@@ -27,10 +28,10 @@ export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
       minNetArea: areaRange[0],
       maxNetArea: areaRange[1],
       minBedrooms: bedrooms[0],
-      maxBedrooms: bedrooms[1]
+      maxBedrooms: bedrooms[1],
     }));
     onClose();
-    nav('/search-results')
+    nav("/search-results");
   };
   const onClear = () => {
     setFilters((p) => ({
@@ -53,24 +54,26 @@ export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
         <Typography fontWeight={"bold"}>Filters</Typography>
       </Toolbar>
       <Box sx={{ p: 2, mb: 1 }}>
-        <Typography fontWeight={"bold"}>Bedrooms</Typography>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <BedroomSlider setPriceRange={setBedrooms} />
-        </Box>
         <Box>
           <Typography fontWeight={"bold"}>Area</Typography>
           <AreaSlider setAreaRange={setAreaRange} />
         </Box>
+        <Typography fontWeight={"bold"}>Bedrooms</Typography>
+
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <BedroomSlider setPriceRange={setBedrooms} />
+        </Box>
+
         <Box sx={{ mt: 2, display: "flex", flexDirection: "column" }}>
           <Button
             onClick={onDone}
-            sx={{ ml: 0, mb: 1 }}
+            sx={{ ml: 0, mb: 1, borderRadius: 5 }}
             variant="contained"
             fullWidth
           >
             Done
           </Button>
-          <Button onClick={onClear} variant="outlined">
+          <Button sx={{ borderRadius: 5 }} onClick={onClear} variant="outlined">
             Clear
           </Button>
         </Box>

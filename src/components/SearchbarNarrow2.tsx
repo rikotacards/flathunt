@@ -98,9 +98,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     >
       {bedroomLabel|| "Bedrooms"}
     </Typography>
-    {filters.location ? null : (
-      <KeyboardArrowDown fontSize="small" color="action" />
-    )}
+    
   </Box>
   )
   const location = (
@@ -113,9 +111,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
       >
         {filters.location || "Location"}
       </Typography>
-      {filters.location ? null : (
-        <KeyboardArrowDown fontSize="small" color="action" />
-      )}
+      
     </Box>
   );
   const price = (
@@ -123,16 +119,13 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
       <Typography fontWeight={500} color="textPrimary" variant="body2">
         {priceLabel}
       </Typography>
-      {filters.maxPrice ? null : (
-        <KeyboardArrowDown fontSize="small" color="action" />
-      )}
     </Box>
   );
   
   const searchPage = (
     <>
-      {filters.location && (
-        <IconButton onClick={() => onFilterClick(2)}>
+      { (
+        <IconButton  onClick={() => onFilterClick(2)}>
           <TuneRoundedIcon />
         </IconButton>
       )}
@@ -175,8 +168,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   );
   return (
     <Box sx={{pb:0}}>
-    
-      <Box sx={{ display: "flex", alignItems: 'center',  }}>
+      <Box sx={{ display: "flex", alignItems: 'center', mr:1  }}>
         {(isHomePage || isSearchResults || isAgentListings) && searchPage}
       </Box>
       <Drawer
