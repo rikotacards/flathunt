@@ -22,6 +22,8 @@ import { useFilterContext } from "../Providers/contextHooks";
 import { MoreFilter } from "./MoreFilters";
 import { getRangeLabel } from "../utils/getRangeLabel";
 import { IFilters } from "../firebase/types";
+import { getBedroomsLabel } from "../utils/getBedroomsLabel";
+import { FilterBedrooms } from "./FiltersBedrooms";
 interface SearchbarNarrow2Props {
   disableRedirect?: boolean;
 }
@@ -33,7 +35,6 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   const goHome = () => nav("/");
   const { filters, setFilters } = useFilterContext();
 
-  const isProfilePage = urlLocation.pathname === "/profile";
   const isHomePage = urlLocation.pathname === "/";
   const isSearchResults = urlLocation.pathname === "/search-results";
   const isAgentListings = urlLocation.pathname === "/listings";
@@ -54,6 +55,8 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     setFilterIndex(index);
     onOpenDrawer();
   };
+  const [bedroomsRange, setBedroomsRange] = React.useState([0, 5]);
+
   const [priceRange, setPriceRange] = React.useState([5000, 90000]);
   const onPriceDone = () => {
     setFilters((p) => ({
@@ -64,6 +67,16 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     onCloseDrawer();
     !disableRedirect && nav("/search-results");
   };
+  const onBedroomsDone = () => {
+    setFilters((p) => ({
+      ...p,
+      minBedrooms: bedroomsRange[0],
+      maxBedrooms: bedroomsRange[1],
+    }));
+    onCloseDrawer();
+    !disableRedirect && nav("/search-results");
+  };
+  
   const onMoreFiltersDone = (filters: IFilters) => {
     setFilters((p) => ({
       ...p,
@@ -74,6 +87,22 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     !disableRedirect && nav("/search-results");
   };
   const priceLabel = getRangeLabel(filters.minPrice, filters.maxPrice, "HKD");
+  const bedroomLabel = getBedroomsLabel(filters.minBedrooms, filters.maxBedrooms)
+  const bedrooms = (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Typography
+      fontWeight={500}
+      // color="textSecondary"
+      sx={{ textTransform: "capitalize" }}
+      variant="body2"
+    >
+      {bedroomLabel|| "Bedrooms"}
+    </Typography>
+    {filters.location ? null : (
+      <KeyboardArrowDown fontSize="small" color="action" />
+    )}
+  </Box>
+  )
   const location = (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Typography
@@ -99,16 +128,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
       )}
     </Box>
   );
-  const profilePage = (
-    <>
-    <Box sx={{ display: "flex", alignItems: "center",ml:0.5}}>
-    <IconButton onClick={goHome}>
-          <HolidayVillageRounded />
-        </IconButton>
-        <Typography fontWeight={"bold"}>Profile</Typography>
-      </Box>
-    </>
-  );
+  
   const searchPage = (
     <>
       {filters.location && (
@@ -139,8 +159,15 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
             onClick={() => onFilterClick(1)}
             variant="filled"
             sx={{ mr: 1}}
-
             label={price}
+          />
+        </Zoom>
+        <Zoom in>
+          <Chip
+            onClick={() => onFilterClick(4)}
+            variant="filled"
+            sx={{ mr: 1}}
+            label={bedrooms}
           />
         </Zoom>
       </Box>
@@ -175,6 +202,13 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
               setPriceRange={setPriceRange}
               onCancel={onCloseDrawer}
               onClose={onPriceDone}
+            />
+          )}
+          {filterIndex === 4 && (
+            <FilterBedrooms
+              setPriceRange={setBedroomsRange}
+              onCancel={onCloseDrawer}
+              onClose={onBedroomsDone}
             />
           )}
           {filterIndex === 2 && <MoreFilter onClose={onCloseDrawer} />}

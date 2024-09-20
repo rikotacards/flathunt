@@ -21,13 +21,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     setFilterToOpen(filterIndex || 0);
     setFiltersOpen(true);
   };
-
+  const [titleOpen, setTitleOpen] = React.useState(true)
   const onSearchbarClose = () => {
     setFiltersOpen(false);
   };
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const { getAppBar } = useAppBarContext();
+  React.useEffect(() => {
+    setTimeout(() => {
+      setTitleOpen(false)
+    }, 1000)
+  }, [])
   return (
     <Box sx={{ position: "relative" }}>
       <AppBar
@@ -45,7 +50,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {
             <Collapse
               sx={{}}
-              in={!hasFilters && isHomePage}
+              in={titleOpen&& !hasFilters && isHomePage}
               orientation="horizontal"
             >
               <Typography
