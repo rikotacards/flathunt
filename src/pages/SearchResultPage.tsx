@@ -36,6 +36,8 @@ export const SearchResultPage: React.FC = () => {
       filters.bedrooms,
       filters.minNetArea,
       filters.maxNetArea,
+      filters.minBedrooms, 
+      filters.maxBedrooms
     ],
     queryFn: () => getAllListings(filters),
   });

@@ -17,6 +17,8 @@ export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
   const [areaRange, setAreaRange] = React.useState([
     filters.minNetArea || MIN,
     filters.maxNetArea || MAX,
+    filters.minBedrooms || 0,
+    filters.maxBedrooms || 5
   ]);
 
   const onDone = () => {
@@ -24,6 +26,8 @@ export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
       ...p,
       minNetArea: areaRange[0],
       maxNetArea: areaRange[1],
+      minBedrooms: bedrooms[0],
+      maxBedrooms: bedrooms[1]
     }));
     onClose();
     nav('/search-results')
@@ -49,10 +53,10 @@ export const MoreFilter: React.FC<MoreFilterProps> = ({ onClose }) => {
         <Typography fontWeight={"bold"}>Filters</Typography>
       </Toolbar>
       <Box sx={{ p: 2, mb: 1 }}>
-        {/* <Typography fontWeight={"bold"}>Bedrooms</Typography>
+        <Typography fontWeight={"bold"}>Bedrooms</Typography>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <BedroomSlider setPriceRange={setBedrooms} />
-        </Box> */}
+        </Box>
         <Box>
           <Typography fontWeight={"bold"}>Area</Typography>
           <AreaSlider setAreaRange={setAreaRange} />

@@ -363,15 +363,15 @@ export const ListingTile: React.FC<IListing> = (props) => {
         </Box>
       </Box>
       <Box sx={{ textAlign: "left", mt: 1.5 }}>
-        <Box sx={{ display: "flex", mb:0.5 }}>
+        <Box sx={{ display: "flex", mb:0.5, whiteSpace: 'nowrap',  textOverflow: 'ellipsis'}}>
           <Typography
             fontWeight={"bold"}
             sx={{ textTransform: "capitalize", }}
             variant="body2"
           >
-            {location},
+            {location} -
           </Typography>
-          <Typography fontWeight={"bold"} variant="body2" sx={{ ml: 1 }}>
+          <Typography  fontWeight={"bold"} variant="body2" sx={{ ml: 1,  overflow: 'hidden', textOverflow: 'ellipsis'}}>
             {address}
           </Typography>
         </Box>
@@ -403,7 +403,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
           </Typography>
         </Box>
       )}
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", whiteSpace: 'nowrap' }}>
         <Typography
           color="textSecondary"
           sx={{ textTransform: "capitalize", mr: 1 }}
@@ -412,7 +412,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
           {netArea} sqft
         </Typography>
         <Typography color="textSecondary" sx={{ mr: 1 }} variant="body2">
-          {bedrooms} bedrooms
+          {bedrooms === 0 ? 'Studio' : bedrooms + ' bedrooms'}
         </Typography>
         <Typography color="textSecondary" variant="body2">
           {bathrooms} bathrooms

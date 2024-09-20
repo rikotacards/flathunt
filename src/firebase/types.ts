@@ -39,6 +39,8 @@ export interface IFilters {
     minPrice?: number;
     maxPrice?: number;
     bedrooms?: string;
+    minBedrooms?: number;
+    maxBedrooms?: number;
     bathrooms?: number;
     minNetArea?: number;
     maxNetArea?: number;
