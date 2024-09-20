@@ -57,6 +57,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     dateAdded,
     listingSpecificContact,
     desc,
+    bathrooms,
     isSaved,
   } = props;
   const queryClient = useQueryClient();
@@ -129,7 +130,12 @@ export const ListingTile: React.FC<IListing> = (props) => {
   };
   const imgs = images?.map((image) => (
     <SwiperSlide
-      style={{minHeight:400, height: "auto", width: "100%", maxHeight: "450px" }}
+      style={{
+        minHeight: 400,
+        height: "auto",
+        width: "100%",
+        maxHeight: "450px",
+      }}
       key={image}
     >
       <ListingImage imageName={image} listingId={listingId} userId={userId} />
@@ -139,7 +145,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
   \n${bedrooms} bedroom, \naddress: ${address}, ${location}, \nasking: ${price} HKD`;
 
   return (
-    <>
+    <Box sx={{ mb: 1 }}>
       <Box
         id={listingId}
         sx={{
@@ -171,10 +177,10 @@ export const ListingTile: React.FC<IListing> = (props) => {
               pagination={true}
               style={{
                 position: "relative",
-                borderRadius: 16,
+                borderRadius: 12,
                 zIndex: 0,
                 overflow: "hidden",
-                height:'auto',
+                height: "auto",
 
                 "--swiper-pagination-color": "white",
                 boxShadow:
@@ -184,6 +190,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
               {imgs}
               {true && (
                 <Box
+              
                   elevation={0}
                   color=""
                   sx={{
@@ -195,7 +202,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                     pr: 1,
                     m: 1,
                     borderRadius: 5,
-                    display: "flex",
+                    display: "none",
                     flexDirection: "row",
                     alignItem: "flex-start",
                     background: "transparent",
@@ -204,7 +211,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                   }}
                 >
                   <Chip
-                    size={isNarrow ? "medium": "small"}
+                    size={isNarrow ? "medium" : "small"}
                     variant="outlined"
                     label={
                       <Typography variant="caption" fontWeight={"bold"}>
@@ -226,7 +233,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
 
                   {location && (
                     <Chip
-                      size={isNarrow ? "medium": "small"}
+                      size={isNarrow ? "medium" : "small"}
                       variant="outlined"
                       label={
                         <Typography variant="caption" fontWeight={"bold"}>
@@ -247,7 +254,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                     />
                   )}
                   <Chip
-                    size={isNarrow ? "medium": "small"}
+                    size={isNarrow ? "medium" : "small"}
                     variant="outlined"
                     label={
                       <Typography variant="caption" fontWeight={"bold"}>
@@ -268,7 +275,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                   />
 
                   <Chip
-                    size={isNarrow ? "medium": "small"}
+                    size={isNarrow ? "medium" : "small"}
                     variant="outlined"
                     label={
                       <Typography variant="caption" fontWeight={"bold"}>
@@ -295,10 +302,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
                 display: "flex",
                 alignItems: "flex-start",
               }}
-            >
-      
-              
-            </Box>
+            ></Box>
           </Box>
         </Link>
 
@@ -322,9 +326,9 @@ export const ListingTile: React.FC<IListing> = (props) => {
               <BookmarkAddOutlined sx={{ color: "white" }} />
             )}
           </IconButton>
-          { (
+          {
             <Chip
-              size={isNarrow ? "medium": "small"}
+              size={isNarrow ? "medium" : "small"}
               onClick={toggleContactForm}
               label="Contact"
               id={listingId + "contact"}
@@ -355,17 +359,31 @@ export const ListingTile: React.FC<IListing> = (props) => {
             // >
             //   <WhatsApp />
             // </IconButton>
-          )}
+          }
+        </Box>
+      </Box>
+      <Box sx={{ textAlign: "left", mt: 1.5 }}>
+        <Box sx={{ display: "flex", mb:0.5 }}>
+          <Typography
+            fontWeight={"bold"}
+            sx={{ textTransform: "capitalize", }}
+            variant="body2"
+          >
+            {location},
+          </Typography>
+          <Typography fontWeight={"bold"} variant="body2" sx={{ ml: 1 }}>
+            {address}
+          </Typography>
         </Box>
       </Box>
       {!!desc && (
         <Box
           sx={{
-            mb: 0,
+            mb: 0.5,
             textAlign: "left",
-            mt: 1,
+            mt: 0,
             display: "flex",
-            ml: 1,
+            ml: 0,
             mr: 1,
             overflow: "hidden",
           }}
@@ -374,16 +392,38 @@ export const ListingTile: React.FC<IListing> = (props) => {
             sx={{
               textAlign: "left",
               display: "-webkit-box",
-              WebkitLineClamp: 2,
+              WebkitLineClamp: 1,
               WebkitBoxOrient: "vertical",
-              fontWeight: "500",
+              // fontSize: '1rem'
             }}
+            color="textSecondary"
             variant="body2"
           >
             {desc}
           </Typography>
         </Box>
       )}
+      <Box sx={{ display: "flex" }}>
+        <Typography
+          color="textSecondary"
+          sx={{ textTransform: "capitalize", mr: 1 }}
+          variant="body2"
+        >
+          {netArea} sqft
+        </Typography>
+        <Typography color="textSecondary" sx={{ mr: 1 }} variant="body2">
+          {bedrooms} bedrooms
+        </Typography>
+        <Typography color="textSecondary" variant="body2">
+          {bathrooms} bathrooms
+        </Typography>
+      </Box>
+      <Box sx={{ display: "flex", mt: 0.5 }}>
+        <Typography fontWeight={800}>${price} HKD</Typography>
+        <Typography fontWeight={500} sx={{ ml: 0.5 }}>
+          month
+        </Typography>
+      </Box>
       <Drawer
         open={openContactForm}
         anchor="bottom"
@@ -404,6 +444,6 @@ export const ListingTile: React.FC<IListing> = (props) => {
           toggleForm={toggleContactForm}
         />
       </Drawer>
-    </>
+    </Box>
   );
 };

@@ -84,13 +84,12 @@ export const ListingPage: React.FC = () => {
         position: "relative",
         justifyContent: "center",
         display: "flex",
-        m: 1,
         flexDirection: "column",
-        alignItems: 'center',
 
       }}
     >
       <ListingVerticalLayout {...data} />
+      <Toolbar/>
     </Box>
   );
 };

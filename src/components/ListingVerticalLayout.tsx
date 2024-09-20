@@ -43,6 +43,7 @@ import { ContactFormNew } from "./ContactFormNew";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useIsNarrow } from "../utils/useIsNarrow";
 export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const [open, setOpen] = React.useState(false);
   const { user } = useAuthContext();
@@ -83,25 +84,15 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   );
   const imgs = images?.map((image) => (
     <SwiperSlide
-      style={{ height: "auto", width: "100%", minHeight: "450px" }}
+      style={{
+        height: "100%",
+        width: "100%",
+        // minHeight: "450px"
+      }}
       key={image}
     >
       <ListingImage imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
-  ));
-  const photos = images?.map((image) => (
-    <ListingImage
-      key={image}
-      imageName={image}
-      listingId={listingId}
-      style={{
-        height: "100%",
-        width: "100%",
-        borderRadius: 16,
-        marginBottom: 8,
-      }}
-      userId={userId}
-    />
   ));
 
   const handleClose = () => {
@@ -120,7 +111,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
     s.toggleSnackbar();
   };
   const queryClient = useQueryClient();
-
+  const isNarrow = useIsNarrow();
   const onSaveListing = async () => {
     try {
       if (!user) {
@@ -181,188 +172,204 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   ));
 
   return (
-    <Box sx={{p:2, maxWidth: "400px", position: "relative", mt: 1 }}>
-      <meta content={`${price}`} property="og:price" />
-      <IconButton
-        size="small"
-        onClick={() => nav(-1)}
-        sx={{
-          backgroundColor: "rgba(255,255,255,0.1)",
-          position: "fixed",
-          color: "white",
-          top: 16,
-          left: 16,
-          zIndex: 999,
-
-          backdropFilter: "blur(10px)",
-          border: "1px solid white",
-        }}
-      >
-        <ChevronLeft />
-      </IconButton>
-      {!enableSwipe && (
-        <Box sx={{ position: "relative" }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              borderRadius: 5,
-              overflow: "hidden",
-              maxHeight:'500px',
-            }}
-          >
-            {photos}
-          </Box>
-
-          {photos?.length > 1 && (
-            <Button
-              size="small"
-              variant="outlined"
-              color="inherit"
-              onClick={handleClickOpen}
-              sx={{
-                backdropFilter: "blur(10px)",
-                position: "absolute",
-                right: 16,
-                bottom: 32,
-                color: "white",
-              }}
-            >
-              Show all photos
-            </Button>
-          )}
-        </Box>
-      )}
-      {enableSwipe && (
-        <Swiper
-          modules={[Navigation, Pagination]}
-          // navigation
-          pagination={true}
-          style={{
-            position: "relative",
-            zIndex: 0,
-            borderRadius:16,
-            height:'auto',
-            overflow: "hidden",
-            boxShadow:
-              "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-            "--swiper-pagination-color": "white",
+    <Box
+      sx={{
+        p: 2,
+        position: "relative",
+        mt: 1,
+      }}
+    >
+      <Box sx={{ display: "flex", flexDirection: isNarrow ? "column" : "row" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexGrow: 2,
+            flexShrink: 0,
+            flexBasis: 1,
           }}
         >
-          {imgs}
-          <Button
-            sx={{
-              position: "absolute",
-              bottom: 2,
-              right: 2,
-              zIndex: 3,
-              color: "white",
-              p: 2,
-              textTransform: "capitalize",
-            }}
-            onClick={handleClickOpen}
-            size="small"
-          >
-            View all
-          </Button>
-        </Swiper>
-      )}
-      {!!desc && <Card
-        elevation={0}
-        sx={{
-          borderRadius: 3,
-          boxShadow:
-            "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-          textAlign: "left",
-          p: 2,
-          mt: 1,
-        }}
-      >
-      {  <Typography fontWeight={500} variant="body2">
-          {desc}
-        </Typography>}
-      </Card>}
-      <Box
-        component={Paper}
-        elevation={0}
-        sx={{
-          p: 2,
-          pt: 1,
-          borderRadius: 3,
-          textAlign: "left",
-          m: 0,
-          mt: 1,
+          <Swiper
+            modules={[Navigation, Pagination]}
+            // navigation
+            pagination={true}
+            style={{
+              position: "relative",
+              zIndex: 0,
+              maxWidth: "500px",
+              borderRadius: 16,
+              overflow: "hidden",
 
-          boxShadow:
-            "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-          <DirectionsSubwayFilledOutlined />
-          <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-            {location}
-          </Typography>
+              boxShadow:
+                "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+              "--swiper-pagination-color": "white",
+            }}
+          >
+            {imgs}
+            <Button
+              sx={{
+                position: "absolute",
+                bottom: 2,
+                right: 2,
+                zIndex: 3,
+                color: "white",
+                p: 2,
+                textTransform: "capitalize",
+              }}
+              onClick={handleClickOpen}
+              size="small"
+            >
+              View all
+            </Button>
+          </Swiper>
         </Box>
-        <Divider />
-        {!!address && (
-          <>
+
+        <Box
+          sx={{
+            flexGrow: 1,
+            flexBasis: 1,
+            flexShrink: 0,
+            display: "flex",
+            flexDirection: isNarrow ? "column" : "column",
+          }}
+        >
+          {!!desc && (
+            <Box
+              component={Paper}
+              elevation={0}
+              sx={{
+                borderRadius: 3,
+                boxShadow:
+                  "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+                textAlign: "left",
+                p: 2,
+                mt: 1,
+                flexDirection: "column",
+                display: "flex",
+              }}
+            >
+              <Typography fontWeight={500} variant="body2">
+                {desc}
+              </Typography>
+            </Box>
+          )}
+          <Box
+            component={Paper}
+            elevation={0}
+            sx={{
+              p: 2,
+              pt: 1,
+              borderRadius: 3,
+              textAlign: "left",
+              m: 0,
+              mt: 1,
+
+              boxShadow:
+                "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+            }}
+          >
             <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-              <PlaceOutlined />
+              <DirectionsSubwayFilledOutlined />
               <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-                {address}
+                {location}
               </Typography>
             </Box>
             <Divider />
-          </>
-        )}
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-          <HotelOutlinedIcon />
-          <Typography variant="body2" sx={{ fontWeight: 500, ml: 1 }}>
-            {bedrooms} bedrooms
-          </Typography>
-        </Box>
-        <Divider />
+            {!!address && (
+              <>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}
+                >
+                  <PlaceOutlined />
+                  <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
+                    {address}
+                  </Typography>
+                </Box>
+                <Divider />
+              </>
+            )}
+            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
+              <HotelOutlinedIcon />
+              <Typography variant="body2" sx={{ fontWeight: 500, ml: 1 }}>
+                {bedrooms} bedrooms
+              </Typography>
+            </Box>
+            <Divider />
 
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-          <ShowerOutlined />
-          <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-            {bathrooms} bathroom(s)
-          </Typography>
-        </Box>
-        <Divider />
+            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
+              <ShowerOutlined />
+              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
+                {bathrooms} bathroom(s)
+              </Typography>
+            </Box>
+            <Divider />
 
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-          <SquareFootOutlinedIcon />
-          <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-            {netArea} sqft (net)
-          </Typography>
-        </Box>
-        <Divider />
+            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
+              <SquareFootOutlinedIcon />
+              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
+                {netArea} sqft (net)
+              </Typography>
+            </Box>
+            <Divider />
 
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-          <Box sx={{ display: "flex", alignSelf: "flex-start" }}>
-            <StoreOutlinedIcon />
+            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
+              <Box sx={{ display: "flex", alignSelf: "flex-start" }}>
+                <StoreOutlinedIcon />
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
+                <Typography variant="caption">Real Estate Company</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {listingSpecificRealEstateCompany || realEstateCompany}
+                </Typography>
+                <Typography sx={{ mt: 1 }} variant="caption">
+                  License Number
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {listingSpecificLicenseNumber || licenseNumber}
+                </Typography>
+              </Box>
+            </Box>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
-            <Typography variant="caption">Real Estate Company</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              {listingSpecificRealEstateCompany || realEstateCompany}
-            </Typography>
-            <Typography sx={{ mt: 1 }} variant="caption">
-              License Number
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              {listingSpecificLicenseNumber || licenseNumber}
-            </Typography>
-          </Box>
+          <Card
+            sx={{
+              display: "flex",
+              p: 1,
+              justifyContent: "space-around",
+              borderRadius: 3,
+              mt:1,
+              boxShadow:
+              "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+            }}
+          >
+            <IconButton
+              onClick={() => onShare(listingId)}
+              sx={{ mb: 0.5, transform: "rotate(-45deg)" }}
+            >
+              <InsertLink />
+            </IconButton>
+            <IconButton sx={{ ml: 1 }} onClick={onSaveListing}>
+              {isBookmarked ? <Bookmark /> : <BookmarkAddOutlined />}
+            </IconButton>
+            <Button
+              onClick={toggleContactForm}
+              variant="contained"
+              fullWidth
+              sx={{ ml: 1, textTransform: "capitalize" }}
+            >
+              Message
+            </Button>
+          </Card>
         </Box>
       </Box>
-
       <Toolbar />
       <AppBar
         position="fixed"
         elevation={10}
-        sx={{ top: "auto", bottom: 0, background: "white" }}
+        sx={{
+          top: "auto",
+          bottom: 0,
+          background: "white",
+          height: isNarrow ? undefined : 0,
+        }}
       >
         <Toolbar>
           <Box sx={{ textAlign: "left" }}>
