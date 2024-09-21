@@ -98,7 +98,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   const location = (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Typography
-        fontWeight={500}
+        fontWeight={filters.location? 'bold' : '500'}
         // color="textSecondary"
         sx={{ textTransform: "capitalize" }}
         variant="body2"
@@ -109,7 +109,8 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   );
   const price = (
     <Box sx={{ display: "flex", alignItems: "center", ml: 0.5 }}>
-      <Typography fontWeight={500} color="textPrimary" variant="body2">
+      <Typography fontWeight={(filters.minPrice || filters.maxPrice) ? 'bold': '500'}
+       color="textPrimary" variant="body2">
         {priceLabel}
       </Typography>
     </Box>
@@ -140,9 +141,13 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
         <Zoom in={true}>
           <Chip
             onClick={() => onFilterClick(0)}
-            sx={{ mr: 1 }}
+            sx={{ mr: 1,
+            
+         
+             }}
             variant="filled"
             label={location}
+
           />
         </Zoom>
         <Zoom in>

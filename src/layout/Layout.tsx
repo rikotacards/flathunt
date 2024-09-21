@@ -78,7 +78,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
           <Collapse sx={{ width: "100%" }} in={!openTitle}>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <Box>{getAppBar()}</Box>
+              <Box
+              sx={{
+                overflowX: 'auto'
+              }}
+              >{getAppBar()}</Box>
 
               <Box sx={{ ml: "auto" }}>
                 <UserMenu />

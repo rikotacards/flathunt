@@ -21,6 +21,7 @@ import {
   ForumOutlined,
   HolidayVillageRounded,
 } from "@mui/icons-material";
+import { ListingTileSkeleton } from "../components/ListingTileSkeleton";
 interface ListingPageAppBarProps {
   price: number;
   netArea: number;
@@ -31,10 +32,10 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
   const { price, netArea, location, address } = props;
   const nav = useNavigate();
   const urlLocation = useLocation();
-  console.log(urlLocation);
   const goBack = () => nav("/");
   return (
     <Box
+    elevation={0}
       component={Paper}
       sx={{
         display: "flex",
@@ -66,7 +67,7 @@ export const ListingPage: React.FC = () => {
 
   const { setAppBarChildComponent } = useAppBarContext();
   React.useEffect(() => {
-    setAppBarChildComponent(
+    !isLoading && setAppBarChildComponent(
       <ListingPageAppBar
         price={data?.price || 0}
         netArea={data?.netArea || 0}
@@ -75,8 +76,8 @@ export const ListingPage: React.FC = () => {
       />
     );
   }, [isLoading]);
-  if (isLoading) {
-    <LinearProgress />;
+  if (isLoading || !data) {
+   return <ListingTileSkeleton/>
   }
   return (
     <Box
