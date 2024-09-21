@@ -11,6 +11,7 @@ import {
   Button,
   Alert,
   OutlinedInput,
+  CircularProgress,
 } from "@mui/material";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
@@ -41,7 +42,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
   const queryClient = useQueryClient();
   const s = useSnackbarContext();
   const nav = useNavigate();
-  const { data: listingOwnerData, isLoading } = useQuery({
+  const { data: listingOwnerData, isLoading , isFetching} = useQuery({
     queryKey: ["listingId"],
     queryFn: () => getUser(listingOwnerUid || ""),
   });
@@ -49,7 +50,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
     queryKey: ["getMyUserInfo"],
     queryFn: () => getUser(user?.uid || ""),
   });
-  const { user } = useAuthContext();
+  const { user, isUserLoading } = useAuthContext();
   const [number, setNumber] = React.useState<string | undefined>();
 
   React.useEffect(() => {
@@ -84,8 +85,8 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
       document
         .getElementById(listingId)
         ?.scrollIntoView({ block: "center", behavior: "instant" });
-      toggleForm();
-      document.getElementById(listingId + "contact")?.click();
+      // toggleForm();
+      // document.getElementById(listingId + "contact")?.click();
     } catch (e) {}
   };
   const onMessage = () => {
@@ -143,11 +144,13 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
           <OutlinedInput
             value={number}
             fullWidth
+            type='tel'
             disabled={!!myData?.contactNumber}
             sx={{ mt: 1, mb: 1 }}
             onChange={(e) => setNumber(e.target.value)}
             placeholder="Your whatsapp number"
-            endAdornment={<Button onClick={() => nav("/profile")}>Edit</Button>}
+            startAdornment={(isLoading || isFetching || isUserLoading) ? <Box sx={{display: 'flex'}}><CircularProgress size={20} /></Box> : null }
+            endAdornment={<Button disabled={!myData?.contactNumber} onClick={() => nav("/profile")}>Edit</Button>}
           />
         )}
         {user && (

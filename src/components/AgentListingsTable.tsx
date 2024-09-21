@@ -332,7 +332,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
       <Tab label={<TableRowsIcon/>}/>
 
     </Tabs>
-      <Box sx={{ display: "relative" }} mb={1} mt={2}>
+      <Box sx={{ display: "relative" }} mb={1} mt={0}>
         {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
         {index === 0 && <Box sx={{p:2}}>
           <ListingGrid data={filteredData} isLoading={isLoading} savedListingsTransformed={savedListingsData} />
