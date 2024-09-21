@@ -9,15 +9,10 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { ListingImage } from "./ListingImage";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+
 import "./styles.css";
 import { IListing } from "../firebase/types";
-import { Navigation } from "swiper/modules";
-import { Pagination } from "swiper/modules";
+
 import { Link } from "react-router-dom";
 
 import { useIsNarrow } from "../utils/useIsNarrow";
@@ -31,6 +26,7 @@ import {
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { ContactFormNew } from "./ContactFormNew";
 import { useQueryClient } from "@tanstack/react-query";
+import { ImageSlider } from "./ImageSlider";
 
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
@@ -127,19 +123,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
       alert(e);
     }
   };
-  const imgs = images?.map((image) => (
-    <SwiperSlide
-      style={{
-        // height: "auto",
-        height: 450,
-        width: "100%",
-        // maxHeight: "450px",
-      }}
-      key={image}
-    >
-      <ListingImage imageName={image} listingId={listingId} userId={userId} />
-    </SwiperSlide>
-  ));
+ 
   const message = `Hi, I'm interested this flat:\n flathunt.co/listing/${listingId}
   \n${bedrooms} bedroom, \naddress: ${address}, ${location}, \nasking: ${price} HKD`;
 
@@ -170,132 +154,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
               position: "relative",
             }}
           >
-            <Swiper
-              modules={[Navigation, Pagination]}
-              // navigation
-              pagination={true}
-              style={{
-                position: "relative",
-                borderRadius: 12,
-                zIndex: 0,
-                overflow: "hidden",
-                height: "auto",
-
-                "--swiper-pagination-color": "white",
-                boxShadow:
-                  "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-              }}
-            >
-              {imgs}
-              {true && (
-                <Box
-              
-                  elevation={0}
-                  color=""
-                  sx={{
-                    position: "absolute",
-                    top: 12,
-                    zIndex: 1,
-                    left: 1,
-                    pl: 1,
-                    pr: 1,
-                    m: 1,
-                    borderRadius: 5,
-                    display: "none",
-                    flexDirection: "row",
-                    alignItem: "flex-start",
-                    background: "transparent",
-
-                    pb: 1,
-                  }}
-                >
-                  <Chip
-                    size={isNarrow ? "medium" : "small"}
-                    variant="outlined"
-                    label={
-                      <Typography variant="caption" fontWeight={"bold"}>
-                        {price} HKD
-                      </Typography>
-                    }
-                    sx={{
-                      display: "flex",
-                      pl: 0,
-                      alignItems: "center",
-                      pr: 0,
-                      mr: 0.5,
-                      borderRadius: 5,
-                      backgroundColor: "rgba(0,0,0,0.4)",
-                      color: "white",
-                      backdropFilter: "blur(5px)",
-                    }}
-                  />
-
-                  {location && (
-                    <Chip
-                      size={isNarrow ? "medium" : "small"}
-                      variant="outlined"
-                      label={
-                        <Typography variant="caption" fontWeight={"bold"}>
-                          {location}
-                        </Typography>
-                      }
-                      sx={{
-                        display: "flex",
-                        pl: 0,
-                        alignItems: "center",
-                        pr: 0,
-                        mr: 0.5,
-                        borderRadius: 5,
-                        backgroundColor: "rgba(0,0,0,0.4)",
-                        color: "white",
-                        backdropFilter: "blur(0px)",
-                      }}
-                    />
-                  )}
-                  <Chip
-                    size={isNarrow ? "medium" : "small"}
-                    variant="outlined"
-                    label={
-                      <Typography variant="caption" fontWeight={"bold"}>
-                        {netArea} sqft
-                      </Typography>
-                    }
-                    sx={{
-                      display: "flex",
-                      pl: 0,
-                      alignItems: "center",
-                      pr: 0,
-                      mr: 0.5,
-                      borderRadius: 5,
-                      backgroundColor: "rgba(0,0,0,0.4)",
-                      color: "white",
-                      backdropFilter: "blur(0px)",
-                    }}
-                  />
-
-                  <Chip
-                    size={isNarrow ? "medium" : "small"}
-                    variant="outlined"
-                    label={
-                      <Typography variant="caption" fontWeight={"bold"}>
-                        {bedrooms == 0 ? "Studio" : `${bedrooms} Br`}
-                      </Typography>
-                    }
-                    sx={{
-                      display: "flex",
-                      pl: 0,
-                      alignItems: "center",
-                      pr: 0,
-                      mr: 0.5,
-                      borderRadius: 5,
-                      backgroundColor: "rgba(0,0,0,0.4)",
-                      color: "white",
-                      backdropFilter: "blur(0px)",
-                    }}
-                  />
-                </Box>
-              )}
-            </Swiper>
+          <ImageSlider images={images} listingId={listingId} userId={userId}/>
             <Box
               sx={{
                 display: "flex",
