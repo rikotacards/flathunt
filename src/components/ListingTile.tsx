@@ -4,7 +4,6 @@ import {
   Alert,
   Box,
   Button,
-  Card,
   Chip,
   Drawer,
   IconButton,
@@ -305,16 +304,15 @@ export const ListingTile: React.FC<IListing> = (props) => {
             ></Box>
           </Box>
         </Link>
-
         <Box
-          position={"absolute"}
-          sx={{
-            zIndex: 1,
-            bottom: 8,
-            right: 8,
-          }}
+        sx={{
+          position: 'absolute', 
+          top: 0, 
+          right: 0,
+          p:2
+        }}
         >
-          <IconButton
+        <IconButton
             onClick={(e) => {
               e.stopPropagation();
               onBookmark();
@@ -326,6 +324,16 @@ export const ListingTile: React.FC<IListing> = (props) => {
               <BookmarkAddOutlined sx={{ color: "white" }} />
             )}
           </IconButton>
+        </Box>
+        <Box
+          position={"absolute"}
+          sx={{
+            zIndex: 1,
+            bottom: 8,
+            right: 8,
+          }}
+        >
+        
           {
             <Chip
               size={isNarrow ? "medium" : "small"}
