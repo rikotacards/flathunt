@@ -32,6 +32,7 @@ export interface IListing {
     hasGym?: boolean;
     isSaved?: boolean;
     savedDocId?: string;
+    isDirectListing?: boolean;
 }
 
 export interface IFilters {
@@ -56,6 +57,8 @@ export interface IFilters {
     hasGym?: boolean;
     hasClubhouse?: boolean;
     hasPetfriendly?: boolean;
+    isDirectListing?: boolean;
+    isAgencyListing?: boolean;
 }
 
 export interface FiltersPopoverInterface {

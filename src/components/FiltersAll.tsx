@@ -41,7 +41,7 @@ const getAndCombineFilterFields = (
 };
 
 export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
-  const [open, setPage] = React.useState(0);
+  const [open, setPage] = React.useState('');
   const { filters, setFilters } = useFilterContext();
   const nav = useNavigate();
   const goResult = () => nav('/search-results')
@@ -66,6 +66,10 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
   ]);
   const additionalFilters = [
     {
+        label: 'Agency / Direct',
+        filteredValues: filters.isDirectListing  === undefined ? 'No preference' : filters.isDirectListing ? 'Direct listing' : 'Agency'
+    },
+    {
       label: "Net Area",
       filteredValues: getRangeLabel(
         filters.minNetArea,
@@ -85,8 +89,8 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
     },
   ];
 
-  const onToggle = (page: number) => {
-    setPage(page);
+  const onFilterChange = (filterName: string) => {
+    setPage(filterName);
   };
   const onSetFilter = () => {
     setFilters((p) => ({
@@ -97,7 +101,7 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
     }));
   };
   const onBack = () => {
-    onToggle(0);
+    onFilterChange('');
     onSetFilter();
   };
   const onClear = () => {
@@ -147,7 +151,7 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
         </Toolbar>
         {additionalFilters.map((f, i) => {
           return (
-            <MenuItem key={f.label} divider onClick={() => setPage(i + 1)}>
+            <MenuItem key={f.label} divider onClick={() => setPage(f.label)}>
               <ListItemText
                 secondary={
                   f.filteredValues?.length ? f.filteredValues : "None selected"
@@ -170,7 +174,7 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
             width: "100%",
           },
         }}
-        open={open >= 1}
+        open={open !== ''}
       >
         <Box sx={{ p: 1, width: "100%", position: "relative" }}>
           <Box
@@ -187,27 +191,34 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
               <ChevronLeft />
             </IconButton>
             <Typography variant="h6" fontWeight={"bold"} color="textPrimary">
-              {additionalFilters[open - 1]?.label}
+              {open}
             </Typography>
           </Box>
-          {open == 1 && (
+          {open == "Net Area" && (
             <Box sx={{ p: 2 }}>
               <AreaSlider setAreaRange={setAreaRange} />
             </Box>
           )}
 
-          {open == 2 && (
+          {open == "Outdoors" && (
             <FiltersOutdoors
               localState={localFilterState}
               onToggleFilter={onToggleFilter}
               filterOptions={features.outdoors}
             />
           )}
-          {open == 3 && (
+          {open == "Building Features" && (
             <FiltersOutdoors
               localState={localFilterState}
               onToggleFilter={onToggleFilter}
               filterOptions={features.building}
+            />
+          )}
+          {open == "Agency / Direct" && (
+            <FiltersOutdoors
+              localState={localFilterState}
+              onToggleFilter={onToggleFilter}
+              filterOptions={[{label: 'Direct Listing', name: 'isDirectListing'}, {label: 'Agency', name: 'isAgencyListing'}]}
             />
           )}
         </Box>

@@ -92,7 +92,6 @@ export const UserMenu: React.FC = () => {
           <MenuItem
             onClick={() => {
               handleCloseUserMenu();
-              setIndex(0);
               nav("/");
             }}
           >
@@ -107,7 +106,6 @@ export const UserMenu: React.FC = () => {
               key={setting.path}
               onClick={() => {
                 handleCloseUserMenu();
-                setIndex(i + 1);
                 nav(setting.path);
               }}
             >
@@ -122,7 +120,6 @@ export const UserMenu: React.FC = () => {
               onClick={() => {
                 handleCloseUserMenu();
                 nav("profile");
-                setIndex(3);
               }}
             >
               <ListItemIcon>

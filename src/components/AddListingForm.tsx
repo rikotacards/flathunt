@@ -11,6 +11,7 @@ import {
   IconButton,
   OutlinedInput,
   Paper,
+  Switch,
   Tabs,
   TextField,
   Toolbar,
@@ -498,7 +499,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 isChecked={!!form.rentBuy && !!form.propertyType}
                 text={"Property Info"}
               />
-              <Box sx={{ display: "flex" }}>
+              <Box sx={{ display: "flex", alignItems: 'center' }}>
                 <Chip
                   onClick={() => onClick("rentBuy", "rent")}
                   sx={{
@@ -512,6 +513,28 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                   label="Sale"
                   onClick={() => onClick("rentBuy", "sale")}
                   variant={outlinedOrContained(form.rentBuy === "sale")}
+                />
+              </Box>
+            </FieldLayout>
+            <FieldLayout>
+              <HeaderWithCheck
+                isChecked={form.isDirectListing !== undefined}
+                text={"Agency fee / no fee"}
+              />
+              <Box sx={{ display: "flex", alignItems: 'center' }}>
+                <Chip
+                  onClick={() => onClick("isDirectListing", true)}
+                  sx={{
+                    mr: 1,
+                  }}
+                  label="Agent Listing (agency fee)"
+                  variant={outlinedOrContained(form.isDirectListing === true)}
+                />
+
+                <Chip
+                  label="Direct Listing (no fee)"
+                  onClick={() => onClick("isDirectListing", false)}
+                  variant={outlinedOrContained(form.isDirectListing === false)}
                 />
               </Box>
             </FieldLayout>

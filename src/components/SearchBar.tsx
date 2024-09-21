@@ -166,6 +166,14 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
             label={bedrooms}
           />
         </Zoom>
+        <Zoom in>
+          <Chip
+            onClick={() => onFilterClick(4)}
+            variant="filled"
+            sx={{ mr: 1 }}
+            label={'Agency Fee'}
+          />
+        </Zoom>
       </Box>
     </>
   );
