@@ -1,28 +1,24 @@
 import {
   Tooltip,
   IconButton,
-  Avatar,
   Menu,
   MenuList,
   MenuItem,
   ListItemIcon,
   Typography,
   Button,
-  Box,
 } from "@mui/material";
 import React from "react";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ForumIcon from "@mui/icons-material/Forum";
+
 import { useNavigate } from "react-router";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HolidayVillageRoundedIcon from "@mui/icons-material/HolidayVillageRounded";
 import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
 import MenuIcon from "@mui/icons-material/Menu";
-import { KeyboardArrowDownRounded } from "@mui/icons-material";
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import { MenuRounded } from "@mui/icons-material";
 const settings = [
   { path: "listings", name: "My Listings", icon: <ViewListIcon /> },
   {
@@ -50,14 +46,13 @@ export const UserMenu: React.FC = () => {
           onClick={handleOpenUserMenu}
           sx={{
             ml: "auto",
-            p: 0,
             // boxShadow:
             //   "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
           }}
         >
           {!!user ? (
             <>
-            <MenuIcon/>
+            <MenuRounded />
               {/* <Avatar
                 sx={{ height: 35, width: 35 }}
                 src={user?.photoURL || undefined}
@@ -65,7 +60,7 @@ export const UserMenu: React.FC = () => {
                 <MoreVertIcon  /> */}
             </>
           ) : (
-            <MenuIcon />
+            <MenuRounded  />
           )}
         </IconButton>
       </Tooltip>

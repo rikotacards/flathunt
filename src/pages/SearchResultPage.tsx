@@ -9,15 +9,16 @@ import {
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ListingTile } from "../components/ListingTile";
-import { getAllListings } from "../firebase/listings";
+import { getAllListings, getSavedListings } from "../firebase/listings";
 import Grid from "@mui/material/Grid2";
-import { useAppBarContext, useFilterContext } from "../Providers/contextHooks";
+import { useAppBarContext, useAuthContext, useFilterContext } from "../Providers/contextHooks";
 
 import { useNavigate } from "react-router";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 
 export const SearchResultPage: React.FC = () => {
   const { setFilters, filters } = useFilterContext();
+  const {user} = useAuthContext();
   const nav = useNavigate();
   const { setAppBarChildComponent } = useAppBarContext();
 
@@ -41,7 +42,15 @@ export const SearchResultPage: React.FC = () => {
   const onClear = () => {
     setFilters({});
     nav("/");
-  };
+  }; 
+  const { data: savedListingsData } = useQuery({
+    queryKey: ["getSavedListings"],
+    queryFn: () => getSavedListings(user?.uid || ''),
+  });
+  const savedListingsTransformed: {[key: string]: string} = {}
+  savedListingsData?.forEach((listing) => {
+    savedListingsTransformed[listing.listingId] = listing.docId
+  })
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
@@ -87,11 +96,13 @@ export const SearchResultPage: React.FC = () => {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {data?.map((l) => (
-          <Grid key={l.listingId} size={{ lg: 3, md: 4, xs: 4 }}>
+        {data?.map((l) => {
+                        const savedDocId = savedListingsTransformed[l.listingId]
+
+          return <Grid key={l.listingId} size={{ lg: 3, md: 4, xs: 4 }}>
             <ListingTile {...l} />
           </Grid>
-        ))}
+})}
       </Grid>
     </Box>
   );

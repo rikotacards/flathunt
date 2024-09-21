@@ -130,10 +130,10 @@ export const ListingTile: React.FC<IListing> = (props) => {
   const imgs = images?.map((image) => (
     <SwiperSlide
       style={{
-        minHeight: 400,
-        height: "auto",
+        // height: "auto",
+        height: 450,
         width: "100%",
-        maxHeight: "450px",
+        // maxHeight: "450px",
       }}
       key={image}
     >

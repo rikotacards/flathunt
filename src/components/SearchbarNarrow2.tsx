@@ -33,7 +33,6 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   const { filters, setFilters } = useFilterContext();
   const [openMoreFilters, setOpenMoreFilters] = React.useState(false);
 
-
   const closeMore = () => {
     setOpenMoreFilters(false);
   };
@@ -79,7 +78,6 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     !disableRedirect && nav("/search-results");
   };
 
- 
   const priceLabel = getRangeLabel(filters.minPrice, filters.maxPrice, "HKD");
   const bedroomLabel = getBedroomsLabel(
     filters.minBedrooms,
@@ -117,18 +115,18 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     </Box>
   );
 
-  const hasFilters = hasOtherFeatures(filters)
+  const hasFilters = hasOtherFeatures(filters);
   const searchPage = (
     <>
-        <IconButton
-          onClick={() => {
-            setOpenMoreFilters(true);
-          }}
-        >
-            <Badge color='secondary' variant="dot" invisible={!hasFilters}>
-          <TuneRoundedIcon />
-      </Badge>
-        </IconButton>
+      <IconButton
+        onClick={() => {
+          setOpenMoreFilters(true);
+        }}
+      >
+        <Badge color="secondary" variant="dot" invisible={!hasFilters}>
+          <TuneRoundedIcon  />
+        </Badge>
+      </IconButton>
 
       <Box
         sx={{

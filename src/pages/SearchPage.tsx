@@ -26,6 +26,7 @@ import { ListingTileSkeleton } from "../components/ListingTileSkeleton";
 import { SignInPopup } from "../components/SignInPopup";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 import { USER_ID } from "../firebase/firebaseConfig";
+import { ListingGrid } from "../components/ListingGrid";
 export const SearchPage: React.FC = () => {
   const { setFilters } = useFilterContext();
   const queryClient = useQueryClient();
@@ -44,12 +45,12 @@ export const SearchPage: React.FC = () => {
   });
   const { data: savedListingsData } = useQuery({
     queryKey: ["getSavedListings"],
-    queryFn: () => getSavedListings(user?.uid || ''),
+    queryFn: () => getSavedListings(user?.uid || ""),
   });
-  const savedListingsTransformed: {[key: string]: string} = {}
+  const savedListingsTransformed: { [key: string]: string } = {};
   savedListingsData?.forEach((listing) => {
-    savedListingsTransformed[listing.listingId] = listing.docId
-  })
+    savedListingsTransformed[listing.listingId] = listing.docId;
+  });
 
   return (
     <Box
@@ -62,28 +63,11 @@ export const SearchPage: React.FC = () => {
         p: 2,
       }}
     >
-      <Grid
-        sx={{ mt: 1 }}
-        container
-        spacing={{ xs: 2, md: 3, lg: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {isLoading
-          ? [1, 2, 3, 4, 5, 6].map((l) => (
-              <Grid size={{ lg: 3, md: 4, xs: 4 }} key={l}>
-                <ListingTileSkeleton />
-              </Grid>
-            ))
-          : data?.map((l) => {
-              const savedDocId = savedListingsTransformed[l.listingId]
-
-              return (
-                <Grid key={l.listingId} size={{ lg: 3, md: 4, xs: 4 }}>
-                  <ListingTile savedDocId={savedDocId} isSaved={!!savedDocId} {...l} />
-                </Grid>
-              );
-            })}
-      </Grid>
+      <ListingGrid
+        isLoading={isLoading}
+        data={data}
+        savedListingsTransformed={savedListingsTransformed}
+      />
 
       {isNarrow && !isUserLoading && !user && <SignInPopup />}
     </Box>

@@ -1,3 +1,5 @@
+import TableRowsIcon from '@mui/icons-material/TableRows';
+
 import {
   Alert,
   Box,
@@ -21,10 +23,12 @@ import {
   Typography,
   Toolbar,
   LinearProgress,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { deleteListings, getAgentListings } from "../firebase/listings";
+import { deleteListings, getAgentListings, getSavedListings } from "../firebase/listings";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { auth, USER_ID } from "../firebase/firebaseConfig";
@@ -32,7 +36,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { EditListing } from "./EditListing";
 
 import { IFilters, IListing } from "../firebase/types";
-import { CloseOutlined, InsertLink, OpenInNew } from "@mui/icons-material";
+import { CloseOutlined, InsertLink, OpenInNew, WindowOutlined } from "@mui/icons-material";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -50,6 +54,7 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import { ListingTile } from "./ListingTile";
 import { AddListingForm } from "./AddListingForm";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { ListingGrid } from './ListingGrid';
 const getBedroomCondition = (bedrooms: number, bedroomsFilter?: string) => {
   if (bedroomsFilter === undefined) {
     return bedrooms >= 0;
@@ -357,6 +362,14 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   const onClear = () => {
     setFilters({});
   };
+  const { data: savedListingsData } = useQuery({
+    queryKey: ["getSavedListings"],
+    queryFn: () => getSavedListings(user?.uid || ""),
+  });
+  const savedListingsTransformed: { [key: string]: string } = {};
+  savedListingsData?.forEach((listing) => {
+    savedListingsTransformed[listing.listingId] = listing.docId;
+  });
   const onCopy = () => copy(copyText || "");
   const provider = new GoogleAuthProvider();
   const onOpenDrawer = () => {
@@ -381,12 +394,25 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
     filters.maxPrice ||
     filters.minPrice ||
     filters.maxNetArea;
+    const [index, setIndex] = React.useState(0);
+    const onChange = (event, index: number) => {
+      setIndex(index)
+    }
   return (
     <>
       {isLoading ? <LinearProgress /> : null}
+      <Tabs onChange={onChange} value={index} variant='fullWidth' >
+      <Tab label={<WindowOutlined/>}/>
+      <Tab label={<TableRowsIcon/>}/>
+
+    </Tabs>
       <Box sx={{ display: "relative" }} mb={1} mt={2}>
         {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
-        <TableContainer elevation={0} component={Paper}>
+        {index === 0 && <Box sx={{p:2}}>
+          <ListingGrid data={filteredData} isLoading={isLoading} savedListingsTransformed={savedListingsData} />
+          </Box>
+        }
+        {index === 1 && <TableContainer elevation={0} component={Paper}>
           <Table size="small" stickyHeader>
             <TableHead sx={{ position: "sticy" }}>
               <TableRow>
@@ -421,7 +447,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
             </TableHead>
             <TableBody>{rows}</TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer>}
 
         <Drawer
           open={open}
@@ -477,7 +503,11 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           </Fab>
         </Box>
         {
-          <Drawer open={openAddNewDrawer} anchor="bottom" onClose={handleClose}>
+          <Drawer
+          
+          
+          open={openAddNewDrawer} 
+          anchor="bottom" onClose={handleClose}>
             <AddListingForm
               userId={user?.uid || ""}
               onClose={onCloseAddNewDrawer}
@@ -489,18 +519,26 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           anchor="bottom"
           sx={{ display: "flex", flexDirection: "column" }}
           onClose={onCloseSignInDrawer}
+          PaperProps={{
+            style: {
+              borderTopLeftRadius: 25,
+              borderTopRightRadius: 25,
+            },
+          }}
           open={isSignInDrawerOpen}
         >
-          <Toolbar>
-            <Typography fontWeight={"bold"}>Sign In</Typography>
-            <IconButton onClick={onCloseSignInDrawer} sx={{ ml: "auto" }}>
+          <Toolbar sx={{ display: 'flex', textAlign: 'center', justifyContent: 'center'}}>
+
+            <Typography variant='h6' fontWeight={"bold"}>Sign In</Typography>
+            {/* <IconButton onClick={onCloseSignInDrawer} sx={{ ml: "auto" }}>
               <CloseOutlined />
-            </IconButton>
+            </IconButton> */}
           </Toolbar>
           <Box sx={{ p: 2 }}>
             <Typography sx={{ mb: 1 }}>Sign in to add listings</Typography>
             <Button
               onClick={onSignIn}
+              size='large'
               fullWidth
               sx={{
                 textTransform: "capitalize",

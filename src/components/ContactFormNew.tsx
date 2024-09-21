@@ -3,7 +3,6 @@ import {
   KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import {
-  AppBar,
   Toolbar,
   Typography,
   IconButton,
@@ -12,15 +11,12 @@ import {
   Button,
   Alert,
   OutlinedInput,
-  Paper,
 } from "@mui/material";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 import React from "react";
-import { addContactRequest } from "../firebase/listings";
 import { auth, USER_ID } from "../firebase/firebaseConfig";
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
-import { signIn } from "../utils/signInWithGoogle";
 import { addUser, getUser, updateUser } from "../firebase/user";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";

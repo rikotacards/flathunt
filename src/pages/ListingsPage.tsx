@@ -8,9 +8,12 @@ import {
   Dialog,
   Drawer,
   IconButton,
+  Tab,
+  Tabs,
   Toolbar,
   Typography,
 } from "@mui/material";
+import TableRowsIcon from '@mui/icons-material/TableRows';
 import IosShareIcon from "@mui/icons-material/IosShare";
 import { AddListingForm } from "../components/AddListingForm";
 
@@ -22,6 +25,7 @@ import { SearchBarWide } from "../components/SearchBarWide";
 import { useIsNarrow } from "../utils/useIsNarrow";
 
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
+import { WindowOutlined } from "@mui/icons-material";
 
 export const ListingsPage: React.FC = () => {
   const { filters, setFilters } = useFilterContext();
@@ -38,10 +42,13 @@ export const ListingsPage: React.FC = () => {
 
   const handleClose = () => setOpen(false);
 
- 
+  const [index, setIndex] = React.useState(0);
+  const onChange = (event, index: number) => {
+    setIndex(index)
+  }
   return (
     <>
-
+   
      <AgentListingsTable {...filters} />
      
       {!isNarrow && (
