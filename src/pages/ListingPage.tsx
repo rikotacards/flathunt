@@ -35,8 +35,6 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
   const goBack = () => nav("/");
   return (
     <Box
-    elevation={0}
-      component={Paper}
       sx={{
         display: "flex",
         justifyContent: "flex-start",
@@ -44,7 +42,7 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
         alignItems: "center",
       }}
     >
-      <IconButton size="large" sx={{ color: "black" }} onClick={goBack}>
+      <IconButton size="large" sx={{ color: 'inherit' }} onClick={goBack}>
         <ChevronLeft />
       </IconButton>
       <Box sx={{ display: "flex", flexDirection: "column", pb: 0 }}>

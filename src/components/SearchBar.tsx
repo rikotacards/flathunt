@@ -24,7 +24,7 @@ import { hasOtherFeatures } from "../utils/hasOtherFeatures";
 interface SearchbarNarrow2Props {
   disableRedirect?: boolean;
 }
-export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
+export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
   disableRedirect,
 }) => {
   const urlLocation = useLocation();

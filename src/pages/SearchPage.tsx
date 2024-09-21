@@ -24,7 +24,7 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 import { ListingTileSkeleton } from "../components/ListingTileSkeleton";
 
 import { SignInPopup } from "../components/SignInPopup";
-import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
+import { SearchBar } from "../components/SearchBar";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { ListingGrid } from "../components/ListingGrid";
 export const SearchPage: React.FC = () => {
@@ -34,7 +34,7 @@ export const SearchPage: React.FC = () => {
   const { setAppBarChildComponent } = useAppBarContext();
   const isNarrow = useIsNarrow();
   React.useEffect(() => {
-    setAppBarChildComponent(<SearchbarNarrow2 />);
+    setAppBarChildComponent(<SearchBar />);
     setFilters({});
     queryClient.clear();
   }, []);

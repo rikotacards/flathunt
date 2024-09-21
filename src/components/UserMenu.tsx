@@ -12,74 +12,54 @@ import {
 } from "@mui/material";
 import React from "react";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useLocation, useNavigate } from "react-router";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
-import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
-import { MenuRounded, MoreVert } from "@mui/icons-material";
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 const settings = [
   { path: "listings", name: "My Listings", icon: <ViewListIcon /> },
   {
     path: "saved-listings",
     name: "Saved Listings",
-    icon: <BookmarkBorderRoundedIcon />,
+    icon: <BookmarkIcon />,
   },
-  //   { path: "requests", name: "requests", icon: <ForumIcon /> },
+    // { path: "requests", name: "requests", icon: <ForumIcon /> },
 ];
-
 
 export const UserMenu: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user } = useAuthContext();
   const nav = useNavigate();
   const loc = useLocation();
-  const pathname = loc.pathname
-  console.log(pathname)
-  const [index, setIndex] = React.useState(0);
-  const onClick = (index: number) => {
-    setIndex(index);
-  }
+  const pathname = loc.pathname;
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-  const icons = {'/' :<HomeRoundedIcon/>, 
-    '/listings': <ViewListIcon/>, 
-    '/saved-listings': <BookmarkIcon/>, 
-    '/profile' : <Avatar sx={{height:30, width:30}} src={user?.photoURL}/>
-  }
+  const icons = {
+    "/": <HomeRoundedIcon />,
+    "/listings": <ViewListIcon />,
+    "/saved-listings": <BookmarkIcon />,
+    "/profile": <Avatar sx={{ height: 30, width: 30 }} src={user?.photoURL} />,
+  };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
   return (
     <>
       <Tooltip title="Open settings">
-      <Box sx={{display: 'flex', alignItems: 'center'}}>
-     
-        <IconButton
-          onClick={handleOpenUserMenu}
-          sx={{
-            ml: "auto",
-         
-          }}
-        >
-          {!!user ? (
-            <>
-    
-
-            
-            {icons[pathname] || <HomeRoundedIcon/>}
-            
-             
-            </>
-          ) : (
-            <MenuRounded  />
-          )}
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <IconButton
+            onClick={handleOpenUserMenu}
+            sx={{
+              ml: "auto",
+            }}
+          >
+            {icons[pathname] || <HomeRoundedIcon />}
+          </IconButton>
         </Box>
-        
       </Tooltip>
       <Menu
         sx={{ mt: "45px" }}
@@ -112,7 +92,7 @@ export const UserMenu: React.FC = () => {
           <MenuItem
             onClick={() => {
               handleCloseUserMenu();
-              setIndex(0)
+              setIndex(0);
               nav("/");
             }}
           >
@@ -122,12 +102,12 @@ export const UserMenu: React.FC = () => {
             <Typography sx={{ textAlign: "center" }}>Home</Typography>
           </MenuItem>
 
-          {settings.map((setting,i) => (
+          {settings.map((setting, i) => (
             <MenuItem
               key={setting.path}
               onClick={() => {
                 handleCloseUserMenu();
-                setIndex(i+1)
+                setIndex(i + 1);
                 nav(setting.path);
               }}
             >
@@ -142,7 +122,7 @@ export const UserMenu: React.FC = () => {
               onClick={() => {
                 handleCloseUserMenu();
                 nav("profile");
-                setIndex(3)
+                setIndex(3);
               }}
             >
               <ListItemIcon>

@@ -24,7 +24,7 @@ import { useAppBarContext, useAuthContext, useFilterContext } from "../Providers
 import { SearchBarWide } from "../components/SearchBarWide";
 import { useIsNarrow } from "../utils/useIsNarrow";
 
-import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
+import { SearchBar } from "../components/SearchBar";
 import { WindowOutlined } from "@mui/icons-material";
 
 export const ListingsPage: React.FC = () => {
@@ -35,7 +35,7 @@ export const ListingsPage: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     setFilters({});
-    setAppBarChildComponent(<SearchbarNarrow2 disableRedirect/>)
+    setAppBarChildComponent(<SearchBar disableRedirect/>)
   }, []);
   const isNarrow = useIsNarrow();
 

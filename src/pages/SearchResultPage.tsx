@@ -9,7 +9,7 @@ import {
 } from "../Providers/contextHooks";
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { useNavigate } from "react-router";
-import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
+import { SearchBar } from "../components/SearchBar";
 import { ListingGrid } from "../components/ListingGrid";
 import { Sort } from "@mui/icons-material";
 import { SortPanel } from "../components/SortPanel";
@@ -21,7 +21,7 @@ export const SearchResultPage: React.FC = () => {
   const { setAppBarChildComponent } = useAppBarContext();
 
   React.useEffect(() => {
-    setAppBarChildComponent(<SearchbarNarrow2 />);
+    setAppBarChildComponent(<SearchBar />);
   }, []);
   const { data, isLoading, isFetching } = useQuery({
     queryKey: [

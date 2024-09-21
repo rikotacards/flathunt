@@ -8,7 +8,7 @@ import { getFirestore } from "firebase/firestore";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDoHaAGhyvtMjzNfGU0nqLRiZvzXnCkKJo",
-  authDomain: "flat-hunt-a732f.firebaseapp.com",
+  authDomain: "flathunt.co",
   projectId: "flat-hunt-a732f",
   storageBucket: "flat-hunt-a732f.appspot.com",
   messagingSenderId: "273398034639",
