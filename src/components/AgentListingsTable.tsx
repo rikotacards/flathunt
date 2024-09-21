@@ -159,33 +159,14 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
           </Typography>
           <Typography variant="caption">br</Typography>
         </TableCell>
-        {isNarrow && (
+        { (
           <TableCell sx={{ border: "none" }}>
             <IconButton size="small" onClick={onClick}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
         )}
-        {!isNarrow && (
-          <>
-            <TableCell sx={{ border: "none" }}>
-              <IconButton size="small" onClick={toggleDeleteDialog}>
-                <DeleteIcon />
-              </IconButton>
-              <IconButton onClick={() => handleOpen(listingId)}>
-                <EditIcon />
-              </IconButton>
-              <IconButton onClick={() => onCopyLinkClick(listingId)}>
-                <InsertLink />
-              </IconButton>
-              <Link to={`/listing/${listingId}`} target="_blank">
-                <IconButton>
-                  <OpenInNew />
-                </IconButton>
-              </Link>
-            </TableCell>
-          </>
-        )}
+      
       </TableRow>
 
       <TableRow sx={{ border: "unset" }}>
@@ -217,62 +198,7 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 <ListingTile {...row} />
               </Box>
             </Box>
-            {isNarrow && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-around",
-                  p: 1,
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <IconButton
-                    disabled={!user}
-                    size="small"
-                    onClick={toggleDeleteDialog}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                  <Typography variant="caption">Delete</Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <IconButton
-                    disabled={!user}
-                    onClick={() => handleOpen(listingId)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <Typography variant="caption">Edit</Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <IconButton onClick={() => onCopyLinkClick(listingId)}>
-                    <InsertLink />
-                  </IconButton>
-                  <Typography variant="caption">Copy link</Typography>
-                </Box>
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Link to={`/listing/${listingId}`} target="_blank">
-                    <IconButton>
-                      <OpenInNew />
-                    </IconButton>
-                  </Link>
-                  <Typography variant="caption">Open</Typography>
-                </Box>
-              </Box>
-            )}
+          
           </Collapse>
         </TableCell>
       </TableRow>

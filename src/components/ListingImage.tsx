@@ -32,8 +32,8 @@ export const ListingImage: React.FC<ListingImages> = ({
       {!isLoaded && (
         <Skeleton
           variant="rectangular"
-          sx={{ borderRadius: 5 }}
-          height="400px"
+          sx={{ borderRadius: 3 }}
+          height="450px"
           width="100%"
         />
       )}

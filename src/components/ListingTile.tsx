@@ -27,6 +27,7 @@ import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { ContactFormNew } from "./ContactFormNew";
 import { useQueryClient } from "@tanstack/react-query";
 import { ImageSlider } from "./ImageSlider";
+import { ListingTileInfo } from "./ListingTileInfo";
 
 export const ListingTile: React.FC<IListing> = (props) => {
   const isNarrow = useIsNarrow();
@@ -100,7 +101,6 @@ export const ListingTile: React.FC<IListing> = (props) => {
         s.toggleSnackbar();
         queryClient.invalidateQueries({
           queryKey: ["getSavedListings"],
-          exact: true,
         });
       } else {
         await saveListing({ userId: user?.uid || USER_ID, listingId });
@@ -155,12 +155,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
             }}
           >
           <ImageSlider images={images} listingId={listingId} userId={userId}/>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-              }}
-            ></Box>
+            
           </Box>
         </Link>
         <Box
@@ -193,14 +188,13 @@ export const ListingTile: React.FC<IListing> = (props) => {
           }}
         >
         
-          {
+          
             <Chip
               size={isNarrow ? "medium" : "small"}
               onClick={toggleContactForm}
               label="Contact"
               id={listingId + "contact"}
               variant="outlined"
-              // icon={<WhatsApp/>}
               sx={{
                 borderRadius: 10,
                 color: "white",
@@ -212,87 +206,22 @@ export const ListingTile: React.FC<IListing> = (props) => {
               }}
             />
 
-            // <IconButton
-            //   size="large"
-            //   sx={{
-            //     color: "white",
-            //     backdropFilter:'blur(1px)',
-
-            //   }}
-            //   onClick={(e) => {
-            //     toggleContactForm();
-            //     e.stopPropagation();
-            //   }}
-            // >
-            //   <WhatsApp />
-            // </IconButton>
-          }
+    
+          
         </Box>
       </Box>
-      <Box sx={{ textAlign: "left", mt: 1.5 }}>
-        <Box sx={{ display: "flex", mb:0.5, whiteSpace: 'nowrap',  textOverflow: 'ellipsis'}}>
-          <Typography
-            fontWeight={"bold"}
-            sx={{ textTransform: "capitalize", }}
-            variant="body2"
-          >
-            {location}            {"\u2022"}
-          </Typography>
-     
-          <Typography  fontWeight={"bold"} variant="body2" sx={{ ml: 0.5,  overflow: 'hidden', textOverflow: 'ellipsis'}}>
-            {address}
-          </Typography>
-        </Box>
-      </Box>
-      {!!desc && (
-        <Box
-          sx={{
-            mb: 0.5,
-            textAlign: "left",
-            mt: 0,
-            display: "flex",
-            ml: 0,
-            mr: 1,
-            overflow: "hidden",
-          }}
-        >
-          <Typography
-            sx={{
-              textAlign: "left",
-              display: "-webkit-box",
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: "vertical",
-              // fontSize: '1rem'
-            }}
-            color="textSecondary"
-            variant="body2"
-          >
-            {desc}
-          </Typography>
-        </Box>
-      )}
-      <Box sx={{ display: "flex", whiteSpace: 'nowrap' }}>
-        <Typography
-          color="textSecondary"
-          sx={{ textTransform: "capitalize", mr: 0 }}
-          variant="body2"
-        >
-          {netArea} sqft {"\u2022"}  
-        </Typography>
       
-        <Typography color="textSecondary" sx={{ mr: 0}} variant="body2">
-          {bedrooms === 0 ? 'Studio' : bedrooms + ' bedrooms'}   {"\u2022"}
-        </Typography>
-        <Typography color="textSecondary" variant="body2">
-          {bathrooms} bathrooms
-        </Typography>
-      </Box>
-      <Box sx={{ display: "flex", mt: 0.5 }}>
-        <Typography fontWeight={800}>${price} HKD</Typography>
-        <Typography fontWeight={500} sx={{ ml: 0.5 }}>
-          month
-        </Typography>
-      </Box>
+      <ListingTileInfo
+        desc={desc}
+        bathrooms={bathrooms}
+        bedrooms={bedrooms}
+        price={price}
+        location={location}
+        address={address}
+        netArea={netArea}
+        userId={userId}
+        listingId={listingId}
+      />
       <Drawer
         open={openContactForm}
         anchor="bottom"
