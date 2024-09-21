@@ -17,22 +17,20 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const hasFilters = !!filters.location || !!filters.maxPrice;
   const [isFiltersOpen, setFiltersOpen] = React.useState(false);
   const onSearchbarClick = (filterIndex?: number) => {
-    console.log("filer", filterIndex);
     setFilterToOpen(filterIndex || 0);
     setFiltersOpen(true);
   };
-  const [titleOpen, setTitleOpen] = React.useState(true)
-  const onSearchbarClose = () => {
-    setFiltersOpen(false);
-  };
+  const [titleOpen, setTitleOpen] = React.useState(true);
+  
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const { getAppBar } = useAppBarContext();
   React.useEffect(() => {
     setTimeout(() => {
-      setTitleOpen(false)
-    }, 1000)
-  }, [])
+      setTitleOpen(false);
+    }, 1000);
+  }, []);
+  const openTitle = titleOpen && !hasFilters && isHomePage;
   return (
     <Box sx={{ position: "relative" }}>
       <AppBar
@@ -46,37 +44,47 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         }}
         position="fixed"
       >
-        <Toolbar sx={{ flexDirection: "row", display: "flex" }}>
-          {
-            <Collapse
-              sx={{}}
-              in={titleOpen&& !hasFilters && isHomePage}
-              orientation="horizontal"
+        <Toolbar
+          sx={{
+            justifyContent: "center",
+            flexDirection: "column",
+            display: "flex",
+            width: "100%",
+          }}
+        >
+          <Collapse
+            sx={{}}
+            in={
+              // true
+              openTitle
+            }
+            orientation="vertical"
+          >
+            <Typography
+              sx={{
+                cursor: "pointer",
+                mr: 1,
+                flexBasis: 1,
+                display: "flex",
+                flexGrow: 1,
+              }}
+              onClick={() => nav("/")}
+              color="black"
+              fontWeight={"bold"}
             >
-              <Typography
-                sx={{
-                  cursor: "pointer",
-                  mr: 1,
-                  flexBasis: 1,
-                  display: "flex",
-                  flexGrow: 1,
-                }}
-                onClick={() => nav("/")}
-                color="black"
-                fontWeight={"bold"}
-              >
-                Flathunt.co
-              </Typography>
-            </Collapse>
-          }
+              Flathunt.co
+            </Typography>
+          </Collapse>
 
-          <Box sx={{ flexGrow: 1, flexBasis: 1, overflow: "hidden" }}>
-            {getAppBar()}
-          </Box>
+          <Collapse sx={{ width: "100%" }} in={!openTitle}>
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Box>{getAppBar()}</Box>
 
-          <Box sx={{ flexBasis: 1 }}>
-            <UserMenu />
-          </Box>
+              <Box sx={{ ml: "auto" }}>
+                <UserMenu />
+              </Box>
+            </Box>
+          </Collapse>
         </Toolbar>
       </AppBar>
       <Box
