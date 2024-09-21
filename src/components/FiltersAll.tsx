@@ -21,6 +21,8 @@ import { useFilterContext } from "../Providers/contextHooks";
 import { AreaSlider } from "./AreaSlider";
 import { FilterField, IFilters } from "../firebase/types";
 import { getRangeLabel } from "../utils/getRangeLabel";
+import { hasOtherFeatures } from "../utils/hasOtherFeatures";
+import { useNavigate } from "react-router";
 interface FiltersAllProps {
   onClose: () => void;
 }
@@ -41,6 +43,9 @@ const getAndCombineFilterFields = (
 export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
   const [open, setPage] = React.useState(0);
   const { filters, setFilters } = useFilterContext();
+  const nav = useNavigate();
+  const goResult = () => nav('/search-results')
+  const hasFilters = hasOtherFeatures(filters);
   const [localFilterState, setLocalFilterState] = React.useState({});
   const onToggleFilter = (fieldName: keyof IFilters, value: boolean) => {
     setLocalFilterState((p) => ({
@@ -48,6 +53,13 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
       [fieldName]: value,
     }));
   };
+  const onCloseFilters = () => {
+    if(hasFilters){
+        goResult();
+        onClose();
+    }
+    onClose()
+  }
   const [areaRange, setAreaRange] = React.useState([
     filters.minNetArea || 200,
     filters.maxNetArea || 2000,
@@ -115,13 +127,23 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
           height: "100%",
         }}
       >
-        <Toolbar sx={{ display: "flex", textAlign: "center", justifyContent: 'center'  }}>
-          <Typography variant="h6" fontWeight={"bold"}>Filters</Typography>
-         
-            <IconButton sx={{position: 'absolute', right:0, p:3}} onClick={onClose}>
-              <CloseOutlined />
-            </IconButton>
-       
+        <Toolbar
+          sx={{
+            display: "flex",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Typography variant="h6" fontWeight={"bold"}>
+            Filters
+          </Typography>
+
+          <IconButton
+            sx={{ position: "absolute", right: 0, p: 3 }}
+            onClick={ onCloseFilters}
+          >
+            <CloseOutlined />
+          </IconButton>
         </Toolbar>
         {additionalFilters.map((f, i) => {
           return (
@@ -138,7 +160,7 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
             </MenuItem>
           );
         })}
-        <Button onClick={onClear}>Clear filters</Button>
+        {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
       </Box>
       <Drawer
         anchor="right"
@@ -164,7 +186,7 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
             <IconButton sx={{ position: "absolute", left: 0 }} onClick={onBack}>
               <ChevronLeft />
             </IconButton>
-            <Typography variant='h6' fontWeight={'bold'} color="textPrimary">
+            <Typography variant="h6" fontWeight={"bold"} color="textPrimary">
               {additionalFilters[open - 1]?.label}
             </Typography>
           </Box>

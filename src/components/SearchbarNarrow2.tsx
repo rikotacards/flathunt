@@ -20,6 +20,7 @@ import { IFilters } from "../firebase/types";
 import { getBedroomsLabel } from "../utils/getBedroomsLabel";
 import { FilterBedrooms } from "./FiltersBedrooms";
 import { FiltersAll } from "./FiltersAll";
+import { hasOtherFeatures } from "../utils/hasOtherFeatures";
 interface SearchbarNarrow2Props {
   disableRedirect?: boolean;
 }
@@ -28,13 +29,11 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
 }) => {
   const urlLocation = useLocation();
   const nav = useNavigate();
-  const goHome = () => nav("/");
+
   const { filters, setFilters } = useFilterContext();
   const [openMoreFilters, setOpenMoreFilters] = React.useState(false);
 
-  const onToggleMore = () => {
-    setOpenMoreFilters(!openMoreFilters);
-  };
+
   const closeMore = () => {
     setOpenMoreFilters(false);
   };
@@ -80,15 +79,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     !disableRedirect && nav("/search-results");
   };
 
-  const onMoreFiltersDone = (filters: IFilters) => {
-    setFilters((p) => ({
-      ...p,
-      minNetArea: priceRange[0],
-      maxPrice: priceRange[1],
-    }));
-    onCloseDrawer();
-    !disableRedirect && nav("/search-results");
-  };
+ 
   const priceLabel = getRangeLabel(filters.minPrice, filters.maxPrice, "HKD");
   const bedroomLabel = getBedroomsLabel(
     filters.minBedrooms,
@@ -125,18 +116,8 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
       </Typography>
     </Box>
   );
-  const hasOutdoorsFilter =
-    filters.hasBalcony || filters.hasGarden || filters.hasRooftop;
-  const hasAreaFilter = !!filters.minNetArea || !!filters.maxNetArea;
-  const hasBuildingFilter =
-    filters.hasPool ||
-    filters.hasWalkup ||
-    filters.hasElevator ||
-    filters.hasParking ||
-    filters.hasGym ||
-    filters.hasClubhouse ||
-    filters.hasPetfriendly;
-  const hasFilters = hasOutdoorsFilter || hasAreaFilter || hasBuildingFilter;
+
+  const hasFilters = hasOtherFeatures(filters)
   const searchPage = (
     <>
         <IconButton
