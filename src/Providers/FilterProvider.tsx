@@ -6,6 +6,7 @@ interface FiltersContextProps {
     filters: IFilters, 
     setFilters: React.Dispatch<React.SetStateAction<IFilters>>;
 }
+
 export const FiltersContext = React.createContext({} as FiltersContextProps)
 interface FiltersProviderProps {
     children: React.ReactNode;

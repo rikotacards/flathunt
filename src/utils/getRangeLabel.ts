@@ -1,4 +1,4 @@
-export const getRangeLabel = (minPrice?: number, maxPrice?: number, units?: string) => {
+export const getRangeLabel = (minPrice?: number, maxPrice?: number, units?: string, fallbackValue?: string) => {
     if (maxPrice && !minPrice) {
         return `<= ${maxPrice} ${units || ''}`
     }
@@ -6,7 +6,7 @@ export const getRangeLabel = (minPrice?: number, maxPrice?: number, units?: stri
         return `>= ${minPrice} ${units || ''}`
     }
     if (!maxPrice && !minPrice) {
-        return 'Price'
+        return fallbackValue || 'Price'
     }
     return `${minPrice}${units}-${maxPrice}${units}`
 }

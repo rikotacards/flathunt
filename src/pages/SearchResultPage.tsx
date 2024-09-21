@@ -2,8 +2,7 @@ import {
   Box,
   Button,
   Card,
-  Chip,
-  IconButton,
+
   Paper,
   Typography,
 } from "@mui/material";
@@ -13,12 +12,10 @@ import { ListingTile } from "../components/ListingTile";
 import { getAllListings } from "../firebase/listings";
 import Grid from "@mui/material/Grid2";
 import { useAppBarContext, useFilterContext } from "../Providers/contextHooks";
-import { SearchBarWide } from "../components/SearchBarWide";
-import { useIsNarrow } from "../utils/useIsNarrow";
+
 import { useNavigate } from "react-router";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Sort } from "@mui/icons-material";
+
 export const SearchResultPage: React.FC = () => {
   const { setFilters, filters } = useFilterContext();
   const nav = useNavigate();

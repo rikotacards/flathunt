@@ -1,16 +1,11 @@
-import {
-
-  HolidayVillageRounded,
-  KeyboardArrowDown,
-} from "@mui/icons-material";
+import { HolidayVillageRounded, KeyboardArrowDown } from "@mui/icons-material";
 import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import {
-
+  Badge,
   Box,
   Chip,
   Drawer,
   IconButton,
-
   Typography,
   Zoom,
 } from "@mui/material";
@@ -24,6 +19,7 @@ import { getRangeLabel } from "../utils/getRangeLabel";
 import { IFilters } from "../firebase/types";
 import { getBedroomsLabel } from "../utils/getBedroomsLabel";
 import { FilterBedrooms } from "./FiltersBedrooms";
+import { FiltersAll } from "./FiltersAll";
 interface SearchbarNarrow2Props {
   disableRedirect?: boolean;
 }
@@ -34,7 +30,14 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
   const nav = useNavigate();
   const goHome = () => nav("/");
   const { filters, setFilters } = useFilterContext();
+  const [openMoreFilters, setOpenMoreFilters] = React.useState(false);
 
+  const onToggleMore = () => {
+    setOpenMoreFilters(!openMoreFilters);
+  };
+  const closeMore = () => {
+    setOpenMoreFilters(false);
+  };
   const isHomePage = urlLocation.pathname === "/";
   const isSearchResults = urlLocation.pathname === "/search-results";
   const isAgentListings = urlLocation.pathname === "/listings";
@@ -76,7 +79,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     onCloseDrawer();
     !disableRedirect && nav("/search-results");
   };
-  
+
   const onMoreFiltersDone = (filters: IFilters) => {
     setFilters((p) => ({
       ...p,
@@ -87,20 +90,22 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     !disableRedirect && nav("/search-results");
   };
   const priceLabel = getRangeLabel(filters.minPrice, filters.maxPrice, "HKD");
-  const bedroomLabel = getBedroomsLabel(filters.minBedrooms, filters.maxBedrooms)
+  const bedroomLabel = getBedroomsLabel(
+    filters.minBedrooms,
+    filters.maxBedrooms
+  );
   const bedrooms = (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-    <Typography
-      fontWeight={500}
-      // color="textSecondary"
-      sx={{ textTransform: "capitalize" }}
-      variant="body2"
-    >
-      {bedroomLabel|| "Bedrooms"}
-    </Typography>
-    
-  </Box>
-  )
+      <Typography
+        fontWeight={500}
+        // color="textSecondary"
+        sx={{ textTransform: "capitalize" }}
+        variant="body2"
+      >
+        {bedroomLabel || "Bedrooms"}
+      </Typography>
+    </Box>
+  );
   const location = (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Typography
@@ -111,24 +116,38 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
       >
         {filters.location || "Location"}
       </Typography>
-      
     </Box>
   );
   const price = (
-    <Box sx={{ display: "flex", alignItems: "center",ml:0.5}}>
+    <Box sx={{ display: "flex", alignItems: "center", ml: 0.5 }}>
       <Typography fontWeight={500} color="textPrimary" variant="body2">
         {priceLabel}
       </Typography>
     </Box>
   );
-  
+  const hasOutdoorsFilter =
+    filters.hasBalcony || filters.hasGarden || filters.hasRooftop;
+  const hasAreaFilter = !!filters.minNetArea || !!filters.maxNetArea;
+  const hasBuildingFilter =
+    filters.hasPool ||
+    filters.hasWalkup ||
+    filters.hasElevator ||
+    filters.hasParking ||
+    filters.hasGym ||
+    filters.hasClubhouse ||
+    filters.hasPetfriendly;
+  const hasFilters = hasOutdoorsFilter || hasAreaFilter || hasBuildingFilter;
   const searchPage = (
     <>
-      { (
-        <IconButton  onClick={() => onFilterClick(2)}>
+        <IconButton
+          onClick={() => {
+            setOpenMoreFilters(true);
+          }}
+        >
+            <Badge color='secondary' variant="dot" invisible={!hasFilters}>
           <TuneRoundedIcon />
+      </Badge>
         </IconButton>
-      )}
 
       <Box
         sx={{
@@ -142,7 +161,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
         <Zoom in={true}>
           <Chip
             onClick={() => onFilterClick(0)}
-            sx={{ mr: 1}}
+            sx={{ mr: 1 }}
             variant="filled"
             label={location}
           />
@@ -151,7 +170,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
           <Chip
             onClick={() => onFilterClick(1)}
             variant="filled"
-            sx={{ mr: 1}}
+            sx={{ mr: 1 }}
             label={price}
           />
         </Zoom>
@@ -159,7 +178,7 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
           <Chip
             onClick={() => onFilterClick(4)}
             variant="filled"
-            sx={{ mr: 1}}
+            sx={{ mr: 1 }}
             label={bedrooms}
           />
         </Zoom>
@@ -167,44 +186,60 @@ export const SearchbarNarrow2: React.FC<SearchbarNarrow2Props> = ({
     </>
   );
   return (
-    <Box sx={{pb:0}}>
-      <Box sx={{ display: "flex", alignItems: 'center', mr:1  }}>
+    <Box sx={{ pb: 0 }}>
+      <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
         {(isHomePage || isSearchResults || isAgentListings) && searchPage}
       </Box>
+      {
+        <Drawer
+          PaperProps={{
+            style: {
+              borderTopLeftRadius: 25,
+              borderTopRightRadius: 25,
+              display: "flex",
+              width: "100%",
+            },
+          }}
+          anchor={"bottom"}
+          open={isDrawerOpen}
+          onClose={onCloseDrawer}
+        >
+          <Box sx={{ m: 1 }}>
+            {filterIndex === 0 && (
+              <LocationFilterNew2
+                onClick={onLocationClick}
+                onClose={onCloseDrawer}
+              />
+            )}
+            {filterIndex === 1 && (
+              <PriceFilterNew2
+                setPriceRange={setPriceRange}
+                onCancel={onCloseDrawer}
+                onClose={onPriceDone}
+              />
+            )}
+            {filterIndex === 4 && (
+              <FilterBedrooms
+                setPriceRange={setBedroomsRange}
+                onCancel={onCloseDrawer}
+                onClose={onBedroomsDone}
+              />
+            )}
+          </Box>
+        </Drawer>
+      }
       <Drawer
+        anchor="bottom"
+        open={openMoreFilters}
+        onClose={closeMore}
         PaperProps={{
           style: {
-            borderTopLeftRadius: 25,
-            borderTopRightRadius: 25,
+            display: "flex",
+            height: "100%",
           },
         }}
-        anchor={"bottom"}
-        open={isDrawerOpen}
-        onClose={onCloseDrawer}
       >
-        <Box sx={{ m: 1 }}>
-          {filterIndex === 0 && (
-            <LocationFilterNew2
-              onClick={onLocationClick}
-              onClose={onCloseDrawer}
-            />
-          )}
-          {filterIndex === 1 && (
-            <PriceFilterNew2
-              setPriceRange={setPriceRange}
-              onCancel={onCloseDrawer}
-              onClose={onPriceDone}
-            />
-          )}
-          {filterIndex === 4 && (
-            <FilterBedrooms
-              setPriceRange={setBedroomsRange}
-              onCancel={onCloseDrawer}
-              onClose={onBedroomsDone}
-            />
-          )}
-          {filterIndex === 2 && <MoreFilter onClose={onCloseDrawer} />}
-        </Box>
+        <FiltersAll onClose={closeMore} />
       </Drawer>
     </Box>
   );

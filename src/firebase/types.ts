@@ -46,6 +46,16 @@ export interface IFilters {
     maxNetArea?: number;
     location?: string;
     status?: 'live' | 'draft';
+    hasBalcony?: boolean;
+    hasRooftop?: boolean;
+    hasGarden?: boolean;
+    hasWalkup?: boolean;
+    hasElevator?: boolean;
+    hasPool?: boolean;
+    hasParking?: boolean;
+    hasGym?: boolean;
+    hasClubhouse?: boolean;
+    hasPetfriendly?: boolean;
 }
 
 export interface FiltersPopoverInterface {
@@ -75,4 +85,14 @@ export interface MoreUserInfo {
     contactNumber?: string;
     realEstateCompany?: string;
     licenseNumber?: string;
+}
+export interface FilterField {
+    name: keyof IFilters, 
+    label: string
+}
+export interface IAdditionalFeatures {
+    outdoors: 
+        FilterField[]
+    ,
+    building: FilterField[]
 }

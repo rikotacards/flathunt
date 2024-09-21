@@ -60,8 +60,8 @@ import {
     };
     return (
       <Box
-        component={Paper}
-        elevation={0}
+        
+    
         sx={{
           p: 1,
           m: 0,

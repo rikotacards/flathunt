@@ -1,16 +1,16 @@
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { Box, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import React from "react";
-import { IListing } from "../firebase/types";
+import { IAdditionalFeatures, IListing } from "../firebase/types";
 interface OtherFeaturesProps {
   openMoreFeatures: boolean;
   onCloseMoreFeatures: () => void;
   onOpenMoreFeatures: () => void;
   onClick: (fieldName: string, value: string | number | boolean) => void;
 }
-const features = {
+export const features: IAdditionalFeatures = {
   outdoors: [
-    { name: "hasRooftop", label: "Rooftop" },
+    { name: "hasRooftop", label: "rooftop" },
     { name: "hasBalcony", label: "balcony" },
     { name: "hasGarden", label: "garden" },
   ],
