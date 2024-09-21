@@ -1,18 +1,18 @@
-import { Box, Button, Card, Paper, Typography } from "@mui/material";
+import { Box, Button, Card, IconButton, Menu, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ListingTile } from "../components/ListingTile";
 import { getAllListings, getSavedListings } from "../firebase/listings";
-import Grid from "@mui/material/Grid2";
 import {
   useAppBarContext,
   useAuthContext,
   useFilterContext,
 } from "../Providers/contextHooks";
-
+import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { useNavigate } from "react-router";
 import { SearchbarNarrow2 } from "../components/SearchbarNarrow2";
 import { ListingGrid } from "../components/ListingGrid";
+import { Sort } from "@mui/icons-material";
+import { SortPanel } from "../components/SortPanel";
 
 export const SearchResultPage: React.FC = () => {
   const { setFilters, filters } = useFilterContext();
@@ -37,10 +37,41 @@ export const SearchResultPage: React.FC = () => {
     ],
     queryFn: () => getAllListings(filters),
   });
+  const [sortedData, setSortedData] = React.useState()
+ 
+console.log('sorting')
   const onClear = () => {
     setFilters({});
     nav("/");
   };
+  const onHighestSortPrice = () => {
+    if(!data){
+      return;
+    }
+    setSortedData(data?.sort((a,b) => b.price - a.price))
+    handleCloseUserMenu()
+  }
+  const onHighestSortArea = () => {
+    if(!data){
+      return;
+    }
+    setSortedData(data?.sort((a,b) => b.netArea - a.netArea))
+    handleCloseUserMenu()
+  }
+  const onLowestSortArea = () => {
+    if(!data){
+      return;
+    }
+    setSortedData(data?.sort((a,b) => a.netArea - b.netArea))
+    handleCloseUserMenu()
+  }
+  const onLowestSortPrice = () => {
+    if(!data){
+      return;
+    }
+    setSortedData(data?.sort((a,b) => a.price - b.price))
+    handleCloseUserMenu()
+  }
   const { data: savedListingsData } = useQuery({
     queryKey: ["getSavedListings"],
     queryFn: () => getSavedListings(user?.uid || ""),
@@ -49,6 +80,15 @@ export const SearchResultPage: React.FC = () => {
   savedListingsData?.forEach((listing) => {
     savedListingsTransformed[listing.listingId] = listing.docId;
   });
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", p: 2 }}>
@@ -69,6 +109,34 @@ export const SearchResultPage: React.FC = () => {
               borderRadius: 10,
             }}
           >
+            <Menu
+             sx={{ mt: "45px" }}
+             id="menu-appbar"
+             anchorEl={anchorElUser}
+             slotProps={{ paper: { style: { borderRadius: 10 } } }}
+             anchorOrigin={{
+               vertical: "top",
+               horizontal: "right",
+             }}
+             keepMounted
+             transformOrigin={{
+               vertical: "top",
+               horizontal: "right",
+             }}
+             open={Boolean(anchorElUser)}
+             onClose={handleCloseUserMenu}
+            >
+              <SortPanel 
+              onLowestSortArea={onLowestSortArea}
+              onHighestSortArea={onHighestSortArea}
+              onHighestSortPrice={onHighestSortPrice}
+              onLowestSortPrice={onLowestSortPrice}/>
+
+            </Menu>
+            <IconButton onClick={handleOpenUserMenu}>
+
+            <SwapVertIcon/>
+            </IconButton>
             <Typography
               color="textSecondary"
               variant="body2"
@@ -91,7 +159,7 @@ export const SearchResultPage: React.FC = () => {
       )}
       <ListingGrid
         isLoading={isLoading}
-        data={data}
+        data={sortedData || data}
         savedListingsTransformed={savedListingsTransformed}
       />
 
