@@ -27,6 +27,7 @@ import { SignInPopup } from "../components/SignInPopup";
 import { SearchBar } from "../components/SearchBar";
 import { USER_ID } from "../firebase/firebaseConfig";
 import { ListingGrid } from "../components/ListingGrid";
+import { Categories } from "../components/Categories";
 export const SearchPage: React.FC = () => {
   const { setFilters } = useFilterContext();
   const queryClient = useQueryClient();
@@ -61,8 +62,11 @@ export const SearchPage: React.FC = () => {
         position: "relative",
         mt: 0,
         p: 2,
+        pt:1,
       }}
     >
+      
+      <Categories/>
       <ListingGrid
         isLoading={isLoading}
         data={data}
