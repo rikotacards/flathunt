@@ -70,6 +70,12 @@ export const Categories: React. FC = () => {
     const {filters, setFilters} = useFilterContext();
     const nav = useNavigate();
     const onClick = (category: keyof IFilters) => {
+        if(category === 'hasLuxury'){
+            setFilters((p) => ({...p, minPrice : 90000}))
+            nav('/search-results')
+            return;
+
+        }
         setFilters((p) => ({...p, [category] : true}))
         nav('/search-results')
     }

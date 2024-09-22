@@ -169,6 +169,7 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
       </Box>
     </>
   );
+  
   return (
     <Box sx={{ pb: 0 }}>
       <Box sx={{ display: "flex", alignItems: "center", mr: 1 }}>
