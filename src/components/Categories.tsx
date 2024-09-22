@@ -83,7 +83,7 @@ export const Categories: React. FC = () => {
     return (
         <Box sx={{ alignItems: 'flex-start', display: 'flex', justifyContent: 'space-between',    overflowX: 'auto',}}>
 
-        {categories.map((c) => <Category onClick={() => onClick(c.fieldName)} {...c}/>)}
+        {categories.map((c) => <Category key={c.fieldName} onClick={() => onClick(c.fieldName)} {...c}/>)}
         </Box>
     )
 }

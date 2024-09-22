@@ -65,8 +65,6 @@ export const kowloon = [
   "lei yue mun",
   "sau mau ping",
   "to kwa wan",
-  "sau mau ping",
-  "to kwa wan",
   "shek kip mei",
   "mong kok",
   "lam tin",

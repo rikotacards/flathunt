@@ -55,7 +55,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     desc,
     bathrooms,
     isSaved,
-    isDirectListing
+    isDirectListing,
   } = props;
   const queryClient = useQueryClient();
 
@@ -124,7 +124,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
       alert(e);
     }
   };
- 
+
   const message = `Hi, I'm interested this flat:\n flathunt.co/listing/${listingId}
   \n${bedrooms} bedroom, \naddress: ${address}, ${location}, \nasking: ${price} HKD`;
 
@@ -155,19 +155,23 @@ export const ListingTile: React.FC<IListing> = (props) => {
               position: "relative",
             }}
           >
-          <ImageSlider images={images} listingId={listingId} userId={userId}/>
-            
+            <ImageSlider
+              enablePagination={!isNarrow}
+              images={images}
+              listingId={listingId}
+              userId={userId}
+            />
           </Box>
         </Link>
         <Box
-        sx={{
-          position: 'absolute', 
-          top: 0, 
-          right: 0,
-          p:2
-        }}
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            p: 2,
+          }}
         >
-        <IconButton
+          <IconButton
             onClick={(e) => {
               e.stopPropagation();
               onBookmark();
@@ -188,30 +192,25 @@ export const ListingTile: React.FC<IListing> = (props) => {
             right: 8,
           }}
         >
-        
-          
-            <Chip
-              size={isNarrow ? "medium" : "small"}
-              onClick={toggleContactForm}
-              label="Contact"
-              id={listingId + "contact"}
-              variant="outlined"
-              sx={{
-                borderRadius: 10,
-                color: "white",
-                m: 1,
-                fontWeight: "bold",
-                borderColor: "white",
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(10px)",
-              }}
-            />
-
-    
-          
+          <Chip
+            size={isNarrow ? "medium" : "small"}
+            onClick={toggleContactForm}
+            label="Contact"
+            id={listingId + "contact"}
+            variant="outlined"
+            sx={{
+              borderRadius: 10,
+              color: "white",
+              m: 1,
+              fontWeight: "bold",
+              borderColor: "white",
+              background: "rgba(255,255,255,0.1)",
+              backdropFilter: "blur(10px)",
+            }}
+          />
         </Box>
       </Box>
-      
+
       <ListingTileInfo
         desc={desc}
         bathrooms={bathrooms}
