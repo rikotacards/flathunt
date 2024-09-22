@@ -59,6 +59,8 @@ export interface IFilters {
     hasPetFriendly?: boolean;
     isDirectListing?: boolean;
     isAgencyListing?: boolean;
+    hasHouse?: boolean;
+    hasLuxury?: boolean;
 }
 
 export interface FiltersPopoverInterface {

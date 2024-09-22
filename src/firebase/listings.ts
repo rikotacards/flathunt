@@ -37,7 +37,9 @@ export const getAllListings = async (filters: IFilters) => {
     const priceConstraints = and(where('price', '<=', Number(filters.maxPrice || 999999)), where('price', '>=', Number(filters.minPrice || 0)))
     const locationConstraint = where('location', filters.location ? '==' : '!=', filters.location ? filters.location : '')
     const conditions =[areaConstraints, bedroomsConstraints, priceConstraints, locationConstraint]
-    
+    if(filters.hasPetFriendly !== undefined){
+        conditions.push(where('hasPetFriendly', '==', filters.hasPetFriendly))
+    }
     if(filters.isDirectListing !== undefined){
         conditions.push(where('isDirectListing', '==', filters.isDirectListing))
     }
