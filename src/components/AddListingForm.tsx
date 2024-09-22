@@ -7,6 +7,10 @@ import {
   Chip,
   CircularProgress,
   Collapse,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   IconButton,
   OutlinedInput,
@@ -71,7 +75,7 @@ const HeaderWithCheck: React.FC<HeaderWithCheckProps> = ({
         {isChecked ? (
           <CheckCircleIcon fontSize="small" color="success" />
         ) : (
-          <CheckCircleOutlineOutlined  fontSize="small" color="error" />
+          <CheckCircleOutlineOutlined fontSize="small" color="error" />
         )}
       </Box>
       <Typography
@@ -141,10 +145,15 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     propertyType: listing?.propertyType || "residential",
     realEstateCompany: data?.realEstateCompany,
     licenseNumber: data?.licenseNumber,
+    personalLicenseNumber: data?.personalLicenseNumber,
   } as IListing);
   console.log("form", form);
   const canAdd =
-    form.licenseNumber && form.realEstateCompany && data?.contactNumber;
+    data?.personalLicenseNumber &&
+    form.licenseNumber &&
+    form.realEstateCompany &&
+    data?.contactNumber;
+
   const [tabIndex, setTabIndex] = React.useState(0);
   const [files, setFiles] = React.useState([] as File[]);
   const onUpdateRealEstateCompany = async () => {
@@ -159,6 +168,16 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
         return;
       }
       await updateUser(userId, { licenseNumber: form.licenseNumber });
+    } catch (e) {
+      alert(e);
+    }
+  };
+  const onUpdatePersonalLicenseNumber = async () => {
+    try {
+      if (!form.personalLicenseNumber) {
+        return;
+      }
+      await updateUser(userId, { licenseNumber: form.personalLicenseNumber });
     } catch (e) {
       alert(e);
     }
@@ -208,7 +227,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     setContactNumber(e.target.value);
   };
   const imageUrlsForPreview = [];
-  console.log('ffff', form)
+  console.log("ffff", form);
   React.useEffect(() => {
     setContactNumber(data?.contactNumber);
     setForm({
@@ -499,7 +518,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 isChecked={!!form.rentBuy && !!form.propertyType}
                 text={"Property Info"}
               />
-              <Box sx={{ display: "flex", alignItems: 'center' }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Chip
                   onClick={() => onClick("rentBuy", "rent")}
                   sx={{
@@ -521,7 +540,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 isChecked={form.isDirectListing !== undefined}
                 text={"Agency fee / no fee"}
               />
-              <Box sx={{ display: "flex", alignItems: 'center' }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Chip
                   onClick={() => onClick("isDirectListing", false)}
                   sx={{
@@ -698,7 +717,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               />
             </FieldLayout>
             <FieldLayout>
-              <Typography fontWeight={'bold'} variant="body1" sx={{mb:1}}>Description</Typography>
+              <Typography fontWeight={"bold"} variant="body1" sx={{ mb: 1 }}>
+                Description
+              </Typography>
               <OutlinedInput
                 multiline
                 minRows={3}
@@ -730,41 +751,54 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 you directly.
               </Typography>
             )}
-            <Typography variant="body2">Whatsapp Number</Typography>
 
             <TextField
               sx={{ mb: 1 }}
               name="contactNumber"
               type="tel"
-              placeholder="Whatsap Number"
+              label={"Whatsapp Number"}
+              placeholder="12345678"
               disabled={!!data?.contactNumber}
               onChange={onChangeContactNumber}
               value={contactNumber}
             />
-            <Typography variant="body2">Real Estate Company Name</Typography>
+            {!form.isDirectListing && <>
             <TextField
               sx={{ mb: 1 }}
               name="realEstateCompany"
               type="string"
-              placeholder="Company Name"
+              label={"Real Estate Company Name"}
+              placeholder="Best Property Agency"
               disabled={!!data?.realEstateCompany}
               onChange={onChange}
               value={form.realEstateCompany}
               onBlur={onUpdateRealEstateCompany}
             />
 
-            <Typography variant="body2">Company License Number</Typography>
-
             <TextField
               sx={{ mb: 1 }}
               name="licenseNumber"
               type="string"
-              placeholder="License Number"
+              label={"Company License Number"}
+              placeholder="C054899"
               disabled={!!data?.licenseNumber}
               onChange={onChange}
               value={form.licenseNumber}
               onBlur={onUpdateLicenseNumber}
             />
+
+            <TextField
+              sx={{ mb: 1 }}
+              name="personalLicenseNumber"
+              type="string"
+              label="Personal License Number"
+              placeholder="E-123456"
+              disabled={!!data?.personalLicenseNumber}
+              onChange={onChange}
+              value={form.personalLicenseNumber}
+              onBlur={onUpdatePersonalLicenseNumber}
+            />
+            </>}
 
             <Divider sx={{ mb: 1 }} />
             {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
@@ -809,7 +843,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             <Button
               onClick={isEdit ? onUpdate : onAdd}
               disabled={!canAdd}
-              size='large'
+              size="large"
               sx={{ position: "relative", bottom: 0, zIndex: 3, opacity: 1 }}
               variant="contained"
             >

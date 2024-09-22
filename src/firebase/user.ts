@@ -18,6 +18,7 @@ interface NewUser {
     contactNumber?: string;
     realEstateCompany?: string;
     licenseNumber?: string;
+    personalLicenseNumber?: string;
 }
 export const addUser = async (args: NewUser) => {
     try {

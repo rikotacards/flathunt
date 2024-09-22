@@ -1,18 +1,13 @@
 import {
   Alert,
-
   Box,
   Button,
   Card,
   Collapse,
   Divider,
-
   IconButton,
-
   OutlinedInput,
-
   Toolbar,
-
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -20,40 +15,61 @@ import { onSignOut } from "../utils/signOut";
 import { useNavigate } from "react-router";
 import { signIn } from "../utils/signInWithGoogle";
 
-import { useAppBarContext, useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
+import {
+  useAppBarContext,
+  useAuthContext,
+  useSnackbarContext,
+} from "../Providers/contextHooks";
 import { addUser, getUser, updateUser } from "../firebase/user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeftRounded } from "@mui/icons-material";
+import { AccessTimeFilled, ChevronLeftRounded, ClearAll, ClearOutlined, CloseOutlined, Info } from "@mui/icons-material";
+interface OnClearProps {
+  onClick: () => void;
+}
+export const OnClear: React.FC<OnClearProps> = ({onClick}) => {
+  return (
+    <IconButton onClick={onClick}>
+      <ClearOutlined/>
+    </IconButton>
+  )
+}
 
 export const ProfilePage: React.FC = () => {
   const nav = useNavigate();
   const onBack = () => {
-    nav(-1)
-  }
+    nav(-1);
+  };
   const s = useSnackbarContext();
   const { user } = useAuthContext();
   const { data, isLoading } = useQuery({
     queryKey: ["getUser"],
     queryFn: () => getUser(user?.uid || ""),
   });
-  
+
   const [form, setForm] = React.useState({
     name: user?.displayName,
     email: user?.email,
     contactNumber: data?.contactNumber,
     realEstateCompany: data?.realEstateCompany,
     licenseNumber: data?.licenseNumber,
+    personalLicenseNumber: data?.personalLicenseNumber
   });
   const a = useAppBarContext();
   React.useEffect(() => {
-    a.setAppBarChildComponent(<Toolbar sx={{pl:0}}><IconButton onClick={onBack}><ChevronLeftRounded/></IconButton><Typography fontWeight={'bold'} color='textPrimary'>Profile</Typography></Toolbar>)
-    
-  }, [])
+    a.setAppBarChildComponent(
+      <Toolbar sx={{ pl: 0 }}>
+        <IconButton onClick={onBack}>
+          <ChevronLeftRounded />
+        </IconButton>
+        <Typography fontWeight={"bold"} color="textPrimary">
+          Profile
+        </Typography>
+      </Toolbar>
+    );
+  }, []);
   React.useEffect(() => {
-    setForm({...data,   
-      name: user?.displayName,
-      email: user?.email})
-  }, [isLoading])
+    setForm({ ...data, name: user?.displayName, email: user?.email });
+  }, [isLoading]);
   const queryClient = useQueryClient();
 
   const onChange = (
@@ -70,12 +86,12 @@ export const ProfilePage: React.FC = () => {
       return;
     }
     try {
-     
-      await addUser( {userId: user?.uid, contactNumber: 
-        form.contactNumber || '', 
+      await addUser({
+        userId: user?.uid,
+        contactNumber: form.contactNumber || "",
         licenseNumber: form?.licenseNumber || "",
-        realEstateCompany: form.realEstateCompany || ""
-        
+        realEstateCompany: form.realEstateCompany || "",
+
       });
       queryClient.invalidateQueries({
         queryKey: ["getUser"],
@@ -88,7 +104,7 @@ export const ProfilePage: React.FC = () => {
       );
       s.toggleSnackbar();
     } catch (e) {
-      alert(e)
+      alert(e);
     }
 
     onSetField(null);
@@ -119,7 +135,7 @@ export const ProfilePage: React.FC = () => {
         flexDirection: "column",
         p: 2,
         textAlign: "left",
-        position: 'relative'
+        position: "relative",
       }}
     >
       {settings.map((setting, i) => {
@@ -177,90 +193,146 @@ export const ProfilePage: React.FC = () => {
           </>
         );
       })}
-      <Divider sx={{mb:2}}/>
+      <Divider sx={{ mb: 2 }} />
       <Typography sx={{ mb: 3 }} variant="h6">
         For Agents
       </Typography>
-      <>
-      <Box sx={{ display: "flex", mb: 4 }}>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="body2" fontWeight={"bold"}>
-            Real Estate Company
-          </Typography>
-          <Typography variant="body1">{data?.realEstateCompany || "N/A"}</Typography>
-          
-        </Box>
-        <Button size="small" onClick={() => onSetField(3)} sx={{ ml: "auto" }}>
-          Edit
-        </Button>
+      <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
+        <AccessTimeFilled color='success' sx={{mr:1}} fontSize="small"/>
+      <Typography variant='caption'>Early bird deal: First 6 months free listings. </Typography>
       </Box>
-      <Collapse in={3 === field} sx={{ mb: 1 }}>
-              <OutlinedInput
-                type="string"
-                onChange={onChange}
-                name={'realEstateCompany'}
-                placeholder={'Real estate company'}
-                fullWidth
-                value={form.realEstateCompany}
-              />
-              <Button
-                onClick={onSave}
-                sx={{ mt: 2, mb: 1 }}
-                variant="contained"
-                fullWidth
-              >
-                Save
-              </Button>
-              <Button
-                onClick={() => onSetField(null)}
-                variant="outlined"
-                fullWidth
-              >
-                Cancel
-              </Button>
-            </Collapse>
+      
+      <>
+        <Box sx={{ display: "flex", mb: 4 }}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="body2" fontWeight={"bold"}>
+              Real Estate Company
+            </Typography>
+            <Typography variant="body1">
+              {data?.realEstateCompany || "N/A"}
+            </Typography>
+          </Box>
+          <Button
+            size="small"
+            onClick={() => onSetField(3)}
+            sx={{ ml: "auto" }}
+          >
+            Edit
+          </Button>
+        </Box>
+        <Collapse in={3 === field} sx={{ mb: 1 }}>
+          <OutlinedInput
+            type="string"
+            onChange={onChange}
+            name={"realEstateCompany"}
+            placeholder={"Real estate company"}
+            fullWidth
+            value={form.realEstateCompany}
+          />
+          <Button
+            onClick={onSave}
+            sx={{ mt: 2, mb: 1 }}
+            variant="contained"
+            fullWidth
+          >
+            Save
+          </Button>
+          <Button onClick={() => onSetField(null)} variant="outlined" fullWidth>
+            Cancel
+          </Button>
+        </Collapse>
       </>
       <>
-      <Box sx={{ display: "flex", mb: 4 }}>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="body2" fontWeight={"bold"}>
-            Company License No.
-          </Typography>
-          <Typography variant="body1">{data?.licenseNumber}</Typography>
+        <Box sx={{ display: "flex", mb: 4 }}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="body2" fontWeight={"bold"}>
+              Company License No.
+            </Typography>
+            <Typography variant="body1">{data?.licenseNumber}</Typography>
+          </Box>
+          <Button
+            size="small"
+            onClick={() => onSetField(4)}
+            sx={{ ml: "auto" }}
+          >
+            Edit
+          </Button>
         </Box>
-        <Button size="small" onClick={() => onSetField(4)} sx={{ ml: "auto" }}>
-          Edit
-        </Button>
-      </Box>
-      <Collapse in={4 === field} sx={{ mb: 1 }}>
-              <OutlinedInput
-                type="string"
-                onChange={onChange}
-                name={'licenseNumber'}
-                placeholder={'License Number'}
-                fullWidth
-              />
-              <Button
-                onClick={onSave}
-                sx={{ mt: 2, mb: 1 }}
-                variant="contained"
-                fullWidth
-              >
-                Save
-              </Button>
-              <Button
-                onClick={() => onSetField(null)}
-                variant="outlined"
-                fullWidth
-              >
-                Cancel
-              </Button>
-            </Collapse>
+
+        <Collapse in={4 === field} sx={{ mb: 1 }}>
+          <OutlinedInput
+            type="string"
+            onChange={onChange}
+            name={"licenseNumber"}
+            placeholder={"Company License Number"}
+            fullWidth
+            value={form.licenseNumber}
+            endAdornment={<OnClear onClick={() => setForm((p) => ({...p, licenseNumber: ''}))}/>}
+          />
+          <Button
+            onClick={onSave}
+            sx={{ mt: 2, mb: 1 }}
+            variant="contained"
+            fullWidth
+          >
+            Save
+          </Button>
+          <Button onClick={() => onSetField(null)} variant="outlined" fullWidth>
+            Cancel
+          </Button>
+        </Collapse>
+
+        
       </>
+      <>
+        <Box sx={{ display: "flex", mb: 4 }}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="body2" fontWeight={"bold"}>
+              Personal License Number
+            </Typography>
+            <Typography variant="body1">
+              {data?.personalLicenseNumber || "N/A"}
+            </Typography>
+          </Box>
+          <Button
+            size="small"
+            onClick={() => onSetField(3)}
+            sx={{ ml: "auto" }}
+          >
+            Edit
+          </Button>
+        </Box>
+        <Collapse in={3 === field} sx={{ mb: 1 }}>
+          <OutlinedInput
+            type="string"
+            onChange={onChange}
+            name={"personalLicenseNumber"}
+            placeholder={"E-123456"}
+            fullWidth
+            value={form.personalLicenseNumber}
+          />
+          <Button
+            onClick={onSave}
+            sx={{ mt: 2, mb: 1 }}
+            variant="contained"
+            fullWidth
+          >
+            Save
+          </Button>
+          <Button onClick={() => onSetField(null)} variant="outlined" fullWidth>
+            Cancel
+          </Button>
+        </Collapse>
+      </>
+      <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
+        <Info color='action' sx={{mr:1}} fontSize="small"/>
+      <Typography variant='caption'>The information above is required for your listings and will appear at the bottom of each listing.</Typography>
+      </Box>
+      
       <Button
         variant="contained"
         color="error"
-        sx={{mt:4}}
+        sx={{ mt: 4 }}
         onClick={() => onSignOut(() => nav("/"))}
       >
         Log out

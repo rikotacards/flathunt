@@ -22,6 +22,7 @@ export interface IListing {
     listingSpecificContact?: string;
     listingSpecificRealEstateCompany?: string;
     listingSpecificLicenseNumber?: string;
+    personalLicenseNumber?: string;
     otherFeatures?: string[]
     hasWalkup?: boolean;
     hasRooftop?: boolean;
