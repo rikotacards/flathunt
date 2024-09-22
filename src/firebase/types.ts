@@ -56,7 +56,7 @@ export interface IFilters {
     hasParking?: boolean;
     hasGym?: boolean;
     hasClubhouse?: boolean;
-    hasPetfriendly?: boolean;
+    hasPetFriendly?: boolean;
     isDirectListing?: boolean;
     isAgencyListing?: boolean;
 }

@@ -42,14 +42,16 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
         alignItems: "center",
       }}
     >
-      <IconButton size="large" sx={{ color: 'inherit' }} onClick={goBack}>
+      <IconButton  size="large" onClick={goBack}>
         <ChevronLeft />
       </IconButton>
       <Box sx={{ display: "flex", flexDirection: "column", pb: 0 }}>
         <Typography variant="body2" fontWeight={"bold"} color="textPrimary">
           {price} HKD - {netArea} sqft
         </Typography>
-        <Typography variant="caption">
+        <Typography
+        color="textSecondary"
+        variant="caption">
           {location} / {address}
         </Typography>
       </Box>

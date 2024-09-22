@@ -55,6 +55,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     desc,
     bathrooms,
     isSaved,
+    isDirectListing
   } = props;
   const queryClient = useQueryClient();
 
@@ -221,6 +222,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
         netArea={netArea}
         userId={userId}
         listingId={listingId}
+        isDirectListing={isDirectListing}
       />
       <Drawer
         open={openContactForm}

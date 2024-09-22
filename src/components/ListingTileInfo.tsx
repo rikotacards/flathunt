@@ -14,6 +14,7 @@ export const ListingTileInfo: React.FC<Partial<IListing>> = ({
   bedrooms,
   bathrooms,
   userId,
+  isDirectListing,
   listingId,
 }) => {
   const { user } = useAuthContext();
@@ -96,11 +97,12 @@ export const ListingTileInfo: React.FC<Partial<IListing>> = ({
           {bathrooms} bathrooms
         </Typography>
       </Box>
-      <Box sx={{ display: "flex", mt: 0.5 }}>
+      <Box sx={{ display: "flex", mt: 0.5 , alignItems: 'center'}}>
         <Typography fontWeight={800}>${price} HKD</Typography>
         <Typography fontWeight={500} sx={{ ml: 0.5 }}>
           month
         </Typography>
+        {isDirectListing && <Typography fontWeight={'bold'} color='textSecondary' variant='caption' sx={{ml: 1}}>No agency fee</Typography>}
       </Box>
     </>
   );

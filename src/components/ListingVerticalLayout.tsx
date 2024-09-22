@@ -18,6 +18,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import { auth, USER_ID } from "../firebase/firebaseConfig";
 import {
   getSavedListings,
@@ -31,6 +32,7 @@ import {
   ChevronLeft,
   DirectionsSubwayFilledOutlined,
   InsertLink,
+  MonetizationOnRounded,
   PlaceOutlined,
   ShowerOutlined,
 } from "@mui/icons-material";
@@ -68,6 +70,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
     listingSpecificRealEstateCompany,
     listingSpecificLicenseNumber,
     licenseNumber,
+    isDirectListing,
     desc,
   } = props;
   const handleClickOpen = () => {
@@ -307,6 +310,13 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
               <SquareFootOutlinedIcon />
               <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
                 {netArea} sqft (net)
+              </Typography>
+            </Box>
+            <Divider />
+            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
+             {isDirectListing ? <MoneyOffIcon/> : <MonetizationOnRounded/>} 
+              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
+                {isDirectListing? 'No agenct fee, direct' : 'Agency fee required'}
               </Typography>
             </Box>
             <Divider />

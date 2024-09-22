@@ -3,6 +3,7 @@ import {
   ChevronRightRounded,
   CloseOutlined,
 } from "@mui/icons-material";
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import {
   Box,
   Button,
@@ -23,6 +24,9 @@ import { FilterField, IFilters } from "../firebase/types";
 import { getRangeLabel } from "../utils/getRangeLabel";
 import { hasOtherFeatures } from "../utils/hasOtherFeatures";
 import { useNavigate } from "react-router";
+import SquareFootIcon from '@mui/icons-material/SquareFoot';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import DeckIcon from '@mui/icons-material/Deck';
 interface FiltersAllProps {
   onClose: () => void;
 }
@@ -67,10 +71,12 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
   const additionalFilters = [
     {
         label: 'Agency / Direct',
+        icon: <MonetizationOnIcon/>,
         filteredValues: filters.isDirectListing  === undefined ? 'No preference' : filters.isDirectListing ? 'Direct listing' : 'Agency'
     },
     {
       label: "Net Area",
+      icon: <SquareFootIcon/>,
       filteredValues: getRangeLabel(
         filters.minNetArea,
         filters.maxNetArea,
@@ -81,10 +87,12 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
 
     {
       label: "Outdoors",
+      icon: <DeckIcon/>, 
       filteredValues: getAndCombineFilterFields(filters, features.outdoors),
     },
     {
       label: "Building Features",
+      icon: <HomeWorkIcon/>,
       filteredValues: getAndCombineFilterFields(filters, features.building),
     },
   ];
@@ -152,6 +160,9 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
         {additionalFilters.map((f, i) => {
           return (
             <MenuItem key={f.label} divider onClick={() => setPage(f.label)}>
+                <ListItemIcon>
+                    {f.icon}
+                </ListItemIcon>
               <ListItemText
                 secondary={
                   f.filteredValues?.length ? f.filteredValues : "None selected"

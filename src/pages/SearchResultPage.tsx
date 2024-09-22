@@ -13,6 +13,7 @@ import { SearchBar } from "../components/SearchBar";
 import { ListingGrid } from "../components/ListingGrid";
 import { Sort } from "@mui/icons-material";
 import { SortPanel } from "../components/SortPanel";
+import { NoResults } from "../components/NoResults";
 
 export const SearchResultPage: React.FC = () => {
   const { setFilters, filters } = useFilterContext();
@@ -152,10 +153,7 @@ console.log('sorting')
       )}
 
       {data?.length === 0 && !isFetching && !isLoading && (
-        <Card variant="outlined" sx={{ p: 2 }}>
-          Try to broaden your search or{" "}
-          <Button onClick={onClear}>clear filters</Button>
-        </Card>
+        <NoResults onClear={onClear}/>
       )}
       <ListingGrid
         isLoading={isLoading}

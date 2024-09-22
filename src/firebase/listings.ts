@@ -30,18 +30,18 @@ export const getAgentListings = async (userId: string) => {
 
 export const getAllListings = async (filters: IFilters) => {
     console.log('CALLING getAllListings called', filters)
+    
     const areaConstraints = and(where('netArea', '<=', Number(filters.maxNetArea || 999999)), where('netArea', '>=', Number(filters.minNetArea || 0)))
     const bedroomsConstraints = and(where('bedrooms', '<=', Number(filters.maxBedrooms || 5)), where('bedrooms', '>=', Number(filters.minBedrooms || 0)))
 
     const priceConstraints = and(where('price', '<=', Number(filters.maxPrice || 999999)), where('price', '>=', Number(filters.minPrice || 0)))
     const locationConstraint = where('location', filters.location ? '==' : '!=', filters.location ? filters.location : '')
-    const q = query(collection(db, "listings"), and(
-        priceConstraints,
-        locationConstraint,
-        areaConstraints,
-        bedroomsConstraints
-    )
-
+    const conditions =[areaConstraints, bedroomsConstraints, priceConstraints, locationConstraint]
+    
+    if(filters.isDirectListing !== undefined){
+        conditions.push(where('isDirectListing', '==', filters.isDirectListing))
+    }
+    const q = query(collection(db, "listings"), and(...conditions)
 
     );
     const res: IListing[] = [];

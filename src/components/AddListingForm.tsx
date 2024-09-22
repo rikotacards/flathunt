@@ -208,7 +208,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     setContactNumber(e.target.value);
   };
   const imageUrlsForPreview = [];
-
+  console.log('ffff', form)
   React.useEffect(() => {
     setContactNumber(data?.contactNumber);
     setForm({
@@ -523,18 +523,18 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               />
               <Box sx={{ display: "flex", alignItems: 'center' }}>
                 <Chip
-                  onClick={() => onClick("isDirectListing", true)}
+                  onClick={() => onClick("isDirectListing", false)}
                   sx={{
                     mr: 1,
                   }}
                   label="Agent Listing (agency fee)"
-                  variant={outlinedOrContained(form.isDirectListing === true)}
+                  variant={outlinedOrContained(form.isDirectListing === false)}
                 />
 
                 <Chip
                   label="Direct Listing (no fee)"
-                  onClick={() => onClick("isDirectListing", false)}
-                  variant={outlinedOrContained(form.isDirectListing === false)}
+                  onClick={() => onClick("isDirectListing", true)}
+                  variant={outlinedOrContained(form.isDirectListing === true)}
                 />
               </Box>
             </FieldLayout>
