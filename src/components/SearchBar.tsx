@@ -6,6 +6,7 @@ import {
   Chip,
   Drawer,
   IconButton,
+  Menu,
   Typography,
   Zoom,
 } from "@mui/material";
@@ -21,6 +22,7 @@ import { getBedroomsLabel } from "../utils/getBedroomsLabel";
 import { FilterBedrooms } from "./FiltersBedrooms";
 import { FiltersAll } from "./FiltersAll";
 import { hasOtherFeatures } from "../utils/hasOtherFeatures";
+import { useIsNarrow } from "../utils/useIsNarrow";
 interface SearchbarNarrow2Props {
   disableRedirect?: boolean;
 }
@@ -29,11 +31,15 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
 }) => {
   const urlLocation = useLocation();
   const nav = useNavigate();
-
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
   const { filters, setFilters } = useFilterContext();
   const [openMoreFilters, setOpenMoreFilters] = React.useState(false);
 
   const closeMore = () => {
+    setAnchorElUser(null)
     setOpenMoreFilters(false);
   };
   const isHomePage = urlLocation.pathname === "/";
@@ -46,7 +52,9 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
   };
   const onCloseDrawer = () => {
     setDrawer(false);
+    setAnchorElUser(null)
   };
+  const isNarrow = useIsNarrow();
   const onLocationClick = (location: string) => {
     setFilters((p) => ({ ...p, location }));
     onCloseDrawer();
@@ -54,7 +62,8 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
   };
   const onFilterClick = (index: number) => {
     setFilterIndex(index);
-    onOpenDrawer();
+   isNarrow && onOpenDrawer();
+ 
   };
   const [bedroomsRange, setBedroomsRange] = React.useState([0, 5]);
 
@@ -120,8 +129,9 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
   const searchPage = (
     <>
       <IconButton
-        onClick={() => {
-          setOpenMoreFilters(true);
+        onClick={(e) => {
+        
+       setOpenMoreFilters(true);
         }}
       >
         <Badge color="secondary" variant="dot" invisible={!hasFilters}>
@@ -140,7 +150,7 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
       >
         <Zoom in={true}>
           <Chip
-            onClick={() => onFilterClick(0)}
+            onClick={(e) => { !isNarrow && handleOpenUserMenu(e); onFilterClick(0)}}
             sx={{ mr: 1,
             
          
@@ -152,7 +162,7 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
         </Zoom>
         <Zoom in>
           <Chip
-            onClick={() => onFilterClick(1)}
+            onClick={(e) => { !isNarrow && handleOpenUserMenu(e); onFilterClick(1)}}
             variant="filled"
             sx={{ mr: 1 }}
             label={price}
@@ -160,7 +170,7 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
         </Zoom>
         <Zoom in>
           <Chip
-            onClick={() => onFilterClick(4)}
+            onClick={(e) => { !isNarrow && handleOpenUserMenu(e); onFilterClick(4)}}
             variant="filled"
             sx={{ mr: 1 }}
             label={bedrooms}
@@ -169,6 +179,9 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
       </Box>
     </>
   );
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   
   return (
     <Box sx={{ pb: 0 }}>
@@ -226,6 +239,45 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
       >
         <FiltersAll onClose={closeMore} />
       </Drawer>
+      <Menu
+        sx={{ mt: "45px" }}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        slotProps={{ paper: { style: { borderRadius: 10 } } }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+         {filterIndex === 0 && (
+              <LocationFilterNew2
+                onClick={onLocationClick}
+                onClose={onCloseDrawer}
+              />
+            )}
+            {filterIndex === 1 && (
+              <PriceFilterNew2
+                setPriceRange={setPriceRange}
+                onCancel={onCloseDrawer}
+                onClose={onPriceDone}
+              />
+            )}
+            {filterIndex === 4 && (
+              <FilterBedrooms
+                setPriceRange={setBedroomsRange}
+                onCancel={onCloseDrawer}
+                onClose={onBedroomsDone}
+              />
+            )}
+           
+        </Menu>
     </Box>
   );
 };
