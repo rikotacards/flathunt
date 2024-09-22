@@ -48,11 +48,12 @@ import {
   KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import ErrorIcon from "@mui/icons-material/Error";
-import { getUser, updateUser } from "../firebase/user";
+import { addUser, getUser, updateUser } from "../firebase/user";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { OtherFeatures } from "./OtherFeatures";
 import { updateListing } from "../firebase/listings";
+import { allHkLocations } from "../hongKongLocations";
 const bedrooms = [0, 1, 2, 3, 4, 5];
 const bathrooms = [1, 2, 3];
 
@@ -153,14 +154,31 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     form.licenseNumber &&
     form.realEstateCompany &&
     data?.contactNumber;
-
+  
   const [tabIndex, setTabIndex] = React.useState(0);
   const [files, setFiles] = React.useState([] as File[]);
+  const onWhatsappUpdate = async () => {
+    try {
+      if(!contactNumber || !user){
+        return;
+      }
+      await addUser({userId: user?.uid, contactNumber})
+      queryClient.invalidateQueries({
+        queryKey: ['getUser']
+      })
+    } catch(e){
+      alert(e)
+    }
+  
+  }
   const onUpdateRealEstateCompany = async () => {
     if (!form.realEstateCompany) {
       return;
     }
     await updateUser(userId, { realEstateCompany: form.realEstateCompany });
+    queryClient.invalidateQueries({
+      queryKey: ['getUser']
+    })
   };
   const onUpdateLicenseNumber = async () => {
     try {
@@ -168,6 +186,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
         return;
       }
       await updateUser(userId, { licenseNumber: form.licenseNumber });
+      queryClient.invalidateQueries({
+        queryKey: ['getUser']
+      })
     } catch (e) {
       alert(e);
     }
@@ -177,7 +198,10 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       if (!form.personalLicenseNumber) {
         return;
       }
-      await updateUser(userId, { licenseNumber: form.personalLicenseNumber });
+      await updateUser(userId, { personalLicenseNumber: form.personalLicenseNumber });
+      queryClient.invalidateQueries({
+        queryKey: ['getUser']
+      })
     } catch (e) {
       alert(e);
     }
@@ -362,7 +386,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       await setDoc(docRef, {
         ...form,
         rentBuy: form.rentBuy || "rent",
-        location: form.location,
+        location: form.location.toLowerCase(),
         propertyType: form.propertyType,
         price: parseInt(form.price),
         netArea: parseInt(form.netArea),
@@ -647,9 +671,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 }}
                 sx={{}}
                 renderInput={(params) => (
-                  <TextField placeholder="Select location" {...params} />
+                  <TextField sx={{textTransform: 'capitalize'}} placeholder="Select location" {...params} />
                 )}
-                options={["central", "wanchai"]}
+                options={allHkLocations}
               />
             </FieldLayout>
             <FieldLayout>
@@ -752,49 +776,47 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 you directly.
               </Typography>
             )}
-
+        <HeaderWithCheck isChecked={!!data?.contactNumber} text={'Whatsapp number'}/>
             <TextField
               sx={{ mb: 1 }}
               name="contactNumber"
               type="tel"
-              label={"Whatsapp Number"}
-              placeholder="12345678"
-              disabled={!!data?.contactNumber}
+              // label={"Whatsapp Number"}
+              placeholder="Whatsapp number, 12345678"
               onChange={onChangeContactNumber}
+              onBlur={onWhatsappUpdate}
               value={contactNumber}
             />
             {!form.isDirectListing && <>
+              <HeaderWithCheck isChecked={!!data?.realEstateCompany} text={'Real Estate Company'}/>
+
             <TextField
               sx={{ mb: 1 }}
               name="realEstateCompany"
               type="string"
-              label={"Real Estate Company Name"}
               placeholder="Best Property Agency"
-              disabled={!!data?.realEstateCompany}
               onChange={onChange}
               value={form.realEstateCompany}
               onBlur={onUpdateRealEstateCompany}
             />
+              <HeaderWithCheck isChecked={!!data?.licenseNumber} text={'Company License Number'}/>
 
             <TextField
               sx={{ mb: 1 }}
               name="licenseNumber"
               type="string"
-              label={"Company License Number"}
               placeholder="C054899"
-              disabled={!!data?.licenseNumber}
               onChange={onChange}
               value={form.licenseNumber}
               onBlur={onUpdateLicenseNumber}
             />
+              <HeaderWithCheck isChecked={!!data?.personalLicenseNumber} text={'Personal License Number'}/>
 
             <TextField
               sx={{ mb: 1 }}
               name="personalLicenseNumber"
               type="string"
-              label="Personal License Number"
-              placeholder="E-123456"
-              disabled={!!data?.personalLicenseNumber}
+              placeholder="Personal license number, E-123456"
               onChange={onChange}
               value={form.personalLicenseNumber}
               onBlur={onUpdatePersonalLicenseNumber}

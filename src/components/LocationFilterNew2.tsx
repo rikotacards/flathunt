@@ -3,27 +3,15 @@ import {
   Box,
   Button,
   Card,
-  Chip,
   MenuItem,
   MenuList,
   TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { useFilterContext } from "../Providers/contextHooks";
-const locations = [
-  "central",
-  "wanchai",
-  "kennedy town",
-  "causeway bay",
-  "Sheung Wan",
-  "Happy Valley",
-  "Quarry Bay",
-  "Admirality",
-  "Lohas Park",
-];
-const popularLocations = ["Central", "Sheung wan", "Kennedy Town"];
+import { allHkLocations } from "../hongKongLocations";
+
 interface LocationFilterNew2Props {
   onClick: (location: string) => void;
   onClose: () => void;
@@ -79,28 +67,12 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
         }}
         size="small"
         value={value}
-        options={locations}
+        options={allHkLocations}
         renderInput={(params) => (
-          <TextField placeholder="Search" {...params} />
+          <TextField sx={{textTransform: 'capitalize'}} placeholder="Search" {...params} />
         )}
       />
-      {/* <Card
-        sx={{
-          p: 1,
-          mb: 1,
-          mt: 1,
-        }}
-        variant="outlined"
-      >
-        <Typography sx={{ mb: 1 }}>Popular locations</Typography>
-        {popularLocations.map((l) => (
-          <Chip
-            onClick={() => onClick(l.toLocaleLowerCase())}
-            label={l}
-            sx={{ textTransform: "capitalize", mr: 1 }}
-          />
-        ))}
-      </Card> */}
+      
       <Card variant="outlined">
         <MenuList
           sx={{
@@ -109,7 +81,7 @@ export const LocationFilterNew2: React.FC<LocationFilterNew2Props> = ({
             textTransform: "capitalize",
           }}
         >
-          {locations.map((l) => (
+          {allHkLocations.map((l) => (
             <MenuItem key={l} onClick={() => onMenuItemClick(l)} selected={value === l}>
               {l}
             </MenuItem>
