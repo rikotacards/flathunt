@@ -40,6 +40,15 @@ export const getAllListings = async (filters: IFilters) => {
     if(filters.hasPetFriendly !== undefined){
         conditions.push(where('hasPetFriendly', '==', filters.hasPetFriendly))
     }
+    if(filters.hasBalcony !== undefined){
+        conditions.push(where('hasBalcony', '==', filters.hasBalcony))
+    }
+    if(filters.hasRooftop !== undefined){
+        conditions.push(where('hasRooftop', '==', filters.hasRooftop))
+    }
+    if(filters.hasWalkup !== undefined){
+        conditions.push(where('hasWalkup', '==', filters.hasWalkup))
+    }
     if(filters.isDirectListing){
         conditions.push(where('isDirectListing', '==', filters.isDirectListing))
     }

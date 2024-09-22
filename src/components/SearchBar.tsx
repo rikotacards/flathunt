@@ -108,7 +108,7 @@ export const SearchBar: React.FC<SearchbarNarrow2Props> = ({
     </Box>
   );
   const price = (
-    <Box sx={{ display: "flex", alignItems: "center", ml: 0.5 }}>
+    <Box sx={{ display: "flex", alignItems: "center" }}>
       <Typography fontWeight={(filters.minPrice || filters.maxPrice) ? 'bold': '500'}
        color="textPrimary" variant="body2">
         {priceLabel}

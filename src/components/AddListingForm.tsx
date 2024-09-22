@@ -474,7 +474,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               overflowY: "scroll",
             }}
           >
-            <HeaderWithCheck isChecked={files.length > 0} text={"Add Photos"} />
+            {!isEdit && <HeaderWithCheck isChecked={files.length > 0} text={"Add Photos"} />}
 
             <div style={{ marginBottom: "20px" }}>
               <div
