@@ -17,6 +17,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { AuthProvider } from "./Providers/AuthProvider";
 import { AppBarProvider } from "./Providers/AppbarProvider";
 import { SignUpPage } from "./pages/SignUpPage";
+import { AgentSignUp } from "./components/AgentSignUp";
 
 function App() {
   const queryClient = new QueryClient();
@@ -79,6 +80,7 @@ function App() {
                       element={<SearchResultPage />}
                     />
                     <Route path="/requests" element={<RequestsPage />} />
+
                   </Routes>
                 </Layout>
               </SnackbarProvider>

@@ -12,9 +12,7 @@ export const signIn = async() => {
       // The signed-in user info.
       const user = result.user;
       const isNew = user.metadata.creationTime === user.metadata.lastSignInTime
-      if(isNew){
-        alert("NEW")
-      }
+      
       // IdP data available using getAdditionalUserInfo(result)
       // ...
     })
