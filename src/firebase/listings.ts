@@ -40,7 +40,7 @@ export const getAllListings = async (filters: IFilters) => {
     if(filters.hasPetFriendly !== undefined){
         conditions.push(where('hasPetFriendly', '==', filters.hasPetFriendly))
     }
-    if(filters.isDirectListing !== undefined){
+    if(filters.isDirectListing){
         conditions.push(where('isDirectListing', '==', filters.isDirectListing))
     }
     const q = query(collection(db, "listings"), and(...conditions)

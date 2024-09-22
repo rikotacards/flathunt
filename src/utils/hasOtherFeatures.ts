@@ -11,7 +11,8 @@ export const hasOtherFeatures = (filters: IFilters) => {
     filters.hasParking ||
     filters.hasGym ||
     filters.hasClubhouse ||
-    filters.hasPetfriendly;
+    filters.hasPetFriendly || 
+    filters.isDirectListing 
   const hasFilters = hasOutdoorsFilter || hasAreaFilter || hasBuildingFilter;
   return hasFilters;
 };

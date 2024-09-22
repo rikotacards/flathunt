@@ -1,15 +1,11 @@
 import {
   Box,
-  FormControlLabel,
-  FormGroup,
   MenuItem,
   Typography,
 } from "@mui/material";
 import React from "react";
-import { features, OtherFeatures } from "./OtherFeatures";
 
 import Checkbox from "@mui/material/Checkbox";
-import { useFilterContext } from "../Providers/contextHooks";
 import { FilterField, IFilters } from "../firebase/types";
 
 interface FiltersOutdoorsProps {
@@ -19,12 +15,12 @@ interface FiltersOutdoorsProps {
 }
 export const FiltersOutdoors: React.FC<FiltersOutdoorsProps> = ({filterOptions, localState, onToggleFilter}) => {
   
-  
+  console.log(filterOptions, localState)
   
   return (
     <Box>
       {filterOptions.map((f) => (
-        <MenuItem onClick={() => onToggleFilter(f.name, !localState[f.name])} divider>
+        <MenuItem key={f.name} onClick={() => onToggleFilter(f.name, !localState[f.name])} divider>
           <Typography sx={{ textTransform: "capitalize" }}>
             {f.label}
           </Typography>

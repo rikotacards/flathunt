@@ -50,7 +50,9 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
   const nav = useNavigate();
   const goResult = () => nav('/search-results')
   const hasFilters = hasOtherFeatures(filters);
-  const [localFilterState, setLocalFilterState] = React.useState({});
+  console.log("FFFF", filters)
+  const [localFilterState, setLocalFilterState] = React.useState(filters);
+
   const onToggleFilter = (fieldName: keyof IFilters, value: boolean) => {
     setLocalFilterState((p) => ({
       ...p,
@@ -65,21 +67,21 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
     onClose()
   }
   const [areaRange, setAreaRange] = React.useState([
-    filters.minNetArea || 200,
-    filters.maxNetArea || 2000,
+    filters.minNetArea,
+    filters.maxNetArea,
   ]);
   const additionalFilters = [
     {
-        label: 'Agency / Direct',
+        label: 'Direct Listing?',
         icon: <MonetizationOnIcon/>,
-        filteredValues: filters.isDirectListing  === undefined ? 'No preference' : filters.isDirectListing ? 'Direct listing' : 'Agency'
+        filteredValues: !!localFilterState.isDirectListing  ? 'Direct listings' : 'No preference'
     },
     {
       label: "Net Area",
       icon: <SquareFootIcon/>,
       filteredValues: getRangeLabel(
-        filters.minNetArea,
-        filters.maxNetArea,
+        areaRange[0],
+        areaRange[1],
         " sqft",
         "No preference"
       ),
@@ -88,12 +90,12 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
     {
       label: "Outdoors",
       icon: <DeckIcon/>, 
-      filteredValues: getAndCombineFilterFields(filters, features.outdoors),
+      filteredValues: getAndCombineFilterFields(localFilterState, features.outdoors),
     },
     {
       label: "Building Features",
       icon: <HomeWorkIcon/>,
-      filteredValues: getAndCombineFilterFields(filters, features.building),
+      filteredValues: getAndCombineFilterFields(localFilterState, features.building),
     },
   ];
 
@@ -103,9 +105,9 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
   const onSetFilter = () => {
     setFilters((p) => ({
       ...p,
+      ...localFilterState,
       minNetArea: areaRange[0],
       maxNetArea: areaRange[1],
-      ...localFilterState,
     }));
   };
   const onBack = () => {
@@ -113,6 +115,8 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
     onSetFilter();
   };
   const onClear = () => {
+    setLocalFilterState({})
+    setAreaRange([])
     setFilters((p) => ({
       ...p,
       minNetArea: undefined,
@@ -127,6 +131,7 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
       hasPetfriendly: false,
       hasRooftop: false,
       hasWalkup: false,
+      isDirectListing: false,
     }));
   };
   return (
@@ -225,11 +230,11 @@ export const FiltersAll: React.FC<FiltersAllProps> = ({ onClose }) => {
               filterOptions={features.building}
             />
           )}
-          {open == "Agency / Direct" && (
+          {open == "Direct Listing?" && (
             <FiltersOutdoors
               localState={localFilterState}
               onToggleFilter={onToggleFilter}
-              filterOptions={[{label: 'Direct Listing', name: 'isDirectListing'}, {label: 'Agency', name: 'isAgencyListing'}]}
+              filterOptions={[{label: 'Direct Listing', name: 'isDirectListing'}]}
             />
           )}
         </Box>
