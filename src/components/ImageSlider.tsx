@@ -61,6 +61,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
       >
         {imgs}
       </Swiper>
+      {enablePagination && <>
       <IconButton
         onClick={(e) => e.stopPropagation()}
         size="small"
@@ -92,6 +93,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
       >
         <ChevronRight />
       </IconButton>
+      </>}
     </Box>
   );
 };
