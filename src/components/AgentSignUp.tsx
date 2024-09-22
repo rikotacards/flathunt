@@ -6,6 +6,7 @@ export const AgentSignUp: React.FC = () => {
         <Box>
             <Typography variant='h6'>Welcome to Flathunt.co</Typography>
             <Typography>Congratulations, you've been selected as the very first batch, and to be part of the best flathunting experience.</Typography>
+            <Typography>To start posting, we need to help clients get in touch with you. </Typography>
         </Box>
     )
 }

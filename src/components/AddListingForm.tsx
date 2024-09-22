@@ -636,6 +636,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               <Autocomplete
                 autoHighlight
                 fullWidth
+                
                 size="small"
                 value={form.location}
                 onChange={(e, newValue) => {

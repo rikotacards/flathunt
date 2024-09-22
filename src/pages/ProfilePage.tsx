@@ -199,7 +199,7 @@ export const ProfilePage: React.FC = () => {
       </Typography>
       <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
         <AccessTimeFilled color='success' sx={{mr:1}} fontSize="small"/>
-      <Typography variant='caption'>Early bird deal: First 6 months free listings. </Typography>
+      <Typography variant='caption'>Early bird deal: First 3 months free listings. </Typography>
       </Box>
       
       <>
@@ -209,7 +209,7 @@ export const ProfilePage: React.FC = () => {
               Real Estate Company
             </Typography>
             <Typography variant="body1">
-              {data?.realEstateCompany || "N/A"}
+              {data?.realEstateCompany}
             </Typography>
           </Box>
           <Button
@@ -291,7 +291,7 @@ export const ProfilePage: React.FC = () => {
               Personal License Number
             </Typography>
             <Typography variant="body1">
-              {data?.personalLicenseNumber || "N/A"}
+              {data?.personalLicenseNumber}
             </Typography>
           </Box>
           <Button
@@ -325,8 +325,8 @@ export const ProfilePage: React.FC = () => {
         </Collapse>
       </>
       <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
-        <Info color='action' sx={{mr:1}} fontSize="small"/>
-      <Typography variant='caption'>The information above is required for your listings and will appear at the bottom of each listing.</Typography>
+        <Info color='warning' sx={{mr:1}} fontSize="small"/>
+      <Typography color='warning' variant='caption'>The information above is required for your listings and will appear at the bottom of each listing.</Typography>
       </Box>
       
       <Button
