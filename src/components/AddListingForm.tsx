@@ -54,6 +54,7 @@ import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { OtherFeatures } from "./OtherFeatures";
 import { updateListing } from "../firebase/listings";
 import { allHkLocations } from "../hongKongLocations";
+import { AddListingValidation } from "./AddListingValidation";
 const bedrooms = [0, 1, 2, 3, 4, 5];
 const bathrooms = [1, 2, 3];
 
@@ -142,18 +143,26 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
   });
   const [form, setForm] = React.useState({
     ...listing,
-    rentBuy: listing?.rentBuy || "rent",
-    propertyType: listing?.propertyType || "residential",
+    rentBuy: listing?.rentBuy,
+    propertyType: listing?.propertyType,
     realEstateCompany: data?.realEstateCompany,
     licenseNumber: data?.licenseNumber,
     personalLicenseNumber: data?.personalLicenseNumber,
   } as IListing);
   console.log("form", form);
-  const canAdd =
+  const canAdd = form.isDirectListing ? data?.contactNumber : 
     data?.personalLicenseNumber &&
-    form.licenseNumber &&
-    form.realEstateCompany &&
-    data?.contactNumber;
+    !!form.licenseNumber &&
+    !!form.realEstateCompany &&
+    !!data?.contactNumber && 
+    !!form.isDirectListing == false && 
+    !!form.bedrooms !== undefined && 
+    !!form.location &&
+    !!form.price && 
+    !!form.location && 
+    !!form.netArea &&
+    !!form.rentBuy && 
+    !!form.propertyType
   
   const [tabIndex, setTabIndex] = React.useState(0);
   const [files, setFiles] = React.useState([] as File[]);
@@ -255,10 +264,9 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
   React.useEffect(() => {
     setContactNumber(data?.contactNumber);
     setForm({
-      rentBuy: listing?.rentBuy || "rent",
-      propertyType: listing?.propertyType || "residential",
       realEstateCompany: data?.realEstateCompany,
       licenseNumber: data?.licenseNumber,
+      personalLicenseNumber: data?.personalLicenseNumber,
       ...listing,
     } as IListing);
   }, [isLoading, listing]);
@@ -410,6 +418,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       onClose();
     }
   };
+  console.log('hi', data?.personalLicenseNumber)
   const [openMoreFeatures, setMoreFeatures] = React.useState(true);
   const onOpenMoreFeatures = () => {
     setMoreFeatures(true);
@@ -455,6 +464,22 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
           </Typography>
           <Box sx={{ flexGrow: 1, flexBasis: 1 }} />
         </Toolbar>
+          <AddListingValidation
+          requiredSteps={
+            [
+              !!form.images,
+              !!form.rentBuy, 
+              form.isDirectListing!== undefined, 
+              !!form.propertyType,
+              form.bedrooms!==undefined,
+              !!form.bathrooms, 
+              !!form.location,
+              !!form.price,
+              !!form.address,
+              !!form.netArea
+            ]
+          }
+          />
 
         {!disableTabs && (
           <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
@@ -539,7 +564,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             </div>
             <FieldLayout>
               <HeaderWithCheck
-                isChecked={!!form.rentBuy && !!form.propertyType}
+                isChecked={!!form.rentBuy}
                 text={"Property Info"}
               />
               <Box sx={{ display: "flex", alignItems: "center" }}>
