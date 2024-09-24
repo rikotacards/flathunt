@@ -88,24 +88,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const isBookmarked = savedListingsData?.some(
     (e) => e.listingId === listingId
   );
-  const imgs = images?.map((image) => (
-    <SwiperSlide
-      style={
-        {
-          // height: "100%",
-          // width: "100%",
-          // minHeight: "450px"
-        }
-      }
-      key={image}
-    >
-      <ImageWithLoading
-        imageName={image}
-        listingId={listingId}
-        userId={userId}
-      />
-    </SwiperSlide>
-  ));
+
 
   const handleClose = () => {
     setOpen(false);
@@ -141,7 +124,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
       }
 
       isBookmarked
-        ? await removeSavedListings({ userId, docId: listingId })
+        ? await removeSavedListings({ userId: user?.uid, docId: listingId })
         : await saveListing({ userId: user?.uid || "", listingId });
       s.setSnackbarChildComponent(
         <Alert
@@ -203,7 +186,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             // navigation
             sx={{
               position: "relative",
-              zIndex: 0,
+              // zIndex: 2,
 
               overflow: "hidden",
             }}
@@ -212,7 +195,8 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             listingId={listingId}
             userId={userId}
             images={images}
-            /> :<ImageList sx={{mr:2,
+            /> :
+            <ImageList sx={{mr:2,
 
               borderRadius:4,
             }} variant="quilted">
@@ -233,13 +217,16 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
                 right: 2,
                 zIndex: 3,
                 color: "white",
-                p: 2,
+                p: 1,
+                m:1,
+                borderRadius: 6,
+                background: 'rgba(0,0,0,0.5)',
                 textTransform: "capitalize",
               }}
               onClick={handleClickOpen}
               size="small"
             >
-              View all
+              Fullscreen
             </Button>
           </Box>
         </Box>
