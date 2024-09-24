@@ -326,7 +326,7 @@ export const ProfilePage: React.FC = () => {
       </>
       <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
         <Info color='warning' sx={{mr:1}} fontSize="small"/>
-      <Typography color='warning' variant='caption'>The information above is required for agents only. Your listings and will appear at the bottom of each listing.</Typography>
+      <Typography color='warning' variant='caption'>The information above is required for <b>agents only</b>. Your listings and will appear at the bottom of each listing.</Typography>
       </Box>
       
       <Button
