@@ -2,7 +2,7 @@ import SquareFootOutlinedIcon from "@mui/icons-material/SquareFootOutlined";
 import React from "react";
 import HotelOutlinedIcon from "@mui/icons-material/HotelOutlined";
 import { IListing } from "../firebase/types";
-import { ListingImage } from "./ListingImage";
+import { ImageWithLoading } from "./ImageWithLoading";
 import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
 import {
   Alert,
@@ -88,13 +88,13 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const imgs = images?.map((image) => (
     <SwiperSlide
       style={{
-        height: "100%",
-        width: "100%",
+        // height: "100%",
+        // width: "100%",
         // minHeight: "450px"
       }}
       key={image}
     >
-      <ListingImage imageName={image} listingId={listingId} userId={userId} />
+      <ImageWithLoading imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
   ));
 
@@ -164,7 +164,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
         display: "flex",
       }}
     >
-      <ListingImage
+      <ImageWithLoading
         key={image}
         imageName={image}
         listingId={listingId}
@@ -199,6 +199,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
               position: "relative",
               zIndex: 0,
               maxWidth: "500px",
+              height:'400px',
               borderRadius: 16,
               overflow: "hidden",
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IListing } from '../firebase/types';
-import { ListingImage } from './ListingImage';
+import { ImageWithLoading } from './ImageWithLoading';
 import Grid from '@mui/material/Grid2';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Slide from '@mui/material/Slide';
@@ -30,7 +30,7 @@ export const ListingNew: React.FC<IListing> = (props) => {
     const imgs = images?.map((image) => <SwiperSlide
         style={{ objectFit: 'cover', height: 'auto' }}
         key={image}>
-        <ListingImage key={image} imageName={image}
+        <ImageWithLoading key={image} imageName={image}
             listingId={listingId}
             userId={userId} />
     </SwiperSlide>)
@@ -50,7 +50,7 @@ export const ListingNew: React.FC<IListing> = (props) => {
     const imgWithoutGrid = images?.map((image, i) =>
         <div>
 
-            <ListingImage key={image} imageName={image}
+            <ImageWithLoading key={image} imageName={image}
                 listingId={listingId}
                 style={{ width: '100%', height: '100%' }}
                 userId={userId} />

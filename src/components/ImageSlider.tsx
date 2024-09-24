@@ -1,6 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { ListingImage } from "./ListingImage";
+import { ImageWithLoading } from "./ImageWithLoading";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -22,14 +22,13 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   const imgs = images?.map((image) => (
     <SwiperSlide
       style={{
-        // height: "auto",
-        height: 450,
-        width: "100%",
-        // maxHeight: "450px",
+ 
+        display: 'flex',
+        alignItems: 'center',
       }}
       key={image + listingId}
     >
-      <ListingImage imageName={image} listingId={listingId} userId={userId} />
+      <ImageWithLoading style={{objectFit: 'cover', objectPosition: 'center'}}  imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
   ));
   if (!listingId) {
@@ -51,8 +50,10 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         style={{
           position: "relative",
           borderRadius: 12,
-
+          background: 'black',
           zIndex: 0,
+          height: '400px',
+          width: "100%",
           overflow: "hidden",
           "--swiper-pagination-color": "white",
           boxShadow:

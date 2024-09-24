@@ -9,7 +9,7 @@ interface ListingImages {
   imageName: string;
   style?: React.CSSProperties;
 }
-export const ListingImage: React.FC<ListingImages> = ({
+export const ImageWithLoading: React.FC<ListingImages> = ({
   userId,
   style,
   listingId,
@@ -42,6 +42,9 @@ export const ListingImage: React.FC<ListingImages> = ({
           ...style,
           objectFit: "cover",
           display: isLoaded ? "block" : "none",
+          height:'100%',
+          width: '100%',
+          // height: 'auto'
         }}
         onLoad={handleImageLoad}
         src={data}

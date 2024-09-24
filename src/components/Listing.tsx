@@ -1,7 +1,7 @@
 import { Box, Button, Card, Chip, IconButton, Typography } from '@mui/material';
 import React from 'react';
 import { IListing } from '../firebase/listings';
-import { ListingImage } from './ListingImage';
+import { ImageWithLoading } from './ImageWithLoading';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -17,7 +17,7 @@ export const Listing: React.FC<IListing> = ({ netArea, address, price, images, l
     const imgs = images?.map((image) => <SwiperSlide
 
         key={image}>
-        <ListingImage key={image} imageName={image}
+        <ImageWithLoading key={image} imageName={image}
             listingId={listingId}
             userId={userId} />
     </SwiperSlide>)
