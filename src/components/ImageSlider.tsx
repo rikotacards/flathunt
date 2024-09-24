@@ -47,7 +47,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
               }
             : undefined
         }
-        pagination={enablePagination}
+        pagination={true}
         style={{
           position: "relative",
           borderRadius: 12,
