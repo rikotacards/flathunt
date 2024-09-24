@@ -43,6 +43,7 @@ export const getUser = async (userId: string) => {
         } else {
             // docSnap.data() will be undefined in this case
             console.log("No such document!");
+            return {realEstateCompany: undefined, licenseNumber: undefined, personalLicenseNumber: undefined}
         }
     } catch (e) {
         alert(e)

@@ -1,4 +1,4 @@
-import TableRowsIcon from '@mui/icons-material/TableRows';
+import TableRowsIcon from "@mui/icons-material/TableRows";
 
 import {
   Alert,
@@ -28,7 +28,11 @@ import {
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { deleteListings, getAgentListings, getSavedListings } from "../firebase/listings";
+import {
+  deleteListings,
+  getAgentListings,
+  getSavedListings,
+} from "../firebase/listings";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { auth, USER_ID } from "../firebase/firebaseConfig";
@@ -36,7 +40,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import { EditListing } from "./EditListing";
 
 import { IFilters, IListing } from "../firebase/types";
-import { CloseOutlined, InsertLink, OpenInNew, WindowOutlined } from "@mui/icons-material";
+import {
+  CloseOutlined,
+  InsertLink,
+  OpenInNew,
+  WindowOutlined,
+} from "@mui/icons-material";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -54,7 +63,8 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import { ListingTile } from "./ListingTile";
 import { AddListingForm } from "./AddListingForm";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { ListingGrid } from './ListingGrid';
+import { ListingGrid } from "./ListingGrid";
+import { AddListingSteps } from "./AddListingSteps";
 const getBedroomCondition = (bedrooms: number, bedroomsFilter?: string) => {
   if (bedroomsFilter === undefined) {
     return bedrooms >= 0;
@@ -159,14 +169,13 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
           </Typography>
           <Typography variant="caption">br</Typography>
         </TableCell>
-        { (
+        {
           <TableCell sx={{ border: "none" }}>
             <IconButton size="small" onClick={onClick}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
-        )}
-      
+        }
       </TableRow>
 
       <TableRow sx={{ border: "unset" }}>
@@ -198,7 +207,6 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
                 <ListingTile {...row} />
               </Box>
             </Box>
-          
           </Collapse>
         </TableCell>
       </TableRow>
@@ -234,7 +242,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
     props;
   const isNarrow = useIsNarrow();
   const { setFilters, filters } = useFilterContext();
-  const { user } = useAuthContext();
+  const { user, isUserLoading } = useAuthContext();
   const [openDrawer, setOpenDrawer] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
@@ -320,60 +328,66 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
     filters.maxPrice ||
     filters.minPrice ||
     filters.maxNetArea;
-    const [index, setIndex] = React.useState(0);
-    const onChange = (event, index: number) => {
-      setIndex(index)
-    }
+  const [index, setIndex] = React.useState(0);
+  const onChange = (event, index: number) => {
+    setIndex(index);
+  };
   return (
     <>
       {isLoading ? <LinearProgress /> : null}
-      <Tabs onChange={onChange} value={index} variant='fullWidth' >
-      <Tab label={<WindowOutlined/>}/>
-      <Tab label={<TableRowsIcon/>}/>
-
-    </Tabs>
+      <Tabs onChange={onChange} value={index} variant="fullWidth">
+        <Tab label={<WindowOutlined />} />
+        <Tab label={<TableRowsIcon />} />
+      </Tabs>
       <Box sx={{ display: "relative" }} mb={1} mt={0}>
         {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
-        {index === 0 && <Box sx={{p:2}}>
-          <ListingGrid data={filteredData} isLoading={isLoading} savedListingsTransformed={savedListingsData} />
+        {index === 0 && (
+          <Box sx={{ p: 2 }}>
+            <ListingGrid
+              data={filteredData}
+              isLoading={isLoading}
+              savedListingsTransformed={savedListingsData}
+            />
           </Box>
-        }
-        {index === 1 && <TableContainer elevation={0} component={Paper}>
-          <Table size="small" stickyHeader>
-            <TableHead sx={{ position: "sticy" }}>
-              <TableRow>
-                <TableCell
-                  component={"th"}
-                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  {isNarrow ? "📍" : "Location"}
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  component={"th"}
-                >
-                  Price
-                </TableCell>
-                <TableCell
-                  component={"th"}
-                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  {isNarrow ? "Area" : "Net Area"}
-                </TableCell>
+        )}
+        {index === 1 && (
+          <TableContainer elevation={0} component={Paper}>
+            <Table size="small" stickyHeader>
+              <TableHead sx={{ position: "sticy" }}>
+                <TableRow>
+                  <TableCell
+                    component={"th"}
+                    sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    {isNarrow ? "📍" : "Location"}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                    component={"th"}
+                  >
+                    Price
+                  </TableCell>
+                  <TableCell
+                    component={"th"}
+                    sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    {isNarrow ? "Area" : "Net Area"}
+                  </TableCell>
 
-                <TableCell
-                  sx={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  {isNarrow ? "Br" : "Bedrooms"}
-                </TableCell>
-                {!isNarrow && <TableCell></TableCell>}
+                  <TableCell
+                    sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    {isNarrow ? "Br" : "Bedrooms"}
+                  </TableCell>
+                  {!isNarrow && <TableCell></TableCell>}
 
-                {isNarrow && <TableCell></TableCell>}
-              </TableRow>
-            </TableHead>
-            <TableBody>{rows}</TableBody>
-          </Table>
-        </TableContainer>}
+                  {isNarrow && <TableCell></TableCell>}
+                </TableRow>
+              </TableHead>
+              <TableBody>{rows}</TableBody>
+            </Table>
+          </TableContainer>
+        )}
 
         <Drawer
           open={open}
@@ -423,6 +437,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
             sx={{ m: 1, textTransform: "capitalize" }}
             variant="extended"
             onClick={onOpenAddNewDrawer}
+            disabled={isUserLoading}
           >
             Add Listing
             <AddIcon fontSize="medium" />
@@ -430,14 +445,23 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         </Box>
         {
           <Drawer
-          
-          
-          open={openAddNewDrawer} 
-          anchor="bottom" onClose={handleClose}>
-            <AddListingForm
+            PaperProps={{
+              sx: {
+                height: "calc(100% )",
+              },
+            }}
+            open={openAddNewDrawer}
+            anchor="bottom"
+            onClose={onCloseAddNewDrawer}
+          >
+            <AddListingSteps
+              onClose={onCloseAddNewDrawer}
+              userId={user?.uid || USER_ID}
+            />
+            {/* <AddListingForm
               userId={user?.uid || ""}
               onClose={onCloseAddNewDrawer}
-            />
+            /> */}
           </Drawer>
         }
 
@@ -453,18 +477,25 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           }}
           open={isSignInDrawerOpen}
         >
-          <Toolbar sx={{ display: 'flex', textAlign: 'center', justifyContent: 'center'}}>
-
-            <Typography variant='h6' fontWeight={"bold"}>Sign In</Typography>
+          <Toolbar
+            sx={{
+              display: "flex",
+              textAlign: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography variant="h6" fontWeight={"bold"}>
+              Sign In
+            </Typography>
             {/* <IconButton onClick={onCloseSignInDrawer} sx={{ ml: "auto" }}>
               <CloseOutlined />
             </IconButton> */}
           </Toolbar>
-          <Box sx={{ p: 2, textAlign: 'center' }}>
+          <Box sx={{ p: 2, textAlign: "center" }}>
             <Typography sx={{ mb: 1 }}>Sign in to add listings</Typography>
             <Button
               onClick={onSignIn}
-              size='large'
+              size="large"
               fullWidth
               sx={{
                 textTransform: "capitalize",

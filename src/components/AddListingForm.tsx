@@ -420,7 +420,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       onClose();
     }
   };
-  console.log("hi", data?.personalLicenseNumber);
+  
   const [openMoreFeatures, setMoreFeatures] = React.useState(true);
   const onOpenMoreFeatures = () => {
     setMoreFeatures(true);

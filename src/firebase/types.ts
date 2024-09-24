@@ -16,7 +16,7 @@ export interface IListing {
     status?: 'live' | 'draft'
     dateAdded: Timestamp;
     //@desc 1, rental, 2, commercial, 3, eventspace
-    propertyType: string; 
+    propertyType: 'commercial' | 'residential'; 
     realEstateCompany: string;
     licenseNumber?: string;
     listingSpecificContact?: string;

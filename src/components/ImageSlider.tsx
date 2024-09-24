@@ -12,14 +12,16 @@ interface ImageSliderProps {
   listingId: string;
   userId: string;
   enablePagination?: boolean;
+  previewUrls?: string[]
 }
 export const ImageSlider: React.FC<ImageSliderProps> = ({
   images,
   listingId,
   userId,
   enablePagination,
+  previewUrls,
 }) => {
-  const imgs = images?.map((image) => (
+  const imgs = (images)?.map((image) => (
     <SwiperSlide
       style={{
  
@@ -29,6 +31,19 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
       key={image + listingId}
     >
       <ImageWithLoading style={{objectFit: 'cover', objectPosition: 'center'}}  imageName={image} listingId={listingId} userId={userId} />
+    </SwiperSlide>
+  ));
+  console.log(previewUrls)
+  const previews = (previewUrls)?.map((image) => (
+    <SwiperSlide
+      style={{
+ 
+        display: 'flex',
+        alignItems: 'center',
+      }}
+      key={image + listingId}
+    >
+      <ImageWithLoading previewUrl={image} style={{objectFit: 'cover', objectPosition: 'center'}}  imageName={image} listingId={listingId} userId={userId} />
     </SwiperSlide>
   ));
   if (!listingId) {
@@ -59,7 +74,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
             "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
         }}
       >
-        {imgs}
+        {previewUrls && previewUrls?.length > 0  ? previews : imgs}
       </Swiper>
       {enablePagination && <>
       <IconButton

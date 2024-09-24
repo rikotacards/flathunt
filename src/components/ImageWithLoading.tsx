@@ -1,4 +1,4 @@
-import { Skeleton } from "@mui/material";
+import { Skeleton, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import React from "react";
@@ -8,22 +8,23 @@ interface ListingImages {
   listingId: string;
   imageName: string;
   style?: React.CSSProperties;
+  previewUrl?: string;
 }
 export const ImageWithLoading: React.FC<ListingImages> = ({
   userId,
   style,
   listingId,
   imageName,
+  previewUrl
 }) => {
   const storage = getStorage();
   const imageRef = ref(storage, `${userId}/${listingId}/${imageName}`);
-  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [isLoaded, setIsLoaded] = React.useState(!!previewUrl ? true : false);
 
   const { data } = useQuery({
     queryKey: [imageName],
-    queryFn: () => getDownloadURL(imageRef),
+    queryFn: () => !!previewUrl ? ({}) :getDownloadURL(imageRef),
   });
-
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
@@ -47,7 +48,7 @@ export const ImageWithLoading: React.FC<ListingImages> = ({
           // height: 'auto'
         }}
         onLoad={handleImageLoad}
-        src={data}
+        src={previewUrl || data}
       />
     </>
   );

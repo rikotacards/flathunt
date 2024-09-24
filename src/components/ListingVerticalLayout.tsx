@@ -49,7 +49,9 @@ import { Navigation, Pagination } from "swiper/modules";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { ImageSlider } from "./ImageSlider";
-export const ListingVerticalLayout: React.FC<IListing> = (props) => {
+export const ListingVerticalLayout: React.FC<
+  IListing & { previewUrls?: string[] }
+> = (props) => {
   const [open, setOpen] = React.useState(false);
   const { user } = useAuthContext();
   const nav = useNavigate();
@@ -75,6 +77,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
     licenseNumber,
     isDirectListing,
     desc,
+    previewUrls,
   } = props;
   const handleClickOpen = () => {
     setOpen(true);
@@ -88,7 +91,6 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const isBookmarked = savedListingsData?.some(
     (e) => e.listingId === listingId
   );
-
 
   const handleClose = () => {
     setOpen(false);
@@ -191,25 +193,34 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
               overflow: "hidden",
             }}
           >
-            {isNarrow ? <ImageSlider
-            listingId={listingId}
-            userId={userId}
-            images={images}
-            /> :
-            <ImageList sx={{mr:2,
+            {isNarrow ? (
+              <ImageSlider
+                listingId={listingId}
+                userId={userId}
+                images={images}
+                previewUrls={previewUrls}
+              />
+            ) : (
+              <ImageList
+                sx={{
+                  mr: 2,
 
-              borderRadius:4,
-            }} variant="quilted">
-              {images.map((i) => (
-                <ImageListItem key={i}>
-                  <ImageWithLoading
-                    imageName={i}
-                    listingId={listingId}
-                    userId={userId}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>}
+                  borderRadius: 4,
+                }}
+                variant="quilted"
+              >
+                {(previewUrls || images).map((i) => (
+                  <ImageListItem key={i}>
+                    <ImageWithLoading
+                      imageName={i}
+                      listingId={listingId}
+                      userId={userId}
+                      previewUrl={!!previewUrls?.length ? i : undefined}
+                    />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            )}
             <Button
               sx={{
                 position: "absolute",
@@ -218,9 +229,9 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
                 zIndex: 3,
                 color: "white",
                 p: 1,
-                m:1,
+                m: 1,
                 borderRadius: 6,
-                background: 'rgba(0,0,0,0.5)',
+                background: "rgba(0,0,0,0.5)",
                 textTransform: "capitalize",
               }}
               onClick={handleClickOpen}
@@ -326,25 +337,34 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
                   : "Agency fee required"}
               </Typography>
             </Box>
-            <Divider />
 
-            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-              <Box sx={{ display: "flex", alignSelf: "flex-start" }}>
-                <StoreOutlinedIcon />
-              </Box>
-              <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
-                <Typography variant="caption">Real Estate Company</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  {listingSpecificRealEstateCompany || realEstateCompany}
-                </Typography>
-                <Typography sx={{ mt: 1 }} variant="caption">
-                  License Number
-                </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  {listingSpecificLicenseNumber || licenseNumber}
-                </Typography>
-              </Box>
-            </Box>
+            {!isDirectListing && (
+              <>
+                <Divider />
+
+                <Box
+                  sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}
+                >
+                  <Box sx={{ display: "flex", alignSelf: "flex-start" }}>
+                    <StoreOutlinedIcon />
+                  </Box>
+                  <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
+                    <Typography variant="caption">
+                      Real Estate Company
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {listingSpecificRealEstateCompany || realEstateCompany}
+                    </Typography>
+                    <Typography sx={{ mt: 1 }} variant="caption">
+                      License Number
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {listingSpecificLicenseNumber || licenseNumber}
+                    </Typography>
+                  </Box>
+                </Box>
+              </>
+            )}
           </Box>
           <Card
             sx={{
@@ -363,7 +383,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             >
               <InsertLink />
             </IconButton>
-            <IconButton sx={{ ml: 1 }} onClick={ onSaveListing}>
+            <IconButton sx={{ ml: 1 }} onClick={onSaveListing}>
               {isBookmarked ? <Bookmark /> : <BookmarkAddOutlined />}
             </IconButton>
             <Button
@@ -402,7 +422,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             <InsertLink />
           </IconButton>
 
-          <IconButton sx={{ ml: 1 }} onClick={ onSaveListing}>
+          <IconButton sx={{ ml: 1 }} onClick={onSaveListing}>
             {isBookmarked ? <Bookmark /> : <BookmarkAddOutlined />}
           </IconButton>
           <Button

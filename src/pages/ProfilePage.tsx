@@ -1,11 +1,13 @@
 import {
   Alert,
+  AppBar,
   Box,
   Button,
   Card,
   Collapse,
   Divider,
   IconButton,
+  LinearProgress,
   OutlinedInput,
   Toolbar,
   Typography,
@@ -22,17 +24,24 @@ import {
 } from "../Providers/contextHooks";
 import { addUser, getUser, updateUser } from "../firebase/user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AccessTimeFilled, ChevronLeftRounded, ClearAll, ClearOutlined, CloseOutlined, Info } from "@mui/icons-material";
+import {
+  AccessTimeFilled,
+  ChevronLeftRounded,
+  ClearAll,
+  ClearOutlined,
+  CloseOutlined,
+  Info,
+} from "@mui/icons-material";
 interface OnClearProps {
   onClick: () => void;
 }
-export const OnClear: React.FC<OnClearProps> = ({onClick}) => {
+export const OnClear: React.FC<OnClearProps> = ({ onClick }) => {
   return (
     <IconButton onClick={onClick}>
-      <ClearOutlined/>
+      <ClearOutlined />
     </IconButton>
-  )
-}
+  );
+};
 
 export const ProfilePage: React.FC = () => {
   const nav = useNavigate();
@@ -52,21 +61,26 @@ export const ProfilePage: React.FC = () => {
     contactNumber: data?.contactNumber,
     realEstateCompany: data?.realEstateCompany,
     licenseNumber: data?.licenseNumber,
-    personalLicenseNumber: data?.personalLicenseNumber
+    personalLicenseNumber: data?.personalLicenseNumber,
   });
   const a = useAppBarContext();
   React.useEffect(() => {
     a.setAppBarChildComponent(
-      <Toolbar sx={{ pl: 0 }}>
-        <IconButton onClick={onBack}>
-          <ChevronLeftRounded />
-        </IconButton>
-        <Typography fontWeight={"bold"} color="textPrimary">
-          Profile
-        </Typography>
-      </Toolbar>
+      <>
+        <AppBar elevation={0} sx={{ background: "white" }}>
+          <Toolbar sx={{ pl: 0 }}>
+            <IconButton onClick={onBack}>
+              <ChevronLeftRounded />
+            </IconButton>
+            <Typography fontWeight={"bold"} color="textPrimary">
+              Profile
+            </Typography>
+          </Toolbar>
+          {isLoading && <LinearProgress sx={{ width: "100%" }} />}
+        </AppBar>
+      </>
     );
-  }, []);
+  }, [isLoading]);
   React.useEffect(() => {
     setForm({ ...data, name: user?.displayName, email: user?.email });
   }, [isLoading]);
@@ -91,7 +105,7 @@ export const ProfilePage: React.FC = () => {
         contactNumber: form.contactNumber || "",
         licenseNumber: form?.licenseNumber || "",
         realEstateCompany: form.realEstateCompany || "",
-
+        personalLicenseNumber: form.personalLicenseNumber || ""
       });
       queryClient.invalidateQueries({
         queryKey: ["getUser"],
@@ -127,6 +141,9 @@ export const ProfilePage: React.FC = () => {
         </Button>
       </>
     );
+  }
+  if (isLoading) {
+    return null;
   }
   return (
     <Box
@@ -197,20 +214,27 @@ export const ProfilePage: React.FC = () => {
       <Typography sx={{ mb: 3 }} variant="h6">
         For Agents Only
       </Typography>
-      <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
-        <AccessTimeFilled color='success' sx={{mr:1}} fontSize="small"/>
-      <Typography variant='caption'>Early bird deal: First 3 months free listings. </Typography>
+      <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
+        <Info color="warning" sx={{ mr: 1 }} fontSize="small" />
+        <Typography color="warning" variant="caption">
+          The information below is required for <b>agents only</b>.
+        </Typography>
       </Box>
-      
+
+      <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
+        <AccessTimeFilled color="success" sx={{ mr: 1 }} fontSize="small" />
+        <Typography variant="caption">
+          Early bird deal: First 3 months free listings.{" "}
+        </Typography>
+      </Box>
+
       <>
         <Box sx={{ display: "flex", mb: 4 }}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography variant="body2" fontWeight={"bold"}>
               Real Estate Company
             </Typography>
-            <Typography variant="body1">
-              {data?.realEstateCompany}
-            </Typography>
+            <Typography variant="body1">{data?.realEstateCompany}</Typography>
           </Box>
           <Button
             size="small"
@@ -267,7 +291,11 @@ export const ProfilePage: React.FC = () => {
             placeholder={"Company License Number"}
             fullWidth
             value={form.licenseNumber}
-            endAdornment={<OnClear onClick={() => setForm((p) => ({...p, licenseNumber: ''}))}/>}
+            endAdornment={
+              <OnClear
+                onClick={() => setForm((p) => ({ ...p, licenseNumber: "" }))}
+              />
+            }
           />
           <Button
             onClick={onSave}
@@ -281,8 +309,6 @@ export const ProfilePage: React.FC = () => {
             Cancel
           </Button>
         </Collapse>
-
-        
       </>
       <>
         <Box sx={{ display: "flex", mb: 4 }}>
@@ -296,13 +322,13 @@ export const ProfilePage: React.FC = () => {
           </Box>
           <Button
             size="small"
-            onClick={() => onSetField(3)}
+            onClick={() => onSetField(10)}
             sx={{ ml: "auto" }}
           >
             Edit
           </Button>
         </Box>
-        <Collapse in={3 === field} sx={{ mb: 1 }}>
+        <Collapse in={10 === field} sx={{ mb: 1 }}>
           <OutlinedInput
             type="string"
             onChange={onChange}
@@ -324,11 +350,7 @@ export const ProfilePage: React.FC = () => {
           </Button>
         </Collapse>
       </>
-      <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
-        <Info color='warning' sx={{mr:1}} fontSize="small"/>
-      <Typography color='warning' variant='caption'>The information above is required for <b>agents only</b>. Your listings and will appear at the bottom of each listing.</Typography>
-      </Box>
-      
+
       <Button
         variant="contained"
         color="error"
