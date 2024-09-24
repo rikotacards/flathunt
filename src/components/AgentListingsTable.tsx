@@ -460,7 +460,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
               <CloseOutlined />
             </IconButton> */}
           </Toolbar>
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2, textAlign: 'center' }}>
             <Typography sx={{ mb: 1 }}>Sign in to add listings</Typography>
             <Button
               onClick={onSignIn}
