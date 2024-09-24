@@ -2,37 +2,58 @@ import React from "react";
 import { AgentListingsTable } from "../components/AgentListingsTable";
 import {
   Box,
-
   Dialog,
-
+  Divider,
+  IconButton,
+  Toolbar,
+  Typography,
 } from "@mui/material";
 
-
-import { useAppBarContext, useAuthContext, useFilterContext } from "../Providers/contextHooks";
+import {
+  useAppBarContext,
+  useAuthContext,
+  useFilterContext,
+} from "../Providers/contextHooks";
 
 import { useIsNarrow } from "../utils/useIsNarrow";
 
 import { SearchBar } from "../components/SearchBar";
 import { AddListingSteps } from "../components/AddListingSteps";
+import { ChevronLeft, KeyboardArrowDown } from "@mui/icons-material";
 
+const ListingsPageAppBar: React.FC = () => {
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box sx={{ ml: "auto" }}>
+        <Typography fontWeight={"bold"} color="textPrimary">
+          My Listings
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
 export const ListingsPage: React.FC = () => {
   const { filters, setFilters } = useFilterContext();
-  const {setAppBarChildComponent} = useAppBarContext()
+  const { setAppBarChildComponent } = useAppBarContext();
 
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     setFilters({});
-    setAppBarChildComponent(<SearchBar disableRedirect/>)
+    setAppBarChildComponent(<ListingsPageAppBar />);
   }, []);
 
-
   return (
-    <>
-   
-     <AgentListingsTable {...filters} />
-     
-     
-  
-    </>
+    <Box sx={{ mt: 1 }}>
+      <SearchBar disableRedirect />
+      <Divider sx={{ mt: 1 }} />
+      <AgentListingsTable {...filters} />
+    </Box>
   );
 };

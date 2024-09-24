@@ -329,16 +329,13 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
     filters.minPrice ||
     filters.maxNetArea;
   const [index, setIndex] = React.useState(0);
-  const onChange = (event, index: number) => {
+  const onChange = (index: number) => {
     setIndex(index);
   };
   return (
     <>
       {isLoading ? <LinearProgress /> : null}
-      <Tabs onChange={onChange} value={index} variant="fullWidth">
-        <Tab label={<WindowOutlined />} />
-        <Tab label={<TableRowsIcon />} />
-      </Tabs>
+     
       <Box sx={{ display: "relative" }} mb={1} mt={0}>
         {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
         {index === 0 && (
@@ -414,6 +411,9 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
             zIndex: 99,
           }}
         >
+          <Fab color='secondary' onClick={() => onChange(index ===1 ? 0 : 1)} sx={{ mr: 1 }} size="small">
+           {index === 1 ? <WindowOutlined/> : <TableRowsIcon />}
+          </Fab>
           <Fab
             variant="extended"
             sx={{ m: 0, p: 2, alignItems: "center" }}
@@ -450,7 +450,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
                 // height: "calc(100% )",
               },
             }}
-            sx={{overflowY: 'auto'}}
+            sx={{ overflowY: "auto" }}
             fullScreen
             open={openAddNewDrawer}
             onClose={onCloseAddNewDrawer}

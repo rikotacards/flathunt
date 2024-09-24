@@ -22,8 +22,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     setFiltersOpen(true);
   };
   const [titleOpen, setTitleOpen] = React.useState(true);
-  const isDarkTheme = useTheme().palette.mode === 'dark';
-  
+  const isDarkTheme = useTheme().palette.mode === "dark";
+
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const { getAppBar } = useAppBarContext();
@@ -39,7 +39,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         sx={{
           boxShadow:
             "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-          background: isDarkTheme ? undefined :  "white",
+          background: isDarkTheme ? undefined : "white",
           display: "flex",
           justifyContent: "center",
           overflow: "hidden",
@@ -79,12 +79,14 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Collapse>
 
           <Collapse sx={{ width: "100%" }} in={!openTitle}>
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
+            <Box sx={{ display: "flex", flexDirection: "row", alignItems: 'center' }}>
               <Box
-              sx={{
-                overflowX: 'auto'
-              }}
-              >{getAppBar()}</Box>
+                sx={{
+                  overflowX: "auto",
+                }}
+              >
+                {getAppBar()}
+              </Box>
 
               <Box sx={{ ml: "auto" }}>
                 <UserMenu />
