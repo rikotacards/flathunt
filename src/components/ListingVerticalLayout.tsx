@@ -156,7 +156,6 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
       s.toggleSnackbar();
       queryClient.invalidateQueries({
         queryKey: ["getSavedListings"],
-        exact: true,
       });
     } catch (e) {
       alert(e);
@@ -377,7 +376,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             >
               <InsertLink />
             </IconButton>
-            <IconButton sx={{ ml: 1 }} onClick={onSaveListing}>
+            <IconButton sx={{ ml: 1 }} onClick={ onSaveListing}>
               {isBookmarked ? <Bookmark /> : <BookmarkAddOutlined />}
             </IconButton>
             <Button
@@ -416,7 +415,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             <InsertLink />
           </IconButton>
 
-          <IconButton sx={{ ml: 1 }} onClick={onSaveListing}>
+          <IconButton sx={{ ml: 1 }} onClick={ onSaveListing}>
             {isBookmarked ? <Bookmark /> : <BookmarkAddOutlined />}
           </IconButton>
           <Button

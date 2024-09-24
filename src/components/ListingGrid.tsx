@@ -28,7 +28,8 @@ export const ListingGrid: React.FC<ListingGridProps> = ({savedListingsTransforme
 
               return (
                 <Grid key={l.listingId} size={{ lg: 3, md: 4, xs: 4 }}>
-                  <ListingTile savedDocId={savedDocId} isSaved={!!savedDocId} {...l} />
+                  <ListingTile savedDocId={savedDocId}
+                   isSaved={!!savedDocId} {...l} />
                 </Grid>
               );
             })}
