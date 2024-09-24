@@ -444,14 +444,15 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
           </Fab>
         </Box>
         {
-          <Drawer
+          <Dialog
             PaperProps={{
               sx: {
-                height: "calc(100% )",
+                // height: "calc(100% )",
               },
             }}
+            sx={{overflowY: 'auto'}}
+            fullScreen
             open={openAddNewDrawer}
-            anchor="bottom"
             onClose={onCloseAddNewDrawer}
           >
             <AddListingSteps
@@ -462,7 +463,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
               userId={user?.uid || ""}
               onClose={onCloseAddNewDrawer}
             /> */}
-          </Drawer>
+          </Dialog>
         }
 
         <Drawer

@@ -12,7 +12,7 @@ interface ImageSliderProps {
   listingId: string;
   userId: string;
   enablePagination?: boolean;
-  previewUrls?: string[]
+  previewUrls?: string[];
 }
 export const ImageSlider: React.FC<ImageSliderProps> = ({
   images,
@@ -21,29 +21,37 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   enablePagination,
   previewUrls,
 }) => {
-  const imgs = (images)?.map((image) => (
+  const imgs = images?.map((image) => (
     <SwiperSlide
       style={{
- 
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center",
       }}
       key={image + listingId}
     >
-      <ImageWithLoading style={{objectFit: 'cover', objectPosition: 'center'}}  imageName={image} listingId={listingId} userId={userId} />
+      <ImageWithLoading
+        style={{ objectFit: "cover", objectPosition: "center" }}
+        imageName={image}
+        listingId={listingId}
+        userId={userId}
+      />
     </SwiperSlide>
   ));
-  console.log(previewUrls)
-  const previews = (previewUrls)?.map((image) => (
+  const previews = previewUrls?.map((image) => (
     <SwiperSlide
       style={{
- 
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center",
       }}
       key={image + listingId}
     >
-      <ImageWithLoading previewUrl={image} style={{objectFit: 'cover', objectPosition: 'center'}}  imageName={image} listingId={listingId} userId={userId} />
+      <ImageWithLoading
+        previewUrl={image}
+        style={{ objectFit: "cover", objectPosition: "center" }}
+        imageName={image}
+        listingId={listingId}
+        userId={userId}
+      />
     </SwiperSlide>
   ));
   if (!listingId) {
@@ -66,7 +74,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
           position: "relative",
           borderRadius: 12,
           zIndex: 0,
-          height: '400px',
+          height: "400px",
           width: "100%",
           overflow: "hidden",
           "--swiper-pagination-color": "white",
@@ -74,41 +82,43 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
             "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
         }}
       >
-        {previewUrls && previewUrls?.length > 0  ? previews : imgs}
+        <div>{previewUrls && previewUrls?.length > 0 ? previews : imgs}</div>
       </Swiper>
-      {enablePagination && <>
-      <IconButton
-        onClick={(e) => e.stopPropagation()}
-        size="small"
-        color="inherit"
-        sx={{
-          position: "absolute",
-          top: "50%",
-          backdropFilter: "blur(10px)",
-          background: "rgba(255,255,255,0.5)",
-          m: 1,
-        }}
-        className={`H${listingId}swiper-button-prev`}
-      >
-        <ChevronLeft />
-      </IconButton>
-      <IconButton
-        onClick={(e) => e.stopPropagation()}
-        size="small"
-        color="inherit"
-        sx={{
-          right: 0,
-          position: "absolute",
-          top: "50%",
-          backdropFilter: "blur(10px)",
-          background: "rgba(255,255,255,0.5)",
-          m: 1,
-        }}
-        className={`H${listingId}swiper-button-next`}
-      >
-        <ChevronRight />
-      </IconButton>
-      </>}
+      {enablePagination && (
+        <>
+          <IconButton
+            onClick={(e) => e.stopPropagation()}
+            size="small"
+            color="inherit"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              backdropFilter: "blur(10px)",
+              background: "rgba(255,255,255,0.5)",
+              m: 1,
+            }}
+            className={`H${listingId}swiper-button-prev`}
+          >
+            <ChevronLeft />
+          </IconButton>
+          <IconButton
+            onClick={(e) => e.stopPropagation()}
+            size="small"
+            color="inherit"
+            sx={{
+              right: 0,
+              position: "absolute",
+              top: "50%",
+              backdropFilter: "blur(10px)",
+              background: "rgba(255,255,255,0.5)",
+              m: 1,
+            }}
+            className={`H${listingId}swiper-button-next`}
+          >
+            <ChevronRight />
+          </IconButton>
+        </>
+      )}
     </Box>
   );
 };

@@ -44,8 +44,7 @@ import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
 import { copy } from "../utils/copy";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ContactFormNew } from "./ContactFormNew";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { ImageSlider } from "./ImageSlider";
@@ -188,8 +187,8 @@ export const ListingVerticalLayout: React.FC<
             // navigation
             sx={{
               position: "relative",
-              // zIndex: 2,
-
+              zIndex: 2,
+              width:'100%',
               overflow: "hidden",
             }}
           >

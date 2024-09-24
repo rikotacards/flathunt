@@ -89,7 +89,7 @@ export const AddListingOtherFeatures: React.FC<
       <TextField
         multiline
         fullWidth
-        placeholder="Only 3 minutes from subway"
+        placeholder="Only 3 minutes from subway. Near gym."
         minRows={3}
         name={"desc"}
         value={desc}

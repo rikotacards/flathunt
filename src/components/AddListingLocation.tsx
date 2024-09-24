@@ -18,7 +18,6 @@ export const AddListingLocation: React.FC<AddListingLocationProps> = (props) => 
             <Autocomplete
                 autoHighlight
                 fullWidth
-                size="small"
                 onChange={(e, newValue) =>newValue && onClick('location', newValue)}
                 value={location}
                
@@ -37,7 +36,6 @@ export const AddListingLocation: React.FC<AddListingLocationProps> = (props) => 
                 required
                 name="address"
                 type="text"
-                size="small"
                 fullWidth
                 placeholder="Million City, 28 Elgin street"
                 onChange={onChange}

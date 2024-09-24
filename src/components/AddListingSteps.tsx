@@ -36,6 +36,7 @@ import { db, USER_ID } from "../firebase/firebaseConfig";
 import { useSnackbarContext } from "../Providers/contextHooks";
 import { AddListingOtherFeatures } from "./AddListingOtherFeatures";
 import { AddListingValidation } from "./AddListingValidation";
+import App from "../App";
 
 interface AddListingStepsProps {
   onClose: () => void;
@@ -244,8 +245,8 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
     3: !isLocationComplete,
     4: !isPriceComplete,
     5: !files.length,
-    7: false,
-    6: isMissingUserInfo,
+    7: isMissingUserInfo,
+    6: false,
   };
   return (
     <Box
@@ -257,17 +258,21 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
       elevation={0}
       component={Paper}
     >
-      <Toolbar>
-        <Typography variant="h6" fontWeight={"bold"}>
-          Flathunt.co
-        </Typography>
-        <IconButton sx={{ ml: "auto" }} onClick={onClose}>
-          <Close />
-        </IconButton>
-      </Toolbar>
+      <AppBar elevation={0} position="fixed" sx={{ background: "white" }}>
+        <Toolbar>
+          <Typography color='textPrimary' variant="h6" fontWeight={"bold"}>
+            Flathunt.co
+          </Typography>
+          <IconButton sx={{ ml: "auto" }} onClick={onClose}>
+            <Close />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Toolbar/>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         {steps[step]}
       </Box>
+
       <Toolbar />
       <AppBar
         position="fixed"
@@ -281,19 +286,18 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
           // height: isNarrow ? undefined : 0,
         }}
       >
-        <AddListingValidation requiredSteps={[
-            true, 
-            step >=1, 
-            step>=2,
-            step>=3,
-            step>=4, 
-            step>=5,
-            step>=6,
-            step>=7,
-    
-
-
-        ]} />
+        <AddListingValidation
+          requiredSteps={[
+            step >= 1,
+            step >= 2,
+            step >= 3,
+            step >= 4,
+            step >= 5,
+            step >= 6,
+            step >= 7,
+            step >= 8,
+          ]}
+        />
         <Toolbar>
           {step > 0 && (
             <Button sx={{}} onClick={onBack}>
@@ -313,12 +317,13 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
             </Button>
           ) : (
             <Button
-              disabled={!!isNextDisabled[step]}
+              disabled={isNextDisabled[step]}
               variant="contained"
-              sx={{ ml: "auto" }}
+              sx={{ ml: "auto", textTransform: "capitalize" }}
               onClick={onNext}
+              size="large"
             >
-              Next
+              {step === 0 ? "Get Started" : "Next"}
             </Button>
           )}
         </Toolbar>

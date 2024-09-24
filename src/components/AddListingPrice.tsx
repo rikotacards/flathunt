@@ -19,7 +19,6 @@ export const AddListingPrice: React.FC<AddListingPriceProps> = ({
             autoFocus
 
                 required
-                size="small"
                 fullWidth
                 name="price"
                 type="tel"

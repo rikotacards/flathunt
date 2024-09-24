@@ -13,7 +13,7 @@ export const AddListingInfo: React.FC<AddListingInfoProps> = ({propertyType, onC
     return (
       <Box sx={{p:2}}>
         <Typography variant='h6' sx={{mb:2}}>Tell people what you're offering</Typography>
-        <Typography sx={{mb:1}} color='textPrimary'>The property is</Typography>
+        <Typography fontWeight={'bold'} sx={{mb:1}} color='textPrimary'>The property is</Typography>
         <Box sx={{mb:2, display: "flex", alignItems: "center" }}>
           <Chip
             onClick={() => onClick("rentBuy", "rent")}
@@ -30,25 +30,25 @@ export const AddListingInfo: React.FC<AddListingInfoProps> = ({propertyType, onC
             variant={rentBuy === 'sale' ? 'filled': 'outlined'}
           />
         </Box>
-        <Typography sx={{mb:1}} color='textPrimary'>Agency fee? </Typography>
+        <Typography fontWeight={'bold'} sx={{mb:1}} color='textPrimary'>Agency fee? </Typography>
         <Box sx={{mb:2,  display: "flex", alignItems: "center" }}>
           <Chip
                   onClick={() => onClick("isDirectListing", false)}
                   sx={{
               mr: 1,
             }}
-            label="Agency fee"
+            label="Yes"
             variant={isDirectListing === false ? 'filled' : 'outlined'}
             // variant={outlinedOrContained(form.rentBuy === "rent")}
           />
   
           <Chip
-            label="No agency fee (Landlord listing)"
+            label="No (Landlord listing)"
             onClick={() => onClick("isDirectListing", true)}
             variant={isDirectListing === true ? 'filled' : 'outlined'}
           />
         </Box>
-        <Typography sx={{mb:1}} color='textPrimary'>Property Type</Typography>
+        <Typography fontWeight={'bold'} sx={{mb:1}} color='textPrimary'>Property Type</Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Chip
                   onClick={() => onClick("propertyType", "residential")}

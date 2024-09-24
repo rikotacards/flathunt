@@ -16,7 +16,7 @@ export const AddListingPropertySpecifics: React.FC<AddListingPropertySpecificsPr
     return (
         <Box sx={{p:2}}>
             <Typography sx={{mb:1}} variant='h6'>Share some basics about your place</Typography>
-             <Typography sx={{mb:1}}>Bedrooms</Typography>
+             <Typography fontWeight={'bold'} sx={{mb:1}}>Bedrooms</Typography>
              <Box sx={{mb:2, display: "flex", justifyContent: "space-between" }}>
                 {bedroomsOptions.map((br, i) => (
                   <Chip
@@ -34,7 +34,7 @@ export const AddListingPropertySpecifics: React.FC<AddListingPropertySpecificsPr
                   />
                 ))}
               </Box>
-              <Typography sx={{mb:1}}>Bathrooms</Typography>
+              <Typography fontWeight={'bold'} sx={{mb:1}}>Bathrooms</Typography>
               <Box sx={{ mb:2, display: "flex", justifyContent: "space-between" }}>
                 {bathroomsOptions.map((br, i) => (
                   <Chip
@@ -48,7 +48,6 @@ export const AddListingPropertySpecifics: React.FC<AddListingPropertySpecificsPr
               <Box>
 
               <TextField
-                size="small"
                 fullWidth
                 name="netArea"
                 value={netArea}
@@ -61,7 +60,6 @@ export const AddListingPropertySpecifics: React.FC<AddListingPropertySpecificsPr
               <TextField
                 value={grossArea}
                 name="grossArea"
-                size="small"
                 fullWidth
                 type="tel"
                 placeholder="Gross Area (sqft)"
