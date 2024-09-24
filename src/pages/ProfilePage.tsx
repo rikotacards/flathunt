@@ -195,7 +195,7 @@ export const ProfilePage: React.FC = () => {
       })}
       <Divider sx={{ mb: 2 }} />
       <Typography sx={{ mb: 3 }} variant="h6">
-        For Agents
+        For Agents Only
       </Typography>
       <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
         <AccessTimeFilled color='success' sx={{mr:1}} fontSize="small"/>
@@ -326,7 +326,7 @@ export const ProfilePage: React.FC = () => {
       </>
       <Box sx={{display: 'flex', alignItems: 'flex-start', mb:2}}>
         <Info color='warning' sx={{mr:1}} fontSize="small"/>
-      <Typography color='warning' variant='caption'>The information above is required for your listings and will appear at the bottom of each listing.</Typography>
+      <Typography color='warning' variant='caption'>The information above is required for agents only. Your listings and will appear at the bottom of each listing.</Typography>
       </Box>
       
       <Button

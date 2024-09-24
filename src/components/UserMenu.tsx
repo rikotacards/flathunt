@@ -17,10 +17,9 @@ import { useLocation, useNavigate } from "react-router";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useAuthContext } from "../Providers/contextHooks";
 import { signIn } from "../utils/signInWithGoogle";
-import AddIcon from '@mui/icons-material/Add';
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 const settings = [
-  { path: "listings", name: "My Listings", icon: <AddIcon /> },
+  { path: "listings", name: "My Listings", icon: <ViewListIcon /> },
   {
     path: "saved-listings",
     name: "Saved Listings",

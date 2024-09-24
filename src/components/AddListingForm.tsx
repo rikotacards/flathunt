@@ -150,44 +150,44 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
     personalLicenseNumber: data?.personalLicenseNumber,
   } as IListing);
   console.log("form", form);
-  const canAdd = form.isDirectListing ? data?.contactNumber : 
-    data?.personalLicenseNumber &&
-    !!form.licenseNumber &&
-    !!form.realEstateCompany &&
-    !!data?.contactNumber && 
-    !!form.isDirectListing == false && 
-    !!form.bedrooms !== undefined && 
-    !!form.location &&
-    !!form.price && 
-    !!form.location && 
-    !!form.netArea &&
-    !!form.rentBuy && 
-    !!form.propertyType
-  
+  const canAdd = form.isDirectListing
+    ? data?.contactNumber
+    : data?.personalLicenseNumber &&
+      !!form.licenseNumber &&
+      !!form.realEstateCompany &&
+      !!data?.contactNumber &&
+      !!form.isDirectListing == false &&
+      !!form.bedrooms !== undefined &&
+      !!form.location &&
+      !!form.price &&
+      !!form.location &&
+      !!form.netArea &&
+      !!form.rentBuy &&
+      !!form.propertyType;
+
   const [tabIndex, setTabIndex] = React.useState(0);
   const [files, setFiles] = React.useState([] as File[]);
   const onWhatsappUpdate = async () => {
     try {
-      if(!contactNumber || !user){
+      if (!contactNumber || !user) {
         return;
       }
-      await addUser({userId: user?.uid, contactNumber})
+      await addUser({ userId: user?.uid, contactNumber });
       queryClient.invalidateQueries({
-        queryKey: ['getUser']
-      })
-    } catch(e){
-      alert(e)
+        queryKey: ["getUser"],
+      });
+    } catch (e) {
+      alert(e);
     }
-  
-  }
+  };
   const onUpdateRealEstateCompany = async () => {
     if (!form.realEstateCompany) {
       return;
     }
     await updateUser(userId, { realEstateCompany: form.realEstateCompany });
     queryClient.invalidateQueries({
-      queryKey: ['getUser']
-    })
+      queryKey: ["getUser"],
+    });
   };
   const onUpdateLicenseNumber = async () => {
     try {
@@ -196,8 +196,8 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       }
       await updateUser(userId, { licenseNumber: form.licenseNumber });
       queryClient.invalidateQueries({
-        queryKey: ['getUser']
-      })
+        queryKey: ["getUser"],
+      });
     } catch (e) {
       alert(e);
     }
@@ -207,10 +207,12 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       if (!form.personalLicenseNumber) {
         return;
       }
-      await updateUser(userId, { personalLicenseNumber: form.personalLicenseNumber });
+      await updateUser(userId, {
+        personalLicenseNumber: form.personalLicenseNumber,
+      });
       queryClient.invalidateQueries({
-        queryKey: ['getUser']
-      })
+        queryKey: ["getUser"],
+      });
     } catch (e) {
       alert(e);
     }
@@ -418,7 +420,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       onClose();
     }
   };
-  console.log('hi', data?.personalLicenseNumber)
+  console.log("hi", data?.personalLicenseNumber);
   const [openMoreFeatures, setMoreFeatures] = React.useState(true);
   const onOpenMoreFeatures = () => {
     setMoreFeatures(true);
@@ -438,48 +440,47 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Toolbar
           sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "space-between",
+            display: 'flex',
+            position: 'relative',
+            textAlign: 'center',
+            justifyContent: 'center'
           }}
         >
           <Button
             sx={{
-              flexBasis: 1,
-              flexGrow: 1,
-              textTransform: "capitalize",
-              textAlign: "left",
-              justifyContent: "flex-start",
+              position:'absolute',
+              left: 0,
+              ml: 1,
+              textTransform: 'capitalize'
             }}
             onClick={onClose}
           >
-            Cancel
+            cancel
           </Button>
           <Typography
-            sx={{ flexGrow: 1, flexBasis: 1, textTransform: "capitalize" }}
+            sx={{display:
+               'flex', textAlign: 'center', 
+               alignSelf: 'center', 
+               textTransform: "capitalize" }}
             fontWeight={"bold"}
           >
             {isEdit ? "Edit Listing" : "Add Listing"}
           </Typography>
-          <Box sx={{ flexGrow: 1, flexBasis: 1 }} />
         </Toolbar>
-          <AddListingValidation
-          requiredSteps={
-            [
-              !!form.images,
-              !!form.rentBuy, 
-              form.isDirectListing!== undefined, 
-              !!form.propertyType,
-              form.bedrooms!==undefined,
-              !!form.bathrooms, 
-              !!form.location,
-              !!form.price,
-              !!form.address,
-              !!form.netArea
-            ]
-          }
-          />
+        <AddListingValidation
+          requiredSteps={[
+            !!form.images,
+            !!form.rentBuy,
+            form.isDirectListing !== undefined,
+            !!form.propertyType,
+            form.bedrooms !== undefined,
+            !!form.bathrooms,
+            !!form.location,
+            !!form.price,
+            !!form.address,
+            !!form.netArea,
+          ]}
+        />
 
         {!disableTabs && (
           <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
@@ -499,7 +500,12 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               overflowY: "scroll",
             }}
           >
-            {!isEdit && <HeaderWithCheck isChecked={files.length > 0} text={"Add Photos"} />}
+            {!isEdit && (
+              <HeaderWithCheck
+                isChecked={files.length > 0}
+                text={"Add Photos"}
+              />
+            )}
 
             <div style={{ marginBottom: "20px" }}>
               <div
@@ -587,7 +593,7 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
             <FieldLayout>
               <HeaderWithCheck
                 isChecked={form.isDirectListing !== undefined}
-                text={"Agency fee / no fee"}
+                text={"Agency Or Direct Listing?"}
               />
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Chip
@@ -685,7 +691,6 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               <Autocomplete
                 autoHighlight
                 fullWidth
-                
                 size="small"
                 value={form.location}
                 onChange={(e, newValue) => {
@@ -696,7 +701,11 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 }}
                 sx={{}}
                 renderInput={(params) => (
-                  <TextField sx={{textTransform: 'capitalize'}} placeholder="Select location" {...params} />
+                  <TextField
+                    sx={{ textTransform: "capitalize" }}
+                    placeholder="Select location"
+                    {...params}
+                  />
                 )}
                 options={allHkLocations}
               />
@@ -801,7 +810,10 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
                 you directly.
               </Typography>
             )}
-        <HeaderWithCheck isChecked={!!data?.contactNumber} text={'Whatsapp number'}/>
+            <HeaderWithCheck
+              isChecked={!!data?.contactNumber}
+              text={"Whatsapp number"}
+            />
             <TextField
               sx={{ mb: 1 }}
               name="contactNumber"
@@ -812,41 +824,63 @@ export const AddListingForm: React.FC<AddListingFormProps> = ({
               onBlur={onWhatsappUpdate}
               value={contactNumber}
             />
-            {!form.isDirectListing && <>
-              <HeaderWithCheck isChecked={!!data?.realEstateCompany} text={'Real Estate Company'}/>
+            {!form.isDirectListing && (
+              <>
+                <HeaderWithCheck
+                  isChecked={!!data?.realEstateCompany}
+                  text={"Real Estate Company"}
+                />
+                <TextField
+                  sx={{ mb: 1 }}
+                  name="realEstateCompany"
+                  type="string"
+                  placeholder="Best Property Agency"
+                  onChange={onChange}
+                  value={form.realEstateCompany}
+                  onBlur={onUpdateRealEstateCompany}
+                />
+                <Typography color='warning' fontWeight={'bold'} sx={{mb:2}} variant="caption">
+                  Not required for direct listing
+                </Typography>
 
-            <TextField
-              sx={{ mb: 1 }}
-              name="realEstateCompany"
-              type="string"
-              placeholder="Best Property Agency"
-              onChange={onChange}
-              value={form.realEstateCompany}
-              onBlur={onUpdateRealEstateCompany}
-            />
-              <HeaderWithCheck isChecked={!!data?.licenseNumber} text={'Company License Number'}/>
+                <HeaderWithCheck
+                  isChecked={!!data?.licenseNumber}
+                  text={"Company License Number"}
+                />
 
-            <TextField
-              sx={{ mb: 1 }}
-              name="licenseNumber"
-              type="string"
-              placeholder="C054899"
-              onChange={onChange}
-              value={form.licenseNumber}
-              onBlur={onUpdateLicenseNumber}
-            />
-              <HeaderWithCheck isChecked={!!data?.personalLicenseNumber} text={'Personal License Number'}/>
+                <TextField
+                  sx={{ mb: 1 }}
+                  name="licenseNumber"
+                  type="string"
+                  placeholder="C054899"
+                  onChange={onChange}
+                  value={form.licenseNumber}
+                  onBlur={onUpdateLicenseNumber}
+                />
+                <Typography color='warning' fontWeight={'bold'} sx={{mb:2}} variant="caption">
+                Not required for direct listing
+                </Typography>
 
-            <TextField
-              sx={{ mb: 1 }}
-              name="personalLicenseNumber"
-              type="string"
-              placeholder="Personal license number, E-123456"
-              onChange={onChange}
-              value={form.personalLicenseNumber}
-              onBlur={onUpdatePersonalLicenseNumber}
-            />
-            </>}
+                <HeaderWithCheck
+                  isChecked={!!data?.personalLicenseNumber}
+                  text={"Personal License Number"}
+                />
+
+                <TextField
+                  sx={{ mb: 1 }}
+                  name="personalLicenseNumber"
+                  type="string"
+                  placeholder="Personal license number, E-123456"
+                  onChange={onChange}
+                  value={form.personalLicenseNumber}
+                  onBlur={onUpdatePersonalLicenseNumber}
+                />
+                <Typography color='warning' fontWeight={'bold'} sx={{mb:2}} variant="caption">
+                Not required for direct listing
+                </Typography>
+
+              </>
+            )}
 
             <Divider sx={{ mb: 1 }} />
             {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
