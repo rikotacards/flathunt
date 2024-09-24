@@ -50,7 +50,6 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
         style={{
           position: "relative",
           borderRadius: 12,
-          background: 'black',
           zIndex: 0,
           height: '400px',
           width: "100%",

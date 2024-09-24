@@ -14,11 +14,13 @@ import {
   Divider,
   Drawer,
   IconButton,
+  ImageList,
+  ImageListItem,
   Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
-import MoneyOffIcon from '@mui/icons-material/MoneyOff';
+import MoneyOffIcon from "@mui/icons-material/MoneyOff";
 import { auth, USER_ID } from "../firebase/firebaseConfig";
 import {
   getSavedListings,
@@ -46,6 +48,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIsNarrow } from "../utils/useIsNarrow";
+import { ImageSlider } from "./ImageSlider";
 export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   const [open, setOpen] = React.useState(false);
   const { user } = useAuthContext();
@@ -87,14 +90,20 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
   );
   const imgs = images?.map((image) => (
     <SwiperSlide
-      style={{
-        // height: "100%",
-        // width: "100%",
-        // minHeight: "450px"
-      }}
+      style={
+        {
+          // height: "100%",
+          // width: "100%",
+          // minHeight: "450px"
+        }
+      }
       key={image}
     >
-      <ImageWithLoading imageName={image} listingId={listingId} userId={userId} />
+      <ImageWithLoading
+        imageName={image}
+        listingId={listingId}
+        userId={userId}
+      />
     </SwiperSlide>
   ));
 
@@ -191,24 +200,33 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             flexBasis: 1,
           }}
         >
-          <Swiper
-            modules={[Navigation, Pagination]}
+          <Box
             // navigation
-            pagination={true}
-            style={{
+            sx={{
               position: "relative",
               zIndex: 0,
-              maxWidth: "500px",
-              height:'400px',
-              borderRadius: 16,
-              overflow: "hidden",
 
-              boxShadow:
-                "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-              "--swiper-pagination-color": "white",
+              overflow: "hidden",
             }}
           >
-            {imgs}
+            {isNarrow ? <ImageSlider
+            listingId={listingId}
+            userId={userId}
+            images={images}
+            /> :<ImageList sx={{mr:2,
+
+              borderRadius:4,
+            }} variant="quilted">
+              {images.map((i) => (
+                <ImageListItem key={i}>
+                  <ImageWithLoading
+                    imageName={i}
+                    listingId={listingId}
+                    userId={userId}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>}
             <Button
               sx={{
                 position: "absolute",
@@ -224,7 +242,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             >
               View all
             </Button>
-          </Swiper>
+          </Box>
         </Box>
 
         <Box
@@ -315,9 +333,11 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
             </Box>
             <Divider />
             <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-             {isDirectListing ? <MoneyOffIcon/> : <MonetizationOnRounded/>} 
+              {isDirectListing ? <MoneyOffIcon /> : <MonetizationOnRounded />}
               <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-                {isDirectListing? 'No agenct fee, direct' : 'Agency fee required'}
+                {isDirectListing
+                  ? "No agenct fee, direct"
+                  : "Agency fee required"}
               </Typography>
             </Box>
             <Divider />
@@ -346,9 +366,9 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
               p: 1,
               justifyContent: "space-around",
               borderRadius: 3,
-              mt:1,
+              mt: 1,
               boxShadow:
-              "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+                "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
             }}
           >
             <IconButton
@@ -379,7 +399,7 @@ export const ListingVerticalLayout: React.FC<IListing> = (props) => {
           top: "auto",
           bottom: 0,
           background: "white",
-          height: isNarrow ? undefined : 0,
+          // height: isNarrow ? undefined : 0,
         }}
       >
         <Toolbar>
