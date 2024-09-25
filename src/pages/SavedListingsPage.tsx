@@ -14,9 +14,9 @@ const SavedListingAppBar: React.FC = () => {
 
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
-      <IconButton onClick={goBack}>
+      {/* <IconButton onClick={goBack}>
         <ChevronLeft />
-      </IconButton>
+      </IconButton> */}
       <Typography fontWeight={"bold"} color="textPrimary">
         Saved listings
       </Typography>
@@ -25,11 +25,12 @@ const SavedListingAppBar: React.FC = () => {
 };
 export const SavedListingsPage: React.FC = () => {
   const { user, isUserLoading } = useAuthContext();
+  const { setAppBarChildComponent } = useAppBarContext();
+
   const { data, isLoading } = useQuery({
     queryKey: ["getSavedListings", isUserLoading],
     queryFn: () => (!user ? [] : getSavedListings(user?.uid)),
   });
-  const { setAppBarChildComponent } = useAppBarContext();
 
   React.useEffect(() => {
     setAppBarChildComponent(<SavedListingAppBar />);

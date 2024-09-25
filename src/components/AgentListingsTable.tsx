@@ -1,11 +1,10 @@
 import TableRowsIcon from "@mui/icons-material/TableRows";
 
 import {
-  Alert,
+
   Box,
   Button,
-  Chip,
-  CircularProgress,
+
   Collapse,
   Dialog,
   DialogActions,
@@ -13,7 +12,7 @@ import {
   IconButton,
   DialogContent,
   Drawer,
-  Modal,
+
   Table,
   TableBody,
   TableCell,
@@ -23,8 +22,7 @@ import {
   Typography,
   Toolbar,
   LinearProgress,
-  Tabs,
-  Tab,
+
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -34,16 +32,12 @@ import {
   getSavedListings,
 } from "../firebase/listings";
 import Paper from "@mui/material/Paper";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { auth, USER_ID } from "../firebase/firebaseConfig";
-import EditIcon from "@mui/icons-material/Edit";
 import { EditListing } from "./EditListing";
 
 import { IFilters, IListing } from "../firebase/types";
 import {
-  CloseOutlined,
-  InsertLink,
-  OpenInNew,
+  
   WindowOutlined,
 } from "@mui/icons-material";
 import { useIsNarrow } from "../utils/useIsNarrow";
@@ -51,7 +45,6 @@ import AddIcon from "@mui/icons-material/Add";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Link } from "react-router-dom";
 import {
   useAuthContext,
   useFilterContext,
@@ -61,7 +54,6 @@ import { copy } from "../utils/copy";
 import IosShareIcon from "@mui/icons-material/IosShare";
 
 import { ListingTile } from "./ListingTile";
-import { AddListingForm } from "./AddListingForm";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ListingGrid } from "./ListingGrid";
 import { AddListingSteps } from "./AddListingSteps";
@@ -107,18 +99,13 @@ const Row: React.FC<IListing & { handleOpen: (listingId: string) => void }> = (
   const [open, setOpen] = React.useState(false);
   const s = useSnackbarContext();
   const [onDeleteClick, setDeleteClick] = React.useState(false);
-  const { user } = useAuthContext();
   const queryClient = useQueryClient();
   const isNarrow = useIsNarrow();
   const { handleOpen, listingId } = row;
   const onClick = () => {
     setOpen(!open);
   };
-  const onCopyLinkClick = (link: string) => {
-    copy(link);
-    s.setSnackbarChildComponent(<Alert severity="success">Link copied</Alert>);
-    s.toggleSnackbar();
-  };
+  
   const toggleDeleteDialog = () => {
     setDeleteClick(!onDeleteClick);
   };

@@ -1,6 +1,7 @@
 import {
   Alert,
   AppBar,
+  Avatar,
   Box,
   Button,
   Card,
@@ -67,17 +68,13 @@ export const ProfilePage: React.FC = () => {
   React.useEffect(() => {
     a.setAppBarChildComponent(
       <>
-        <AppBar elevation={0} sx={{ background: "white" }}>
-          <Toolbar sx={{ pl: 0 }}>
-            <IconButton onClick={onBack}>
-              <ChevronLeftRounded />
-            </IconButton>
+      
+          
             <Typography fontWeight={"bold"} color="textPrimary">
               Profile
             </Typography>
-          </Toolbar>
           {isLoading && <LinearProgress sx={{ width: "100%" }} />}
-        </AppBar>
+  
       </>
     );
   }, [isLoading]);
@@ -180,7 +177,7 @@ export const ProfilePage: React.FC = () => {
                     </Button>
                   )}
                 </Box>
-                <Typography variant="body1">{setting.value}</Typography>
+                <Typography color='textSecondary' variant="body1">{setting.value}</Typography>
               </Box>
             </Box>
             <Collapse in={i === field} sx={{ mb: 1 }}>

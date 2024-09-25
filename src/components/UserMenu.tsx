@@ -9,6 +9,7 @@ import {
   Button,
   Avatar,
   Box,
+  Zoom,
 } from "@mui/material";
 import React from "react";
 import ViewListIcon from "@mui/icons-material/ViewList";
@@ -39,10 +40,10 @@ export const UserMenu: React.FC = () => {
     setAnchorElUser(event.currentTarget);
   };
   const icons = {
-    "/": <HomeRoundedIcon />,
-    "/listings": <ViewListIcon />,
-    "/saved-listings": <BookmarkIcon />,
-    "/profile": <Avatar sx={{ height: 30, width: 30 }} src={user?.photoURL} />,
+    "/": {icon: <HomeRoundedIcon />},
+    "/listings":{icon: <Zoom in={true}><ViewListIcon /></Zoom>, name: 'My Listings'},
+    "/saved-listings":{icon: <Zoom in={true}><BookmarkIcon /></Zoom>, name: 'saved listings'},
+    "/profile":{icon: <Avatar sx={{ height: 30, width: 30 }} src={user?.photoURL} />, name: 'profile'},
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -50,14 +51,17 @@ export const UserMenu: React.FC = () => {
   return (
     <>
       <Tooltip title="Open settings">
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", }}>
+          {icons[pathname]?.name && <Typography fontWeight={'600'} color='textPrimary'>
+        
+          </Typography>}
           <IconButton
             onClick={handleOpenUserMenu}
             sx={{
               ml: "auto",
             }}
           >
-            {icons[pathname] || <HomeRoundedIcon />}
+            {icons[pathname]?.icon || <HomeRoundedIcon />}
           </IconButton>
         </Box>
       </Tooltip>

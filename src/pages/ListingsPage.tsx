@@ -5,6 +5,7 @@ import {
   Dialog,
   Divider,
   IconButton,
+  Paper,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -19,7 +20,7 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 
 import { SearchBar } from "../components/SearchBar";
 import { AddListingSteps } from "../components/AddListingSteps";
-import { ChevronLeft, KeyboardArrowDown } from "@mui/icons-material";
+import { ChevronLeft, Home, KeyboardArrowDown } from "@mui/icons-material";
 
 const ListingsPageAppBar: React.FC = () => {
   return (
@@ -31,10 +32,8 @@ const ListingsPageAppBar: React.FC = () => {
         justifyContent: "center",
       }}
     >
-      <Box sx={{ ml: "auto" }}>
-        <Typography fontWeight={"bold"} color="textPrimary">
-          My Listings
-        </Typography>
+      <Box sx={{ }}>
+        <Typography fontWeight={'bold'} color='textPrimary'>My Listing</Typography>
       </Box>
     </Box>
   );
@@ -51,7 +50,9 @@ export const ListingsPage: React.FC = () => {
 
   return (
     <Box sx={{ mt: 1 }}>
+
       <SearchBar disableRedirect />
+  
       <Divider sx={{ mt: 1 }} />
       <AgentListingsTable {...filters} />
     </Box>
