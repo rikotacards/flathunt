@@ -22,6 +22,8 @@ import {
   Typography,
   Toolbar,
   LinearProgress,
+  Card,
+  CardContent,
 
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -327,6 +329,9 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
         {index === 0 && (
           <Box sx={{ p: 2 }}>
+            {data?.length === 0 && <Card variant='outlined'>
+              <CardContent>You have no listings yet.</CardContent>
+              </Card>}
             <ListingGrid
               data={filteredData}
               isLoading={isLoading}

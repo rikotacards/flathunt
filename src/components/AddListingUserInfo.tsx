@@ -89,8 +89,8 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             onChange={onChange}
             placeholder="Whatsapp number"
           />
-          <Typography sx={{ mt: 1 }}>
-            We want to make sure customers can reach you.
+          <Typography variant='caption' sx={{ mt: 1 }}>
+            We want to make sure customers can reach you. If the information is incorrect you can update it here.
           </Typography>
         </>
       )}

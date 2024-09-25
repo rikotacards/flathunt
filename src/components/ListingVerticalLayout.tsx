@@ -48,6 +48,7 @@ import { ContactFormNew } from "./ContactFormNew";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { ImageSlider } from "./ImageSlider";
+import { ListingVerticalInfo } from "./ListingVerticalInfo";
 export const ListingVerticalLayout: React.FC<
   IListing & { previewUrls?: string[] }
 > = (props) => {
@@ -270,101 +271,7 @@ export const ListingVerticalLayout: React.FC<
               </Typography>
             </Box>
           )}
-          <Box
-            component={Paper}
-            elevation={0}
-            sx={{
-              p: 2,
-              pt: 1,
-              borderRadius: 3,
-              textAlign: "left",
-              m: 0,
-              mt: 1,
-
-              boxShadow:
-                "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-              <DirectionsSubwayFilledOutlined />
-              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-                {location}
-              </Typography>
-            </Box>
-            <Divider />
-            {!!address && (
-              <>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}
-                >
-                  <PlaceOutlined />
-                  <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-                    {address}
-                  </Typography>
-                </Box>
-                <Divider />
-              </>
-            )}
-            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-              <HotelOutlinedIcon />
-              <Typography variant="body2" sx={{ fontWeight: 500, ml: 1 }}>
-                {bedrooms} bedrooms
-              </Typography>
-            </Box>
-            <Divider />
-
-            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-              <ShowerOutlined />
-              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-                {bathrooms} bathroom(s)
-              </Typography>
-            </Box>
-            <Divider />
-
-            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-              <SquareFootOutlinedIcon />
-              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-                {netArea} sqft (net)
-              </Typography>
-            </Box>
-            <Divider />
-            <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
-              {isDirectListing ? <MoneyOffIcon /> : <MonetizationOnRounded />}
-              <Typography variant="body2" sx={{ ml: 1, fontWeight: 500 }}>
-                {isDirectListing
-                  ? "No agenct fee, direct"
-                  : "Agency fee required"}
-              </Typography>
-            </Box>
-
-            {!isDirectListing && (
-              <>
-                <Divider />
-
-                <Box
-                  sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}
-                >
-                  <Box sx={{ display: "flex", alignSelf: "flex-start" }}>
-                    <StoreOutlinedIcon />
-                  </Box>
-                  <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
-                    <Typography variant="caption">
-                      Real Estate Company
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      {listingSpecificRealEstateCompany || realEstateCompany}
-                    </Typography>
-                    <Typography sx={{ mt: 1 }} variant="caption">
-                      License Number
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      {listingSpecificLicenseNumber || licenseNumber}
-                    </Typography>
-                  </Box>
-                </Box>
-              </>
-            )}
-          </Box>
+          <ListingVerticalInfo {...props}/>
           <Card
             sx={{
               display: "flex",

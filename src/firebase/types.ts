@@ -34,6 +34,9 @@ export interface IListing {
     isSaved?: boolean;
     savedDocId?: string;
     isDirectListing?: boolean;
+    hasPool?: boolean;
+    hasParking?: boolean;
+    hasClubhouse?: boolean;
 }
 
 export interface IFilters {
@@ -98,7 +101,7 @@ export interface FilterField {
 }
 export interface IAdditionalFeatures {
     outdoors: 
-        FilterField[]
+        {name: keyof IListing, label: string, icon?: React.ReactNode, value?: string}[]
     ,
-    building: FilterField[]
+    building: {name: keyof IListing, label: string, icon?: React.ReactNode, value?: string}[]
 }

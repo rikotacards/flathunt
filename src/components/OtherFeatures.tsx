@@ -1,7 +1,17 @@
-import { KeyboardArrowDownOutlined } from "@mui/icons-material";
+import { Deck, KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { Box, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import React from "react";
 import { IAdditionalFeatures, IListing } from "../firebase/types";
+import RoofingIcon from '@mui/icons-material/Roofing';
+import DeckIcon from '@mui/icons-material/Deck';
+import YardIcon from '@mui/icons-material/Yard';
+import StairsIcon from '@mui/icons-material/Stairs';
+import ElevatorIcon from '@mui/icons-material/Elevator';
+import PoolIcon from '@mui/icons-material/Pool';
+import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import Groups2Icon from '@mui/icons-material/Groups2';
+import PetsIcon from '@mui/icons-material/Pets';
 interface OtherFeaturesProps {
   openMoreFeatures: boolean;
   onCloseMoreFeatures: () => void;
@@ -10,18 +20,18 @@ interface OtherFeaturesProps {
 }
 export const features: IAdditionalFeatures = {
   outdoors: [
-    { name: "hasRooftop", label: "rooftop" },
-    { name: "hasBalcony", label: "balcony" },
-    { name: "hasGarden", label: "garden" },
+    { name: "hasRooftop", label: "rooftop", icon: <RoofingIcon/> },
+    { name: "hasBalcony", label: "balcony", icon: <DeckIcon/>},
+    { name: "hasGarden", label: "garden", icon: <YardIcon/>},
   ],
   building: [
-    { name: "hasWalkup", label: "walkup" },
-    { name: "hasElevator", label: "elevator" },
-    { name: "hasPool", label: "pool" },
-    { name: "hasParking", label: "parking" },
-    { name: "hasGym", label: "gym" },
-    { name: "hasClubhouse", label: "clubhouse" },
-    { name: "hasPetFriendly", label: "pet friendly" },
+    { name: "hasWalkup", label: "walkup", icon:<StairsIcon/>, value: 'Is walkup' },
+    { name: "hasElevator", label: "elevator", icon: <ElevatorIcon/>, value: 'Has elevator'},
+    { name: "hasPool", label: "pool", icon: <PoolIcon/>, value: 'Has pool'},
+    { name: "hasParking", label: "parking", icon: <LocalParkingIcon/>, value: 'Has parking'},
+    { name: "hasGym", label: "gym" , icon: <FitnessCenterIcon/>, value: 'Has gym'},
+    { name: "hasClubhouse", label: "clubhouse", icon: <Groups2Icon/>, value: 'has clubhouse'},
+    { name: "hasPetFriendly", label: "pet friendly", icon: <PetsIcon/>, value: 'Pet friendly'},
   ],
 };
 export const OtherFeatures: React.FC<OtherFeaturesProps & IListing> = ({
