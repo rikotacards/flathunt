@@ -65,6 +65,20 @@ export const AddListingOtherFeatures: React.FC<
             />
           ))}
         </Box>
+        <Typography variant="body1" sx={{ mb: 1 }} fontWeight={"bold"}>
+          Indoor space
+        </Typography>
+        <Box sx={{ display: "flex", mb: 3 }}>
+          {features.indoors.map((f) => (
+            <Chip
+              onClick={() => click(f.name)}
+              variant={otherFeatures[f.name] ? "filled" : "outlined"}
+              color={otherFeatures[f.name] ? "primary" : undefined}
+              sx={{ mr: 1 }}
+              label={f.label}
+            />
+          ))}
+        </Box>
         <Typography sx={{ mb: 1 }} fontWeight={"bold"}>
           Building Features
         </Typography>

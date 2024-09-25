@@ -37,6 +37,7 @@ import { useSnackbarContext } from "../Providers/contextHooks";
 import { AddListingOtherFeatures } from "./AddListingOtherFeatures";
 import { AddListingValidation } from "./AddListingValidation";
 import App from "../App";
+import { useNavigate } from "react-router";
 
 interface AddListingStepsProps {
   onClose: () => void;
@@ -73,6 +74,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
     queryKey: ["getUser"],
     queryFn: () => getUser(userId || ""),
   });
+  const nav = useNavigate();
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -82,7 +84,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
     ...listing,
     rentBuy: listing?.rentBuy,
     propertyType: listing?.propertyType,
-    realEstateCompany: data?.realEstateCompany || "",
+    realEstateCompany:  data?.realEstateCompany || "",
     licenseNumber: data?.licenseNumber || "",
     personalLicenseNumber: data?.personalLicenseNumber || "",
   } as IListing);
@@ -119,7 +121,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
 
     return downloadUrls;
   };
-
+  console.log('FORM', form)
   const docRef = doc(collection(db, "listings"));
   const onAdd = async () => {
     // get download URLS,
@@ -151,6 +153,8 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
         </Alert>
       );
       s.toggleSnackbar();
+      nav('/listings')
+      
     } catch (e) {
       alert(e);
       onClose();
@@ -162,16 +166,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
       !data?.personalLicenseNumber ||
       !data?.contactNumber ||
       !data?.realEstateCompany;
-  const info = [
-    <AddListingUserInfo
-      userId={userId}
-      contactNumber={data?.contactNumber}
-      realEstateCompany={data?.realEstateCompany}
-      licenseNumber={data?.licenseNumber}
-      personalLicenseNumber={data?.personalLicenseNumber}
-      isDirectListing={form.isDirectListing}
-    />,
-  ];
+
   const steps = [
     <AddListingIntro />,
     <AddListingInfo
@@ -215,6 +210,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
       licenseNumber={data?.licenseNumber}
       personalLicenseNumber={data?.personalLicenseNumber}
       isDirectListing={form.isDirectListing}
+      onFormChange={onChange}
     />,
     <AddListingReview
       previewUrls={imageUrlsForPreview}

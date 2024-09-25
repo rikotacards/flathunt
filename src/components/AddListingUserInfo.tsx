@@ -14,6 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { addUser } from "../firebase/user";
 import { useSnackbarContext } from "../Providers/contextHooks";
+import { AddListingAdmin } from "./AddListingAdmin";
 interface AddListingUserInfoProps {
   contactNumber?: string;
   realEstateCompany?: string;
@@ -21,6 +22,10 @@ interface AddListingUserInfoProps {
   licenseNumber?: string;
   personalLicenseNumber?: string;
   isDirectListing?: boolean;
+  listingSpecificContact?: string;
+  listingSpecificLicenseNumber?: string;
+  listingSpecificPersonalLicenseNumber?: string;
+  onFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
   props
@@ -32,6 +37,10 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
     licenseNumber,
     personalLicenseNumber,
     isDirectListing,
+    listingSpecificContact,
+    listingSpecificLicenseNumber,
+    listingSpecificPersonalLicenseNumber,
+    onFormChange
   } = props;
 
   const queryClient = useQueryClient();
@@ -41,6 +50,9 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
     realEstateCompany,
     licenseNumber,
     personalLicenseNumber,
+    listingSpecificContact,
+    listingSpecificLicenseNumber,
+    listingSpecificPersonalLicenseNumber,
   });
   const [isUpdate, setUpdate] = React.useState(false)
   const [success, setSuccess] = React.useState(false)
@@ -134,6 +146,12 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             label={'Personal License Number'}
             value={info.personalLicenseNumber}
             placeholder="Personal licenense number"
+          />
+          <AddListingAdmin
+          onChange={onFormChange}
+          listingSpecificContact={info.listingSpecificContact}
+          listingSpecificLicenseNumber={info.listingSpecificLicenseNumber}
+          listingSpecificPersonalLicenseNumber={info.listingSpecificPersonalLicenseNumber}
           />
         </>
       )}

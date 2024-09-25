@@ -1,0 +1,65 @@
+import { Box, Paper, Typography, OutlinedInput, TextField, Button } from '@mui/material';
+import React from 'react';
+import { useAuthContext } from '../Providers/contextHooks';
+interface AddListingAdminProps {
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    listingSpecificContact?: string;
+    listingSpecificLicenseNumber?: string;
+    listingSpecificPersonalLicenseNumber?: string;
+}
+export const AddListingAdmin: React.FC<AddListingAdminProps> = ({onChange}) => {
+    const {user} = useAuthContext();
+    return (
+        <>
+        {user?.uid === "uqox5IKaBVPE6YctRGXXKcYJQpR2" && (
+            <>
+            <Box
+              component={Paper}
+              sx={{ p: 2, mt:3 }}
+              color={"primary"}
+              variant="outlined"
+            >
+              <Typography variant="h5" fontWeight={"bold"}>
+                Admin Options
+              </Typography>
+              <Typography variant="caption">
+                Used for adding on behalf of agents.
+              </Typography>
+              <OutlinedInput
+                name="listingSpecificContact"
+                onChange={onChange}
+                type="tel"
+                sx={{ mb: 1 }}
+                fullWidth
+                placeholder="Listing-specific Whatsapp contact"
+              />
+              <TextField
+                name="listingSpecificRealEstateCompany"
+                onChange={onChange}
+                type="text"
+                fullWidth
+                sx={{ mb: 1 }}
+                placeholder="Listing-specific real estate company name"
+              />
+              <TextField
+                name="listingSpecificLicenseNumber"
+                onChange={onChange}
+                type="text"
+                fullWidth
+                sx={{ mb: 1 }}
+                placeholder="Listing-specific License Number"
+              />
+              <TextField
+                name="listingSpecificPersonalLicenseNumber"
+                onChange={onChange}
+                type="text"
+                fullWidth
+                sx={{ mb: 1 }}
+                placeholder="Listing-specific personal License Number"
+              />
+            </Box>
+          </>
+          )}
+          </>
+    )
+}

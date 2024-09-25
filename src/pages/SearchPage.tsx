@@ -1,7 +1,12 @@
 import {
   Box,
+  Dialog,
+  Drawer,
+  Fab,
 
 } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -19,6 +24,7 @@ import { SignInPopup } from "../components/SignInPopup";
 import { SearchBar } from "../components/SearchBar";
 import { ListingGrid } from "../components/ListingGrid";
 import { Categories } from "../components/Categories";
+import { AddListingSteps } from "../components/AddListingSteps";
 export const SearchPage: React.FC = () => {
   const { setFilters } = useFilterContext();
   const queryClient = useQueryClient();
@@ -30,7 +36,13 @@ export const SearchPage: React.FC = () => {
     setFilters({});
     queryClient.clear();
   }, []);
-
+  const [open, setOpenDrawer] = React.useState(false);
+  const onOpen = () => {
+    setOpenDrawer(true)
+  }
+  const onClose = ()=> {
+    setOpenDrawer(false)
+  }
   const { data, isFetching, isLoading } = useQuery({
     queryKey: ["getAllListingsNoFilters"],
     queryFn: () => getAllListingsNoFilters(),
@@ -65,6 +77,38 @@ export const SearchPage: React.FC = () => {
       />
 
       {isNarrow && !isUserLoading && !user && <SignInPopup />}
+      {user && <Box sx={{position: 'sticky', right:0, bottom: 0, p:1}}>
+        <Fab 
+        sx={{
+          boxShadow: "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
+          background: 'rgba(0,0,0,0.5)',
+          backdropFilter: 'blur(20px)',       
+          color: 'white'
+         }}
+        onClick={onOpen} variant='extended'>
+          <AddIcon/>
+        Add Listing
+        </Fab></Box>}
+      {user && <Dialog
+            PaperProps={{
+              sx: {
+                // height: "calc(100% )",
+              },
+            }}
+            sx={{ overflowY: "auto" }}
+            fullScreen
+            open={open}
+            onClose={onClose}
+          >
+            <AddListingSteps
+              onClose={onClose}
+              userId={user?.uid}
+            />
+            {/* <AddListingForm
+              userId={user?.uid || ""}
+              onClose={onCloseAddNewDrawer}
+            /> */}
+          </Dialog>}
     </Box>
   );
 };

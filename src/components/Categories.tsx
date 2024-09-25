@@ -7,6 +7,8 @@ import CabinIcon from '@mui/icons-material/Cabin';
 import ChairIcon from '@mui/icons-material/Chair';
 import { useFilterContext } from '../Providers/contextHooks';
 import { IFilters } from '../firebase/types';
+import DeckIcon from '@mui/icons-material/Deck';
+
 import { MoneyOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 interface CategoryProps {
@@ -32,7 +34,11 @@ const categories: {label: string, fieldName: keyof IFilters, icon: React.ReactNo
         icon: <StairsIcon/>
 
     },
-    {label: 'House', icon: <CabinIcon/>, fieldName: 'hasHouse'},
+    {label: 'Balcony',
+        fieldName: 'hasBalcony',
+        icon: <DeckIcon/>
+
+    },
     {
 
         label: 'Luxury',
@@ -71,7 +77,7 @@ export const Categories: React. FC = () => {
     const nav = useNavigate();
     const onClick = (category: keyof IFilters) => {
         if(category === 'hasLuxury'){
-            setFilters((p) => ({...p, minPrice : 90000}))
+            setFilters((p) => ({...p, minPrice : 60000}))
             nav('/search-results')
             return;
 

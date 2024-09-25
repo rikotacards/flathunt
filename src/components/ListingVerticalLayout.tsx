@@ -55,7 +55,7 @@ export const ListingVerticalLayout: React.FC<
   const [open, setOpen] = React.useState(false);
   const { user } = useAuthContext();
   const nav = useNavigate();
-  const enableSwipe = true;
+
   const [openContactForm, setOpenContactForm] = React.useState(false);
   const toggleContactForm = () => {
     setOpenContactForm(!openContactForm);
@@ -79,6 +79,7 @@ export const ListingVerticalLayout: React.FC<
     desc,
     previewUrls,
   } = props;
+  console.log('listing', listingSpecificContact, listingSpecificLicenseNumber)
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -228,9 +229,11 @@ export const ListingVerticalLayout: React.FC<
                 right: 2,
                 zIndex: 3,
                 color: "white",
-                p: 1,
+                p: 0.5,
                 m: 1,
-                borderRadius: 6,
+                pl:1,
+                pr:1, 
+                borderRadius: 2,
                 background: "rgba(0,0,0,0.5)",
                 textTransform: "capitalize",
               }}

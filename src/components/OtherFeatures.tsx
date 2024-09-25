@@ -12,6 +12,8 @@ import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import PetsIcon from '@mui/icons-material/Pets';
+import FireplaceIcon from '@mui/icons-material/Fireplace';
+import BathtubIcon from '@mui/icons-material/Bathtub';
 interface OtherFeaturesProps {
   openMoreFeatures: boolean;
   onCloseMoreFeatures: () => void;
@@ -20,12 +22,16 @@ interface OtherFeaturesProps {
 }
 export const features: IAdditionalFeatures = {
   outdoors: [
-    { name: "hasRooftop", label: "rooftop", icon: <RoofingIcon/> },
-    { name: "hasBalcony", label: "balcony", icon: <DeckIcon/>},
-    { name: "hasGarden", label: "garden", icon: <YardIcon/>},
+    { name: "hasRooftop", label: "rooftop", icon: <RoofingIcon/>, value: 'has roof' },
+    { name: "hasBalcony", label: "balcony", icon: <DeckIcon/>, value: 'Has balcony'},
+    { name: "hasGarden", label: "garden", icon: <YardIcon/>, value: 'Has Garden'},
+  ],
+  indoors: [
+    {name: 'hasOven', label: 'oven', value: 'has oven', icon:<FireplaceIcon/>},
+    {name: 'hasBathtub', label: 'bathtub', value: 'has bathtub', icon:<BathtubIcon/>}
   ],
   building: [
-    { name: "hasWalkup", label: "walkup", icon:<StairsIcon/>, value: 'Is walkup' },
+    { name: "hasWalkup", label: "walkup", icon:<StairsIcon />, value: 'Is walkup' },
     { name: "hasElevator", label: "elevator", icon: <ElevatorIcon/>, value: 'Has elevator'},
     { name: "hasPool", label: "pool", icon: <PoolIcon/>, value: 'Has pool'},
     { name: "hasParking", label: "parking", icon: <LocalParkingIcon/>, value: 'Has parking'},
