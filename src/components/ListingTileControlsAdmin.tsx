@@ -30,8 +30,9 @@ export const ListingTileControlsAdmin: React.FC<
   const [onDeleteClick, setDeleteClick] = React.useState(false);
   const { user } = useAuthContext();
   const onCopyLinkClick = (link: string) => {
-    copy(link);
-    s.setSnackbarChildComponent(<Alert severity="success">Link copied</Alert>);
+    const fullUrl = `https://flathunt.co/listing/${link}`
+    copy(fullUrl);
+    s.setSnackbarChildComponent(<Alert variant="filled" icon={<InsertLink sx={{transform: 'rotate(-45deg)'}}/>} severity="success">Link copied</Alert>);
     s.toggleSnackbar();
   };
   const toggleDeleteDialog = () => {
@@ -59,7 +60,7 @@ export const ListingTileControlsAdmin: React.FC<
         <EditIcon />
       </IconButton>
       <IconButton  onClick={() => onCopyLinkClick(listingId)}>
-        <InsertLink />
+        <InsertLink sx={{transform: 'rotate(-45deg)'}} />
       </IconButton>
       <Link to={`/listing/${listingId}`} target="_blank">
         <IconButton >
