@@ -127,7 +127,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     }
   };
 
-  const message = `Hi, this is ${user?.displayName} I'm interested this flat:\n https://flathunt.co/listing/${listingId}?utm_source=whatsapp&utm_medium=flathunt&id=${userId}&listing=${listingId}
+  const message = `Hi,  I'm interested this flat:\n https://flathunt.co/listing/${listingId}?utm_source=whatsapp&utm_medium=flathunt&id=${userId}&listing=${listingId}
   \n${bedrooms} bedroom, \naddress: ${address}, ${location}, \nasking: ${price} HKD`;
  
   return (

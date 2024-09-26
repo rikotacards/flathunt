@@ -110,9 +110,9 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             error={!contactNumber}
             slotProps={{
               input: {
-                startAdornment:  <InputAdornment position="start">
-                +852
-              </InputAdornment>,
+                startAdornment: (
+                  <InputAdornment position="start">+852</InputAdornment>
+                ),
                 endAdornment:
                   contactNumber !== info.contactNumber ? (
                     <InputAdornment position="end">
@@ -193,18 +193,17 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             label="Company License Number"
             placeholder="Company license number"
           />
-
-          <AddListingAdmin
-            onChange={onFormChange}
-            listingSpecificContact={listingSpecificContact}
-            listingSpecificLicenseNumber={listingSpecificLicenseNumber}
-            listingSpecificRealEstateCompany={listingSpecificRealEstateCompany}
-            listingSpecificPersonalLicenseNumber={
-              listingSpecificPersonalLicenseNumber
-            }
-          />
         </>
       )}
+      <AddListingAdmin
+        onChange={onFormChange}
+        listingSpecificContact={listingSpecificContact}
+        listingSpecificLicenseNumber={listingSpecificLicenseNumber}
+        listingSpecificRealEstateCompany={listingSpecificRealEstateCompany}
+        listingSpecificPersonalLicenseNumber={
+          listingSpecificPersonalLicenseNumber
+        }
+      />
     </Box>
   );
 };
