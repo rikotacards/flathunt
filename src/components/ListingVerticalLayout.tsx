@@ -254,7 +254,7 @@ export const ListingVerticalLayout: React.FC<
             flexDirection: isNarrow ? "column" : "column",
           }}
         >
-          {!!desc && (
+          {!!desc?.length && (
             <Box
               component={Paper}
               elevation={0}
