@@ -5,6 +5,9 @@ import {
   Button,
   CircularProgress,
   Divider,
+  FormControl,
+  FormHelperText,
+  InputAdornment,
   OutlinedInput,
   Paper,
   TextField,
@@ -33,7 +36,7 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
 ) => {
   const {
     userId,
-    contactNumber,
+    contactNumber = "",
     realEstateCompany,
     licenseNumber,
     personalLicenseNumber,
@@ -56,6 +59,7 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
   const [isUpdate, setUpdate] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [isModify, setModify] = React.useState(false);
+  console.log("INFO", info);
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInfo((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
@@ -63,7 +67,7 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
 
   const onUpdate = async () => {
     try {
-      setModify(false)
+      setModify(false);
       setUpdate(true);
       await addUser({ userId, ...info });
       queryClient.invalidateQueries({
@@ -103,6 +107,10 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             name={"contactNumber"}
             onChange={onChange}
             placeholder="Whatsapp number"
+            error={!contactNumber}
+            slotProps={{
+              input: {endAdornment:(contactNumber !== info.contactNumber) ? <InputAdornment position="end"><Button onClick={onUpdate}>Update</Button></InputAdornment>: null}
+            }}
           />
           <Typography variant="caption" sx={{ mt: 1 }}>
             We want to make sure customers can reach you. If the information is
@@ -115,7 +123,7 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
         <>
           <Divider sx={{ width: "100%", p: 1 }} />
           <Typography sx={{ mt: 1, mb: 2 }} variant="h6">
-            Agent information
+            Agent Information
           </Typography>
           {!info.personalLicenseNumber && (
             <Box sx={{ display: "flex", mt: 2, mb: 2 }}>
@@ -130,18 +138,32 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
               </Typography>
             </Box>
           )}
-          <TextField
-            onChange={onChange}
-            name="personalLicenseNumber"
-            fullWidth
-            label={"Personal License Number"}
-            value={info.personalLicenseNumber}
-            placeholder="Personal licenense number"
-            sx={{ mb: 2 }}
-            disabled={!isModify}
+          <FormControl sx={{mb:2}} error fullWidth variant="filled">
+            <TextField
+              onChange={onChange}
+              name="personalLicenseNumber"
+              fullWidth
+              label={"Salesperson / Agent License Number"}
+              value={info.personalLicenseNumber}
+              slotProps={{
+                input: {
+                  endAdornment: info.personalLicenseNumber !==
+                    personalLicenseNumber &&
+                    !!info?.personalLicenseNumber?.length && (
+                      <InputAdornment onClick={onUpdate} position="end">
+                        <Button>Update</Button>
+                      </InputAdornment>
+                    ),
+                },
+              }}
+              placeholder="Salesperson / Agent licenense number"
+              sx={{ mb: 0 }}
+              // disabled={!isModify}
 
-            error={!info.personalLicenseNumber}
-          />
+              error={!info.personalLicenseNumber}
+            />
+          </FormControl>
+
           <TextField
             fullWidth
             value={info.realEstateCompany}
@@ -149,9 +171,8 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             color="primary"
             onChange={onChange}
             name="realEstateCompany"
-            label={"Company name"}
-            disabled={!isModify}
-
+            label={"Real Estate Company Name"}
+ 
             placeholder="Real estate company Name"
           />
           <TextField
@@ -161,30 +182,21 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             name="licenseNumber"
             onChange={onChange}
             label="Company License Number"
-            disabled={!isModify}
+ 
             placeholder="Company license number"
           />
-          <Button
-        startIcon={isUpdate && <CircularProgress size={30} />}
-        sx={{ mt: 1 }}
-        fullWidth
-        variant="outlined"
-        onClick={isModify ? onUpdate: () => setModify(true)}
-      >
-        {isModify ? 'Update': 'Modify'}
-      </Button>
+         
           <AddListingAdmin
             onChange={onFormChange}
             listingSpecificContact={listingSpecificContact}
             listingSpecificLicenseNumber={listingSpecificLicenseNumber}
             listingSpecificRealEstateCompany={listingSpecificRealEstateCompany}
             listingSpecificPersonalLicenseNumber={
-              listingSpecificPersonalLicenseNumber
+            listingSpecificPersonalLicenseNumber
             }
           />
         </>
       )}
-      
     </Box>
   );
 };

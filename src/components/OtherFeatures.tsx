@@ -14,6 +14,8 @@ import Groups2Icon from '@mui/icons-material/Groups2';
 import PetsIcon from '@mui/icons-material/Pets';
 import FireplaceIcon from '@mui/icons-material/Fireplace';
 import BathtubIcon from '@mui/icons-material/Bathtub';
+import RoomServiceIcon from '@mui/icons-material/RoomService';
+import SailingIcon from '@mui/icons-material/Sailing';
 interface OtherFeaturesProps {
   openMoreFeatures: boolean;
   onCloseMoreFeatures: () => void;
@@ -28,7 +30,9 @@ export const features: IAdditionalFeatures = {
   ],
   indoors: [
     {name: 'hasOven', label: 'oven', value: 'has oven', icon:<FireplaceIcon/>},
-    {name: 'hasBathtub', label: 'bathtub', value: 'has bathtub', icon:<BathtubIcon/>}
+    {name: 'hasBathtub', label: 'bathtub', value: 'has bathtub', icon:<BathtubIcon/>},
+    {name: 'hasOceanView', label: 'ocean view', value: 'has ocean view', icon:<SailingIcon/>}
+
   ],
   building: [
     { name: "hasWalkup", label: "walkup", icon:<StairsIcon />, value: 'Is walkup' },
@@ -38,6 +42,7 @@ export const features: IAdditionalFeatures = {
     { name: "hasGym", label: "gym" , icon: <FitnessCenterIcon/>, value: 'Has gym'},
     { name: "hasClubhouse", label: "clubhouse", icon: <Groups2Icon/>, value: 'has clubhouse'},
     { name: "hasPetFriendly", label: "pet friendly", icon: <PetsIcon/>, value: 'Pet friendly'},
+    { name: 'hasSecurity', label: 'concierge / security', value: 'has concierge / security', icon:<RoomServiceIcon/> }
   ],
 };
 export const OtherFeatures: React.FC<OtherFeaturesProps & IListing> = ({

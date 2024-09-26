@@ -60,7 +60,7 @@ export const AddListingOtherFeatures: React.FC<
               onClick={() => click(f.name)}
               variant={otherFeatures[f.name] ? "filled" : "outlined"}
               color={otherFeatures[f.name] ? "primary" : undefined}
-              sx={{ mr: 1 }}
+              sx={{ mr: 1 , textTransform: 'capitalize'}}
               label={f.label}
             />
           ))}
@@ -74,7 +74,7 @@ export const AddListingOtherFeatures: React.FC<
               onClick={() => click(f.name)}
               variant={otherFeatures[f.name] ? "filled" : "outlined"}
               color={otherFeatures[f.name] ? "primary" : undefined}
-              sx={{ mr: 1 }}
+              sx={{ mr: 1 , textTransform: 'capitalize'}}
               label={f.label}
             />
           ))}
@@ -88,7 +88,7 @@ export const AddListingOtherFeatures: React.FC<
               onClick={() => click(f.name)}
               variant={otherFeatures[f.name] ? "filled" : "outlined"}
               color={otherFeatures[f.name] ? "primary" : undefined}
-              sx={{ mr: 1, mb: 1 }}
+              sx={{ mr: 1, mb: 1, textTransform: 'capitalize' }}
               label={f.label}
             />
           ))}

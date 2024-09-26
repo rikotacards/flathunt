@@ -18,11 +18,10 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import React from "react";
 import { auth, USER_ID } from "../firebase/firebaseConfig";
 import { useAuthContext, useSnackbarContext } from "../Providers/contextHooks";
-import { addUser, getUser, updateUser } from "../firebase/user";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { addUser, getUser } from "../firebase/user";
+import {  GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import {  useNavigate } from "react-router-dom";
 interface ContactFormNewProps {
   listingId: string;
   listingOwnerUid: string;
@@ -67,7 +66,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
   }, [isMyDataLoading, myData?.contactNumber]);
   const provider = new GoogleAuthProvider();
 
-  const fallback = `Hi, I'm interested this flat \n flathunt.co/listing/${listingId}`;
+  const fallback = `I'm interested this flat \n flathunt.co/listing/${listingId}}?utm_source=whatsapp&utm_medium=whatsapp&id=${listingOwnerUid}&listing=${listingId} hihi`;
   const whatsappLink = `whatsapp://send?phone=${listingSpecificContact || listingOwnerData?.contactNumber}&text=${message || fallback}`;
   const userAgent = window.navigator.userAgent;
   const url = window.location.href;

@@ -46,9 +46,7 @@ export const OnClear: React.FC<OnClearProps> = ({ onClick }) => {
 
 export const ProfilePage: React.FC = () => {
   const nav = useNavigate();
-  const onBack = () => {
-    nav(-1);
-  };
+ 
   const s = useSnackbarContext();
   const { user } = useAuthContext();
   const { data, isLoading } = useQuery({
@@ -211,12 +209,7 @@ export const ProfilePage: React.FC = () => {
       <Typography sx={{ mb: 3 }} variant="h6">
         For Agents Only
       </Typography>
-      <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
-        <Info color="warning" sx={{ mr: 1 }} fontSize="small" />
-        <Typography color="warning" variant="caption">
-          The information below is required for <b>agents only</b>.
-        </Typography>
-      </Box>
+    
 
       <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
         <AccessTimeFilled color="success" sx={{ mr: 1 }} fontSize="small" />
@@ -224,7 +217,52 @@ export const ProfilePage: React.FC = () => {
           Early bird deal: First 3 months free listings.{" "}
         </Typography>
       </Box>
-
+      <Box sx={{ display: "flex", alignItems: "flex-start", mb: 2 }}>
+        <Info color="warning" sx={{ mr: 1 }} fontSize="small" />
+        <Typography color="warning" variant="caption">
+          The information below is required for <b>agents only</b>. As an agent you must provide either your salesperson's license and/or Estate Agent's License.
+        </Typography>
+      </Box>
+      <>
+        <Box sx={{ display: "flex", mb: 4 }}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="body2" fontWeight={"bold"}>
+              Salesperson's / Estate Agent License
+            </Typography>
+            <Typography variant="body1" color='textSecondary'>
+              {data?.personalLicenseNumber || 'Required for agents'}
+            </Typography>
+          </Box>
+          <Button
+            size="small"
+            onClick={() => onSetField(10)}
+            sx={{ ml: "auto" }}
+          >
+            Edit
+          </Button>
+        </Box>
+        <Collapse in={10 === field} sx={{ mb: 1 }}>
+          <OutlinedInput
+            type="string"
+            onChange={onChange}
+            name={"personalLicenseNumber"}
+            placeholder={"S-123456"}
+            fullWidth
+            value={form.personalLicenseNumber}
+          />
+          <Button
+            onClick={onSave}
+            sx={{ mt: 2, mb: 1 }}
+            variant="contained"
+            fullWidth
+          >
+            Save
+          </Button>
+          <Button onClick={() => onSetField(null)} variant="outlined" fullWidth>
+            Cancel
+          </Button>
+        </Collapse>
+      </>
       <>
         <Box sx={{ display: "flex", mb: 4 }}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -307,46 +345,7 @@ export const ProfilePage: React.FC = () => {
           </Button>
         </Collapse>
       </>
-      <>
-        <Box sx={{ display: "flex", mb: 4 }}>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Typography variant="body2" fontWeight={"bold"}>
-              Personal License Number
-            </Typography>
-            <Typography variant="body1">
-              {data?.personalLicenseNumber}
-            </Typography>
-          </Box>
-          <Button
-            size="small"
-            onClick={() => onSetField(10)}
-            sx={{ ml: "auto" }}
-          >
-            Edit
-          </Button>
-        </Box>
-        <Collapse in={10 === field} sx={{ mb: 1 }}>
-          <OutlinedInput
-            type="string"
-            onChange={onChange}
-            name={"personalLicenseNumber"}
-            placeholder={"E-123456"}
-            fullWidth
-            value={form.personalLicenseNumber}
-          />
-          <Button
-            onClick={onSave}
-            sx={{ mt: 2, mb: 1 }}
-            variant="contained"
-            fullWidth
-          >
-            Save
-          </Button>
-          <Button onClick={() => onSetField(null)} variant="outlined" fullWidth>
-            Cancel
-          </Button>
-        </Collapse>
-      </>
+ 
 
       <Button
         variant="contained"

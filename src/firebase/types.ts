@@ -40,6 +40,8 @@ export interface IListing {
   hasClubhouse?: boolean;
   hasOven?: boolean;
   hasBathtub?: boolean;
+  hasOceanView?: boolean;
+  hasSecurity?: boolean;
 }
 
 export interface IFilters {

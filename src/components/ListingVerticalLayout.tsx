@@ -102,7 +102,7 @@ export const ListingVerticalLayout: React.FC<
     await signInWithPopup(auth, provider);
   };
   const onShare = (listingId: string) => {
-    copy(`flathunt.co/listing/${listingId}`);
+    copy(`https://flathunt.co/listing/${listingId}?utm_source=share&utm_medium=flathunt&id=${userId}&listing=${listingId}`);
     s.setSnackbarChildComponent(
       <Alert icon={<InsertLink />}>Link copied!</Alert>
     );

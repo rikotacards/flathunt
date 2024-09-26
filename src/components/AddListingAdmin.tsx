@@ -50,7 +50,7 @@ export const AddListingAdmin: React.FC<AddListingAdminProps> = ({listingSpecific
                 fullWidth
                 value={listingSpecificLicenseNumber}
                 sx={{ mb: 1 }}
-                placeholder="Listing-specific License Number"
+                placeholder="false, Listing-specific License Number"
               />
               <TextField
                 name="listingSpecificPersonalLicenseNumber"
@@ -59,7 +59,7 @@ export const AddListingAdmin: React.FC<AddListingAdminProps> = ({listingSpecific
                 fullWidth
                 value={listingSpecificPersonalLicenseNumber}
                 sx={{ mb: 1 }}
-                placeholder="Listing-specific personal License Number"
+                placeholder="false,Listing-specific personal License Number"
               />
             </Box>
           </>

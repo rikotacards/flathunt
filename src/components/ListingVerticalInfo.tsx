@@ -81,7 +81,7 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
     }
     return (
       <>
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2, textTransform: 'capitalize' }}>
           {customIcon(row.name, props[row.name], row.icon)}
           <Typography  variant="body2" sx={{ ml: 1, fontWeight: 500, textTransform: 'capitalize' }}>
             <>
@@ -134,7 +134,7 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
             props.listingSpecificPersonalLicenseNumber) && 
               <>
                 <Typography variant="body2" sx={{ textTransform: 'capitalize',ml: 1, fontWeight: 500 }}>
-                  <>Individual License</>
+                  <>License</>
                 </Typography>
                 <Typography
                   color="textSecondary"

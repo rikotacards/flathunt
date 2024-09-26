@@ -52,6 +52,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
   const [step, setStep] = React.useState(0);
   const [files, setFiles] = React.useState([] as File[]);
   const storage = getStorage();
+  
   const imageUrlsForPreview: string[] = [];
   files.map((f) => {
     const url = URL?.createObjectURL(f);
@@ -162,11 +163,10 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
   };
   const isMissingUserInfo = form.isDirectListing
     ? !data?.contactNumber
-    : !data?.licenseNumber ||
-      !data?.personalLicenseNumber ||
-      !data?.contactNumber ||
-      !data?.realEstateCompany;
-
+    : !data?.personalLicenseNumber ||
+      !data?.contactNumber
+  
+     
   const steps = [
     <AddListingIntro />,
     <AddListingInfo
@@ -205,11 +205,11 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
     <AddListingOtherFeatures onClick={onClick} onChange={onChange} {...form} />,
     <AddListingUserInfo
       userId={userId}
-      contactNumber={data?.contactNumber}
-      realEstateCompany={data?.realEstateCompany}
-      licenseNumber={data?.licenseNumber}
-      personalLicenseNumber={data?.personalLicenseNumber}
-      listingSpecificContact={form.listingSpecificContact}
+      contactNumber={data?.contactNumber || ''}
+      realEstateCompany={data?.realEstateCompany || ''}
+      licenseNumber={data?.licenseNumber || ''}
+      personalLicenseNumber={data?.personalLicenseNumber || ''}
+      listingSpecificContact={form.listingSpecificContact || ''}
       listingSpecificPersonalLicenseNumber={form.listingSpecificPersonalLicenseNumber}
       listingSpecificLicenseNumber={form.listingSpecificLicenseNumber}
       listingSpecificRealEstateCompany={form.listingSpecificRealEstateCompany}
@@ -225,7 +225,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
       realEstateCompany={
         form.listingSpecificRealEstateCompany || data?.realEstateCompany || ""
       }
-      personalLicenseNumber={form.personalLicenseNumber}
+      personalLicenseNumber={form.personalLicenseNumber || data?.personalLicenseNumber}
     />,
   ];
   const isListingInfoComplete =
@@ -257,7 +257,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
       elevation={0}
       component={Paper}
     >
-      <AppBar elevation={0} position="fixed" sx={{ background: "white" }}>
+      <AppBar  elevation={0} position="fixed" sx={{ background: "white" }}>
         <Toolbar>
           <Typography color='textPrimary' variant="h6" fontWeight={"bold"}>
             Flathunt.co
@@ -316,6 +316,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
             </Button>
           ) : (
             <Button
+            
               disabled={isNextDisabled[step]}
               variant="contained"
               sx={{ ml: "auto", textTransform: "capitalize" }}
