@@ -21,8 +21,11 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 import { SearchBar } from "../components/SearchBar";
 import { AddListingSteps } from "../components/AddListingSteps";
 import { ChevronLeft, Home, KeyboardArrowDown } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 
 const ListingsPageAppBar: React.FC = () => {
+  const nav = useNavigate();
+  const goBack = () => nav(-1)
   return (
     <Box
       sx={{
@@ -32,7 +35,10 @@ const ListingsPageAppBar: React.FC = () => {
         justifyContent: "center",
       }}
     >
-      <Box sx={{ }}>
+      <Box sx={{display: 'flex', alignItems: 'center'}}>
+        {/* <IconButton onClick={goBack}>
+          <ChevronLeft/>
+        </IconButton> */}
         <Typography fontWeight={'bold'} color='textPrimary'>My Listing</Typography>
       </Box>
     </Box>

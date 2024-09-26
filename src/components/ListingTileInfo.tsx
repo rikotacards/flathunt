@@ -1,3 +1,6 @@
+
+import { NumericFormat } from 'react-number-format';
+
 import { Box, IconButton, Typography } from "@mui/material";
 import React from "react";
 import { IListing } from "../firebase/types";
@@ -98,7 +101,7 @@ export const ListingTileInfo: React.FC<Partial<IListing>> = ({
         </Typography>
       </Box>
       <Box sx={{ display: "flex", mt: 0.5 , alignItems: 'center'}}>
-        <Typography fontWeight={800}>${price} HKD</Typography>
+        <Typography fontWeight={800}><NumericFormat value={price} prefix='$' suffix=' HKD' thousandSeparator=',' displayType='text'/></Typography>
         <Typography fontWeight={500} sx={{ ml: 0.5 }}>
           month
         </Typography>

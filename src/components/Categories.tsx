@@ -29,11 +29,6 @@ const categories: {label: string, fieldName: keyof IFilters, icon: React.ReactNo
         icon: <RoofingIcon/>
 
     },
-    {label: 'Walk ups',
-        fieldName: 'hasWalkup',
-        icon: <StairsIcon/>
-
-    },
     {label: 'Balcony',
         fieldName: 'hasBalcony',
         icon: <DeckIcon/>
@@ -44,6 +39,11 @@ const categories: {label: string, fieldName: keyof IFilters, icon: React.ReactNo
         label: 'Luxury',
         fieldName: 'hasLuxury',
         icon: <ChairIcon/>
+    },
+    {label: 'Walk ups',
+        fieldName: 'hasWalkup',
+        icon: <StairsIcon/>
+
     },
     {
 

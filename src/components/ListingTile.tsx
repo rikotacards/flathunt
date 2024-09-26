@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Chip,
+  Dialog,
   Drawer,
   IconButton,
   Typography,
@@ -28,9 +29,9 @@ import { ContactFormNew } from "./ContactFormNew";
 import { useQueryClient } from "@tanstack/react-query";
 import { ImageSlider } from "./ImageSlider";
 import { ListingTileInfo } from "./ListingTileInfo";
+import { ListingVerticalLayout } from "./ListingVerticalLayout";
 
 export const ListingTile: React.FC<IListing> = (props) => {
-  const isNarrow = useIsNarrow();
   const [openContactForm, setOpenContactForm] = React.useState(false);
   const { user } = useAuthContext();
   const toggleContactForm = () => {
@@ -60,6 +61,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
   const queryClient = useQueryClient();
 
   const s = useSnackbarContext();
+  const isNarrow = useIsNarrow();
   const userAgent = window.navigator.userAgent;
   const url = window.location.href;
   const onLogin = () => {
@@ -127,7 +129,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
 
   const message = `Hi, this is ${user?.displayName} I'm interested this flat:\n https://flathunt.co/listing/${listingId}?utm_source=whatsapp&utm_medium=flathunt&id=${userId}&listing=${listingId}
   \n${bedrooms} bedroom, \naddress: ${address}, ${location}, \nasking: ${price} HKD`;
-
+ 
   return (
     <Box sx={{ mb: 1 }}>
       <Box
@@ -243,6 +245,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
           toggleForm={toggleContactForm}
         />
       </Drawer>
+      
     </Box>
   );
 };

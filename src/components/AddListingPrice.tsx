@@ -1,5 +1,6 @@
-import { Box, TextField, Typography } from '@mui/material'
+import { Box, InputAdornment, TextField, Typography } from '@mui/material'
 import React from 'react'
+import { NumericFormat } from 'react-number-format';
 interface AddListingPriceProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) =>void;
     price?: number;
@@ -17,7 +18,11 @@ export const AddListingPrice: React.FC<AddListingPriceProps> = ({
             {rentBuy === 'sale' ? <Typography variant='body2'>Purchase Price</Typography>: <Typography variant='body2'>Monthly rental price (HKD)</Typography>}
             <TextField
             autoFocus
-
+                slotProps={{
+                    input: {
+                        startAdornment: <InputAdornment position='start'>HKD</InputAdornment>
+                    }
+                }}
                 required
                 fullWidth
                 name="price"

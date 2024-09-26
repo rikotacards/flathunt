@@ -329,9 +329,9 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
         {hasFilters && <Button onClick={onClear}>Clear filters</Button>}
         {index === 0 && (
           <Box sx={{ p: 2 }}>
-            {data?.length === 0 && <Card variant='outlined'>
-              <CardContent>You have no listings yet.</CardContent>
-              </Card>}
+            {data?.length === 0 && <Box >
+              <Button onClick={onOpenAddNewDrawer} sx={{borderRadius: 6}} variant='contained'>Create a listing<AddIcon/></Button>
+              </Box>}
             <ListingGrid
               data={filteredData}
               isLoading={isLoading}
@@ -401,6 +401,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
             p: 2,
             alignItems: "center",
             zIndex: 99,
+            visibility: !data?.length ? 'hidden': 'visible'
           }}
         >
           <Fab color='secondary' onClick={() => onChange(index ===1 ? 0 : 1)} sx={{ mr: 1 }} size="small">
