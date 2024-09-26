@@ -6,8 +6,9 @@ interface AddListingAdminProps {
     listingSpecificContact?: string;
     listingSpecificLicenseNumber?: string;
     listingSpecificPersonalLicenseNumber?: string;
+    listingSpecificRealEstateCompany?: string;
 }
-export const AddListingAdmin: React.FC<AddListingAdminProps> = ({onChange}) => {
+export const AddListingAdmin: React.FC<AddListingAdminProps> = ({listingSpecificRealEstateCompany, listingSpecificContact, listingSpecificLicenseNumber, listingSpecificPersonalLicenseNumber, onChange}) => {
     const {user} = useAuthContext();
     return (
         <>
@@ -15,9 +16,8 @@ export const AddListingAdmin: React.FC<AddListingAdminProps> = ({onChange}) => {
             <>
             <Box
               component={Paper}
-              sx={{ p: 2, mt:3 }}
+              elevation={0}
               color={"primary"}
-              variant="outlined"
             >
               <Typography variant="h5" fontWeight={"bold"}>
                 Admin Options
@@ -31,6 +31,7 @@ export const AddListingAdmin: React.FC<AddListingAdminProps> = ({onChange}) => {
                 type="tel"
                 sx={{ mb: 1 }}
                 fullWidth
+                value={listingSpecificContact}
                 placeholder="Listing-specific Whatsapp contact"
               />
               <TextField
@@ -39,6 +40,7 @@ export const AddListingAdmin: React.FC<AddListingAdminProps> = ({onChange}) => {
                 type="text"
                 fullWidth
                 sx={{ mb: 1 }}
+                value={listingSpecificRealEstateCompany}
                 placeholder="Listing-specific real estate company name"
               />
               <TextField
@@ -46,6 +48,7 @@ export const AddListingAdmin: React.FC<AddListingAdminProps> = ({onChange}) => {
                 onChange={onChange}
                 type="text"
                 fullWidth
+                value={listingSpecificLicenseNumber}
                 sx={{ mb: 1 }}
                 placeholder="Listing-specific License Number"
               />
@@ -54,6 +57,7 @@ export const AddListingAdmin: React.FC<AddListingAdminProps> = ({onChange}) => {
                 onChange={onChange}
                 type="text"
                 fullWidth
+                value={listingSpecificPersonalLicenseNumber}
                 sx={{ mb: 1 }}
                 placeholder="Listing-specific personal License Number"
               />

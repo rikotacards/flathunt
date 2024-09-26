@@ -1,6 +1,7 @@
 import { Box, Typography, Chip } from '@mui/material';
 import React from 'react';
 import {  IListing } from '../firebase/types';
+import { Check } from '@mui/icons-material';
 interface AddListingInfoProps {
     onClick: (fieldName: keyof IListing, value: string | number | boolean) => void;
     rentBuy?: 'rent' | 'sale';
@@ -27,6 +28,8 @@ export const AddListingInfo: React.FC<AddListingInfoProps> = ({propertyType, onC
           <Chip
             label="For Sale"
             onClick={() => onClick("rentBuy", "sale")}
+            icon={rentBuy === 'sale' ? <Check/>: <></>}
+
             variant={rentBuy === 'sale' ? 'filled': 'outlined'}
           />
         </Box>

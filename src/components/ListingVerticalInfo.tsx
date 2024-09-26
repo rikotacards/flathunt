@@ -98,7 +98,7 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
       <Box sx={{ display: "flex", alignItems: "flex-start", pt: 2, pb: 2 }}>
         <StoreIcon />
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          {(!!props.realEstateCompany ||
+          {props.listingSpecificRealEstateCompany?.toLowerCase() !== 'false' && (!!props.realEstateCompany ||
             !!props.listingSpecificRealEstateCompany) && (
             <>
               <Typography variant="body2" sx={{textTransform: 'capitalize', ml: 1, fontWeight: 500 }}>
@@ -116,7 +116,7 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
               </Typography>
             </>
           )}
-          {(props.listingSpecificLicenseNumber || props.licenseNumber) && (
+          {props.listingSpecificLicenseNumber?.toLowerCase() !=='false' && (props.listingSpecificLicenseNumber || props.licenseNumber) && (
             <>
               <Typography variant="body2" sx={{textTransform: 'capitalize', ml: 1, fontWeight: 500 }}>
                 <>Company License</>
@@ -130,8 +130,8 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
               </Typography>
             </>
           )}
-          {props.personalLicenseNumber ||
-            (props.listingSpecificPersonalLicenseNumber && (
+          {props.listingSpecificPersonalLicenseNumber?.toLowerCase() !== 'false' && (props.personalLicenseNumber ||
+            props.listingSpecificPersonalLicenseNumber) && 
               <>
                 <Typography variant="body2" sx={{ textTransform: 'capitalize',ml: 1, fontWeight: 500 }}>
                   <>Individual License</>
@@ -147,7 +147,7 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
                   </>
                 </Typography>
               </>
-            ))}
+            }
         </Box>
       </Box>
     );

@@ -25,6 +25,7 @@ interface AddListingUserInfoProps {
   listingSpecificContact?: string;
   listingSpecificLicenseNumber?: string;
   listingSpecificPersonalLicenseNumber?: string;
+  listingSpecificRealEstateCompany?: string;
   onFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
@@ -40,22 +41,21 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
     listingSpecificContact,
     listingSpecificLicenseNumber,
     listingSpecificPersonalLicenseNumber,
-    onFormChange
+    listingSpecificRealEstateCompany,
+    onFormChange,
   } = props;
 
   const queryClient = useQueryClient();
-  const [isEdit, setEdit] = React.useState(false)
+  const [isEdit, setEdit] = React.useState(false);
   const [info, setInfo] = React.useState({
     contactNumber,
     realEstateCompany,
     licenseNumber,
     personalLicenseNumber,
-    listingSpecificContact,
-    listingSpecificLicenseNumber,
-    listingSpecificPersonalLicenseNumber,
   });
-  const [isUpdate, setUpdate] = React.useState(false)
-  const [success, setSuccess] = React.useState(false)
+  const [isUpdate, setUpdate] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const [isModify, setModify] = React.useState(false);
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInfo((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
@@ -63,7 +63,8 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
 
   const onUpdate = async () => {
     try {
-        setUpdate(true)
+      setModify(false)
+      setUpdate(true);
       await addUser({ userId, ...info });
       queryClient.invalidateQueries({
         queryKey: ["getUser"],
@@ -71,29 +72,31 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
       s.setSnackbarChildComponent(
         <Alert severity="success">Updated personal info</Alert>
       );
-      setSuccess(true)
+      setSuccess(true);
       s.toggleSnackbar();
     } catch (e) {
       alert(e);
-      setSuccess(false)
+      setSuccess(false);
     }
-    setUpdate(false)
+    setUpdate(false);
   };
   return (
     <Box elevation={0} component={Paper} sx={{ p: 2 }}>
       <Typography sx={{ mb: 2 }} variant="h6">
         Review Your Information
       </Typography>
-      { (
+      {
         <>
-          { !info.contactNumber?.length && <Box>
-            <Typography color="error" sx={{ display: "flex", mb: 1 }}>
-              <Info color="error" sx={{ mr: 1 }} />
-              Whatsapp number required.
-            </Typography>
-          </Box>}
+          {!info.contactNumber?.length && (
+            <Box>
+              <Typography color="error" sx={{ display: "flex", mb: 1 }}>
+                <Info color="error" sx={{ mr: 1 }} />
+                Whatsapp number required.
+              </Typography>
+            </Box>
+          )}
           <TextField
-          sx={{mb:1}}
+            sx={{ mb: 1 }}
             fullWidth
             value={info.contactNumber}
             label="Whatsapp Number"
@@ -101,25 +104,44 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             onChange={onChange}
             placeholder="Whatsapp number"
           />
-          <Typography variant='caption' sx={{ mt: 1 }}>
-            We want to make sure customers can reach you. If the information is incorrect you can update it here.
+          <Typography variant="caption" sx={{ mt: 1 }}>
+            We want to make sure customers can reach you. If the information is
+            incorrect you can update it here.
           </Typography>
         </>
-      )}
+      }
 
       {!isDirectListing && (
         <>
           <Divider sx={{ width: "100%", p: 1 }} />
-          <Typography sx={{ mt: 1, mb:2 }} variant="h6">
+          <Typography sx={{ mt: 1, mb: 2 }} variant="h6">
             Agent information
           </Typography>
-          {(!info.realEstateCompany || !info.licenseNumber || !info.personalLicenseNumber) &&  <Box sx={{ display: "flex", mt: 2, mb: 2 }}>
-            <Typography color="error" sx={{ display: "flex" }}>
-              <Info sx={{ mr: 1 }} />
-              Agent information missing. It is required for agent listings. Next
-              time it will be automatically included.
-            </Typography>
-          </Box>}
+          {!info.personalLicenseNumber && (
+            <Box sx={{ display: "flex", mt: 2, mb: 2 }}>
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ display: "flex" }}
+              >
+                <Info sx={{ mr: 1 }} />
+                Agent information missing. It is required for agent listings.
+                Next time it will be automatically included.
+              </Typography>
+            </Box>
+          )}
+          <TextField
+            onChange={onChange}
+            name="personalLicenseNumber"
+            fullWidth
+            label={"Personal License Number"}
+            value={info.personalLicenseNumber}
+            placeholder="Personal licenense number"
+            sx={{ mb: 2 }}
+            disabled={!isModify}
+
+            error={!info.personalLicenseNumber}
+          />
           <TextField
             fullWidth
             value={info.realEstateCompany}
@@ -127,7 +149,9 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             color="primary"
             onChange={onChange}
             name="realEstateCompany"
-            label={'Company name'}
+            label={"Company name"}
+            disabled={!isModify}
+
             placeholder="Real estate company Name"
           />
           <TextField
@@ -136,26 +160,31 @@ export const AddListingUserInfo: React.FC<AddListingUserInfoProps> = (
             sx={{ mb: 2 }}
             name="licenseNumber"
             onChange={onChange}
-            label='Company License Number'
+            label="Company License Number"
+            disabled={!isModify}
             placeholder="Company license number"
           />
-          <TextField
-            onChange={onChange}
-            name="personalLicenseNumber"
-            fullWidth
-            label={'Personal License Number'}
-            value={info.personalLicenseNumber}
-            placeholder="Personal licenense number"
-          />
+          <Button
+        startIcon={isUpdate && <CircularProgress size={30} />}
+        sx={{ mt: 1 }}
+        fullWidth
+        variant="outlined"
+        onClick={isModify ? onUpdate: () => setModify(true)}
+      >
+        {isModify ? 'Update': 'Modify'}
+      </Button>
           <AddListingAdmin
-          onChange={onFormChange}
-          listingSpecificContact={info.listingSpecificContact}
-          listingSpecificLicenseNumber={info.listingSpecificLicenseNumber}
-          listingSpecificPersonalLicenseNumber={info.listingSpecificPersonalLicenseNumber}
+            onChange={onFormChange}
+            listingSpecificContact={listingSpecificContact}
+            listingSpecificLicenseNumber={listingSpecificLicenseNumber}
+            listingSpecificRealEstateCompany={listingSpecificRealEstateCompany}
+            listingSpecificPersonalLicenseNumber={
+              listingSpecificPersonalLicenseNumber
+            }
           />
         </>
       )}
-      <Button startIcon={isUpdate && <CircularProgress size={30} />} sx={{mt:1}} fullWidth variant='outlined' onClick={onUpdate}>Update</Button>
+      
     </Box>
   );
 };

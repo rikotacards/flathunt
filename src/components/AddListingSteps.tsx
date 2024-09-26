@@ -209,6 +209,10 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
       realEstateCompany={data?.realEstateCompany}
       licenseNumber={data?.licenseNumber}
       personalLicenseNumber={data?.personalLicenseNumber}
+      listingSpecificContact={form.listingSpecificContact}
+      listingSpecificPersonalLicenseNumber={form.listingSpecificPersonalLicenseNumber}
+      listingSpecificLicenseNumber={form.listingSpecificLicenseNumber}
+      listingSpecificRealEstateCompany={form.listingSpecificRealEstateCompany}
       isDirectListing={form.isDirectListing}
       onFormChange={onChange}
     />,
@@ -229,8 +233,7 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
   const isListingSpecificsComplete =
     form.bedrooms !== undefined &&
     form.bathrooms !== undefined &&
-    form.netArea !== undefined &&
-    form.grossArea !== undefined;
+    form.netArea !== undefined 
 
   const isLocationComplete = !!form.address && !!form.location;
   const isPriceComplete = form.price !== undefined && form.price > 0;
