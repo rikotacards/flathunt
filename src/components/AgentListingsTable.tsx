@@ -283,7 +283,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
   );
   const copyText = shareText?.join("\n");
   const onClear = () => {
-    setFilters({});
+    setFilters({} as IFilters);
   };
   const { data: savedListingsData } = useQuery({
     queryKey: ["getSavedListings"],

@@ -19,6 +19,10 @@ export const ListingTileInfo: React.FC<Partial<IListing>> = ({
   userId,
   isDirectListing,
   listingId,
+  hasSecurity,
+  hasBalcony,
+  hasWalkup,
+  hasRooftop,
 }) => {
   const { user } = useAuthContext();
   const isOwner = user?.uid === userId;
@@ -81,6 +85,38 @@ export const ListingTileInfo: React.FC<Partial<IListing>> = ({
             variant="body2"
           >
             {desc}
+          </Typography>
+        </Box>
+      )}
+      {!!desc && (
+        <Box
+          sx={{
+            mb: 0.5,
+            textAlign: "left",
+            mt: 0,
+            display: "flex",
+            ml: 0,
+            mr: 1,
+            overflow: "hidden",
+          }}
+        >
+          <Typography
+            sx={{
+              textAlign: "left",
+              display: "-webkit-box",
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: "vertical",
+              // fontSize: '1rem'
+            }}
+            color="textSecondary"
+            variant="body2"
+          >
+            {hasBalcony ? 'Balcony ': null}
+            {hasSecurity ? 'Security ': null}
+            {hasWalkup ? 'Walkup ': null}
+            {hasRooftop ? 'Rooftop': null}
+
+
           </Typography>
         </Box>
       )}

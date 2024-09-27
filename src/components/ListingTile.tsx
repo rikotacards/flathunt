@@ -215,15 +215,9 @@ export const ListingTile: React.FC<IListing> = (props) => {
 
       <ListingTileInfo
         desc={desc}
-        bathrooms={bathrooms}
-        bedrooms={bedrooms}
-        price={price}
-        location={location}
-        address={address}
-        netArea={netArea}
-        userId={userId}
-        listingId={listingId}
+        
         isDirectListing={isDirectListing}
+        {...props}
       />
       <Drawer
         open={openContactForm}

@@ -2,6 +2,7 @@ import { addDoc, and, collection, deleteDoc, doc, getDoc, getDocs, or, orderBy, 
 import { db } from "./firebaseConfig";
 import { deleteObject, getStorage, listAll, ref } from "firebase/storage";
 import { IFilters, IListing } from "./types";
+import { features } from "../components/OtherFeatures";
 
 
 
@@ -37,18 +38,23 @@ export const getAllListings = async (filters: IFilters) => {
     const priceConstraints = and(where('price', '<=', Number(filters.maxPrice || 999999)), where('price', '>=', Number(filters.minPrice || 0)))
     const locationConstraint = where('location', filters.location?.toLowerCase() ? '==' : '!=', filters.location ? filters.location : '')
     const conditions =[areaConstraints, bedroomsConstraints, priceConstraints, locationConstraint]
-    if(filters.hasPetFriendly !== undefined){
-        conditions.push(where('hasPetFriendly', '==', filters.hasPetFriendly))
-    }
-    if(filters.hasBalcony !== undefined){
-        conditions.push(where('hasBalcony', '==', filters.hasBalcony))
-    }
-    if(filters.hasRooftop !== undefined){
-        conditions.push(where('hasRooftop', '==', filters.hasRooftop))
-    }
-    if(filters.hasWalkup !== undefined){
-        conditions.push(where('hasWalkup', '==', filters.hasWalkup))
-    }
+    
+    features.building.map((f) => {
+        if(filters[f.name] !== undefined){
+            conditions.push(where(f.name, '==', filters[f.name]))
+        }
+    })
+    features.outdoors.map((f) => {
+        if(filters[f.name] !== undefined){
+            conditions.push(where(f.name, '==', filters[f.name]))
+        }
+    })
+    features.indoors.map((f) => {
+        if(filters[f.name] !== undefined){
+            conditions.push(where(f.name, '==', filters[f.name]))
+        }
+    })
+    console.log(conditions)
     if(filters.isDirectListing){
         conditions.push(where('isDirectListing', '==', filters.isDirectListing))
     }

@@ -81,7 +81,7 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
     }
     return (
       <>
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2, textTransform: 'capitalize' }}>
+        <Box key={row.name} sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2, textTransform: 'capitalize' }}>
           {customIcon(row.name, props[row.name], row.icon)}
           <Typography  variant="body2" sx={{ ml: 1, fontWeight: 500, textTransform: 'capitalize' }}>
             <>
@@ -156,15 +156,15 @@ export const ListingVerticalInfo: React.FC<IListing> = (props) => {
       return null;
     }
     return (
-      <>
-        <Box sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
+      <div key={row.name}>
+        <Box key={row.name} sx={{ display: "flex", alignItems: "center", pt: 2, pb: 2 }}>
           {customIcon(row.name, props[row.name], row.icon)}
           <Typography  variant="body2" sx={{textTransform: 'capitalize', ml: 1, fontWeight: 500 }}>
             <>{row.value || customValue(row.name, props[row.name])}</>
           </Typography>
         </Box>
         {i !== others.length - 1 && <Divider />}
-      </>
+      </div>
     );
   });
   return (

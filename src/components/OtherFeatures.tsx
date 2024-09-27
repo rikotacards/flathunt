@@ -57,6 +57,13 @@ export const OtherFeatures: React.FC<OtherFeaturesProps & IListing> = ({
   hasPetFriendly,
   hasRooftop,
   hasWalkup,
+  hasSecurity,
+  hasBathtub,
+  hasClubhouse,
+  hasOceanView,
+  hasOven,
+  hasParking,
+  hasPool,
 }) => {
   const [otherFeatures, setOtherFeatures] = React.useState({
     hasBalcony,
@@ -65,7 +72,14 @@ export const OtherFeatures: React.FC<OtherFeaturesProps & IListing> = ({
     hasPetFriendly,
     hasRooftop,
     hasGym,
-    hasWalkup
+    hasWalkup,
+    hasSecurity,
+    hasBathtub,
+  hasClubhouse,
+  hasOceanView,
+  hasOven,
+  hasParking,
+  hasPool,
   } as { [key: string]: boolean });
   const onToggle = (fieldName: string) => {
     setOtherFeatures((p) => ({ ...p, [fieldName]: !p?.[fieldName] }));

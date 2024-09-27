@@ -51,7 +51,7 @@ export const SearchPage: React.FC = () => {
     queryKey: ["getSavedListings"],
     queryFn: () => getSavedListings(user?.uid || ""),
   });
-  console.log(isLoading, 'LOOO')
+
   const savedListingsTransformed: { [key: string]: string } = {};
   savedListingsData?.forEach((listing) => {
     savedListingsTransformed[listing.listingId] = listing.docId;

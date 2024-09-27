@@ -55,20 +55,21 @@ export interface IFilters {
   maxNetArea?: number;
   location?: string;
   status?: "live" | "draft";
-  hasBalcony?: boolean;
-  hasRooftop?: boolean;
-  hasGarden?: boolean;
   hasWalkup?: boolean;
+  hasRooftop?: boolean;
+  hasBalcony?: boolean;
+  hasPetFriendly?: boolean;
+  hasGarden: boolean;
   hasElevator?: boolean;
+  hasGym?: boolean;
+  isDirectListing?: boolean;
   hasPool?: boolean;
   hasParking?: boolean;
-  hasGym?: boolean;
   hasClubhouse?: boolean;
-  hasPetFriendly?: boolean;
-  isDirectListing?: boolean;
-  isAgencyListing?: boolean;
-  hasHouse?: boolean;
-  hasLuxury?: boolean;
+  hasOven?: boolean;
+  hasBathtub?: boolean;
+  hasOceanView?: boolean;
+  hasSecurity?: boolean;
 }
 
 export interface FiltersPopoverInterface {
@@ -104,19 +105,19 @@ export interface FilterField {
 }
 export interface IAdditionalFeatures {
   outdoors: {
-    name: keyof IListing;
+    name: keyof IFilters;
     label: string;
     icon?: React.ReactNode;
     value?: string;
   }[];
   indoors: {
-    name: keyof IListing;
+    name: keyof IFilters;
     label: string;
     icon?: React.ReactNode;
     value?: string;
   }[];
   building: {
-    name: keyof IListing;
+    name: keyof IFilters;
     label: string;
     icon?: React.ReactNode;
     value?: string;

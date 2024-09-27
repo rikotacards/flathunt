@@ -10,7 +10,8 @@ interface ListingGridProps {
     savedListingsTransformed?: {[key: string]: string}
 }
 export const ListingGrid: React.FC<ListingGridProps> = ({savedListingsTransformed, data, isLoading}) => {
-    return (
+
+  return (
         <Grid
         sx={{ mt: 1 }}
         container

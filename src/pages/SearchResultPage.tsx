@@ -1,4 +1,12 @@
-import { Box, Button, Card, IconButton, Menu, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  IconButton,
+  Menu,
+  Paper,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllListings, getSavedListings } from "../firebase/listings";
@@ -7,19 +15,26 @@ import {
   useAuthContext,
   useFilterContext,
 } from "../Providers/contextHooks";
-import SwapVertIcon from '@mui/icons-material/SwapVert';
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { useNavigate } from "react-router";
 import { SearchBar } from "../components/SearchBar";
 import { ListingGrid } from "../components/ListingGrid";
-import { Sort } from "@mui/icons-material";
 import { SortPanel } from "../components/SortPanel";
 import { NoResults } from "../components/NoResults";
+import { features, OtherFeatures } from "../components/OtherFeatures";
+import { IFilters } from "../firebase/types";
 
 export const SearchResultPage: React.FC = () => {
   const { setFilters, filters } = useFilterContext();
   const { user } = useAuthContext();
   const nav = useNavigate();
   const { setAppBarChildComponent } = useAppBarContext();
+
+  const otherFeatureFilters = [
+    ...features.building.map((f) => filters[f.name]),
+    ...features.indoors.map((f) => filters[f.name]),
+    ...features.outdoors.map((f) => filters[f.name]),
+  ];
 
   React.useEffect(() => {
     setAppBarChildComponent(<SearchBar />);
@@ -36,47 +51,46 @@ export const SearchResultPage: React.FC = () => {
       filters.minBedrooms,
       filters.maxBedrooms,
       filters.isDirectListing,
-      filters.hasBalcony,
-      filters.hasRooftop,
-      filters.hasWalkup
+      filters.hasSecurity,
+      ...otherFeatureFilters
     ],
     queryFn: () => getAllListings(filters),
   });
-  const [sortedData, setSortedData] = React.useState()
- 
-console.log('sorting')
+  const [sortedData, setSortedData] = React.useState();
+
+  console.log("sorting");
   const onClear = () => {
-    setFilters({});
+    setFilters({} as IFilters);
     nav("/");
   };
   const onHighestSortPrice = () => {
-    if(!data){
+    if (!data) {
       return;
     }
-    setSortedData(data?.sort((a,b) => b.price - a.price))
-    handleCloseUserMenu()
-  }
+    setSortedData(data?.sort((a, b) => b.price - a.price));
+    handleCloseUserMenu();
+  };
   const onHighestSortArea = () => {
-    if(!data){
+    if (!data) {
       return;
     }
-    setSortedData(data?.sort((a,b) => b.netArea - a.netArea))
-    handleCloseUserMenu()
-  }
+    setSortedData(data?.sort((a, b) => b.netArea - a.netArea));
+    handleCloseUserMenu();
+  };
   const onLowestSortArea = () => {
-    if(!data){
+    if (!data) {
       return;
     }
-    setSortedData(data?.sort((a,b) => a.netArea - b.netArea))
-    handleCloseUserMenu()
-  }
+    setSortedData(data?.sort((a, b) => a.netArea - b.netArea));
+    handleCloseUserMenu();
+  };
   const onLowestSortPrice = () => {
-    if(!data){
+    if (!data) {
       return;
     }
-    setSortedData(data?.sort((a,b) => a.price - b.price))
-    handleCloseUserMenu()
-  }
+    setSortedData(data?.sort((a, b) => a.price - b.price));
+    handleCloseUserMenu();
+  };
   const { data: savedListingsData } = useQuery({
     queryKey: ["getSavedListings"],
     queryFn: () => getSavedListings(user?.uid || ""),
@@ -115,32 +129,31 @@ console.log('sorting')
             }}
           >
             <Menu
-             sx={{ mt: "45px" }}
-             id="menu-appbar"
-             anchorEl={anchorElUser}
-             slotProps={{ paper: { style: { borderRadius: 10 } } }}
-             anchorOrigin={{
-               vertical: "top",
-               horizontal: "right",
-             }}
-             keepMounted
-             transformOrigin={{
-               vertical: "top",
-               horizontal: "right",
-             }}
-             open={Boolean(anchorElUser)}
-             onClose={handleCloseUserMenu}
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              slotProps={{ paper: { style: { borderRadius: 10 } } }}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
             >
-              <SortPanel 
-              onLowestSortArea={onLowestSortArea}
-              onHighestSortArea={onHighestSortArea}
-              onHighestSortPrice={onHighestSortPrice}
-              onLowestSortPrice={onLowestSortPrice}/>
-
+              <SortPanel
+                onLowestSortArea={onLowestSortArea}
+                onHighestSortArea={onHighestSortArea}
+                onHighestSortPrice={onHighestSortPrice}
+                onLowestSortPrice={onLowestSortPrice}
+              />
             </Menu>
             <IconButton onClick={handleOpenUserMenu}>
-
-            <SwapVertIcon/>
+              <SwapVertIcon />
             </IconButton>
             <Typography
               color="textSecondary"
@@ -157,14 +170,13 @@ console.log('sorting')
       )}
 
       {data?.length === 0 && !isFetching && !isLoading && (
-        <NoResults onClear={onClear}/>
+        <NoResults onClear={onClear} />
       )}
       <ListingGrid
         isLoading={isLoading}
         data={sortedData || data}
         savedListingsTransformed={savedListingsTransformed}
       />
-
     </Box>
   );
 };
