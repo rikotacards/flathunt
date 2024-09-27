@@ -66,7 +66,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
   }, [isMyDataLoading, myData?.contactNumber]);
   const provider = new GoogleAuthProvider();
 
-  const fallback = `I'm interested this flat \n flathunt.co/listing/${listingId}?utm_source=whatsapp&utm_medium=whatsapp&id=${listingOwnerUid}&listing=${listingId}`;
+  const fallback = `Yo interested this flat: https://flathunt.co/listing/${listingId}?utm_source=whatsapp&utm_medium=whatsapp&id=${listingOwnerUid}&listing=${listingId}`;
   const whatsappLink = `whatsapp://send?phone=${listingSpecificContact || listingOwnerData?.contactNumber}&text=${message || fallback}`;
   const userAgent = window.navigator.userAgent;
   const url = window.location.href;

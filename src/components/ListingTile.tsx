@@ -30,6 +30,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ImageSlider } from "./ImageSlider";
 import { ListingTileInfo } from "./ListingTileInfo";
 import { ListingVerticalLayout } from "./ListingVerticalLayout";
+import { getWhatsappMessage } from "../utils/whatsapp";
 
 export const ListingTile: React.FC<IListing> = (props) => {
   const [openContactForm, setOpenContactForm] = React.useState(false);
@@ -127,8 +128,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     }
   };
 
-  const message = `Hi,  I'm interested this flat:\n https://flathunt.co/listing/${listingId}?utm_source=whatsapp&utm_medium=flathunt&id=${userId}&listing=${listingId}
-  \n${bedrooms} bedroom, \naddress: ${address}, ${location}, \nasking: ${price} HKD`;
+  const message = getWhatsappMessage({price, location, bedrooms, listingId, userId: props.userId, address})
  
   return (
     <Box sx={{ mb: 1 }}>

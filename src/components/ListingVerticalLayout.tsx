@@ -50,6 +50,7 @@ import { useIsNarrow } from "../utils/useIsNarrow";
 import { ImageSlider } from "./ImageSlider";
 import { ListingVerticalInfo } from "./ListingVerticalInfo";
 import { NumericFormat } from "react-number-format";
+import { getWhatsappMessage } from "../utils/whatsapp";
 export const ListingVerticalLayout: React.FC<
   IListing & { previewUrls?: string[] }
 > = (props) => {
@@ -102,6 +103,14 @@ export const ListingVerticalLayout: React.FC<
   const onLogin = async () => {
     await signInWithPopup(auth, provider);
   };
+  const message = getWhatsappMessage({
+    location, 
+    listingId,
+    address,
+    price,
+    bedrooms,
+    userId
+  })
   const onShare = (listingId: string) => {
     copy(`https://flathunt.co/listing/${listingId}?utm_source=share&utm_medium=flathunt&id=${userId}&listing=${listingId}`);
     s.setSnackbarChildComponent(
@@ -381,6 +390,8 @@ export const ListingVerticalLayout: React.FC<
           onClose={() => setOpenContactForm(false)}
           listingId={listingId}
           listingOwnerUid={userId}
+          message={message}
+          toggleForm={toggleContactForm}
           listingSpecificContact={listingSpecificContact}
         />
       </Drawer>
