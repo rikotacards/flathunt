@@ -77,7 +77,7 @@ export const PriceFilterNew2: React.FC<PriceFilterNarrowProps> = ({
       >
         Price
       </Typography>
-      <Typography sx={{alignSelf:'center'}} color='textSecondary'>Selected your desired budget range</Typography>
+      <Typography sx={{alignSelf:'center'}} color='textSecondary'>Select your desired budget range</Typography>
       <Box sx={{ mr: 4, ml: 4, mt: 4 }}>
         <Toolbar/>
         <Slider

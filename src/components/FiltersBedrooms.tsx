@@ -77,7 +77,7 @@ import {
         >
           Bedrooms
         </Typography>
-        <Typography sx={{alignSelf:'center'}} color='textSecondary'>Selected your desired budget range</Typography>
+        <Typography sx={{alignSelf:'center'}} color='textSecondary'>Select the number of bedrooms</Typography>
         <Box sx={{ mr: 4, ml: 4, mt: 4 }}>
           <Toolbar/>
           <Slider

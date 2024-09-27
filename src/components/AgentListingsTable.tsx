@@ -335,7 +335,7 @@ export const AgentListingsTable: React.FC<IFilters> = React.memo((props) => {
             <ListingGrid
               data={filteredData}
               isLoading={isLoading}
-              savedListingsTransformed={savedListingsData}
+              savedListingsTransformed={savedListingsData || []}
             />
           </Box>
         )}

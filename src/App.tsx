@@ -18,6 +18,7 @@ import { AuthProvider } from "./Providers/AuthProvider";
 import { AppBarProvider } from "./Providers/AppbarProvider";
 import { SignUpPage } from "./pages/SignUpPage";
 import { AgentSignUp } from "./components/AgentSignUp";
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
   const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <FiltersProvider>
@@ -88,6 +90,7 @@ function App() {
           </FiltersProvider>
         </AuthProvider>
       </QueryClientProvider>
+      </HelmetProvider>
     </ThemeProvider>
   );
 }
