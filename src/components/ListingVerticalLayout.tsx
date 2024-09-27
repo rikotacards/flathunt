@@ -49,6 +49,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIsNarrow } from "../utils/useIsNarrow";
 import { ImageSlider } from "./ImageSlider";
 import { ListingVerticalInfo } from "./ListingVerticalInfo";
+import { NumericFormat } from "react-number-format";
 export const ListingVerticalLayout: React.FC<
   IListing & { previewUrls?: string[] }
 > = (props) => {
@@ -208,7 +209,8 @@ export const ListingVerticalLayout: React.FC<
 
                   borderRadius: 4,
                 }}
-                variant="quilted"
+                variant="standard"
+                onClick={handleClickOpen}
               >
                 {(previewUrls || images).map((i) => (
                   <ImageListItem key={i}>
@@ -299,6 +301,8 @@ export const ListingVerticalLayout: React.FC<
               onClick={toggleContactForm}
               variant="contained"
               fullWidth
+              size="large"
+            
               sx={{ ml: 1, textTransform: "capitalize" }}
             >
               Message
@@ -320,7 +324,7 @@ export const ListingVerticalLayout: React.FC<
         <Toolbar>
           <Box sx={{ textAlign: "left" }}>
             <Typography fontWeight={"600"} variant="body2" color="textPrimary">
-              {price}HKD / month
+              <NumericFormat value={price} displayType="text" thousandSeparator=',' suffix=" HKD"/> / month
             </Typography>
           </Box>
 

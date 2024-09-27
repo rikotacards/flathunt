@@ -1,27 +1,25 @@
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
-import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import {  useQuery } from "@tanstack/react-query";
 import { getListing } from "../firebase/listings";
 
 import {
   Box,
   IconButton,
-  LinearProgress,
-  Paper,
+
   Toolbar,
   Typography,
 } from "@mui/material";
-import ForumIcon from "@mui/icons-material/Forum";
 
 import { ListingVerticalLayout } from "../components/ListingVerticalLayout";
 import { useAppBarContext } from "../Providers/contextHooks";
 import {
   ChevronLeft,
-  ForumOutlined,
-  HolidayVillageRounded,
+
 } from "@mui/icons-material";
 import { ListingTileSkeleton } from "../components/ListingTileSkeleton";
+import { NumericFormat } from "react-number-format";
 interface ListingPageAppBarProps {
   price: number;
   netArea: number;
@@ -47,9 +45,10 @@ const ListingPageAppBar: React.FC<ListingPageAppBarProps> = (props) => {
       </IconButton>
       <Box sx={{ display: "flex", flexDirection: "column", pb: 0 }}>
         <Typography variant="body2" fontWeight={"bold"} color="textPrimary">
-          {price} HKD - {netArea} sqft
+         <NumericFormat displayType="text" thousandSeparator=',' suffix=" HKD" value={price}/> - {netArea} sqft
         </Typography>
         <Typography
+        sx={{textTransform: 'capitalize'}}
         color="textSecondary"
         variant="caption">
           {location} / {address}
