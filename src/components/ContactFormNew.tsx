@@ -125,16 +125,16 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
         >
           Contact Agent
         </Typography>
-        <Box>
-
-        <IconButton
-          onClick={onClose}
-          sx={{
+        <Box sx={{
             flexBasis: 1,
             display: "flex",
             flexGrow: 1,
             justifyContent: "flex-end",
-          }}
+          }}>
+
+        <IconButton
+          onClick={onClose}
+          
           color="inherit"
           >
           <KeyboardArrowDown />
@@ -158,9 +158,8 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
         {user && (
           <Card variant="outlined" sx={{ p: 1, mt: 0, mb: 1 }}>
             <Typography color="textSecondary">
-              Your contact will be sent to the agent. The agent will reach out
-              to you as soon as possible. In addition, your contact will be
-              saved for future agent requests.
+              By hitting Message, you will open a whatsapp chat diretly with the agent.
+              Your contact be saved and populated automatically next time.
             </Typography>
           </Card>
         )}

@@ -286,7 +286,7 @@ export const ListingVerticalLayout: React.FC<
             </Box>
           )}
           <ListingVerticalInfo {...props}/>
-          <Card
+          {!isNarrow && <Card
             sx={{
               display: "flex",
               p: 1,
@@ -316,7 +316,7 @@ export const ListingVerticalLayout: React.FC<
             >
               Message
             </Button>
-          </Card>
+          </Card>}
         </Box>
       </Box>
       <Toolbar />
