@@ -22,6 +22,7 @@ import { addUser, getUser } from "../firebase/user";
 import {  GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {  useNavigate } from "react-router-dom";
+import { addContactRequest } from "../firebase/listings";
 interface ContactFormNewProps {
   listingId: string;
   listingOwnerUid: string;
@@ -88,7 +89,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
       // document.getElementById(listingId + "contact")?.click();
     } catch (e) {}
   };
-  const onMessage = () => {
+  const onMessage = async() => {
     if (!number) {
       s.setSnackbarChildComponent(
         <Alert severity="error">Whatsapp number required</Alert>
@@ -97,12 +98,21 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
       return;
     }
     if (!myData?.contactNumber) {
-      user?.uid && addUser({ userId: user?.uid, contactNumber: number });
+      user?.uid && await addUser({ userId: user?.uid, contactNumber: number });
     }
     document
       .getElementById(listingId)
       ?.scrollIntoView({ block: "center", behavior: "instant" });
     window.open(whatsappLink, "_top");
+    await addContactRequest({
+      requesterContactNumber: myData?.contactNumber || number,
+      requesterUserId: user?.uid || '',
+      listingOwnerContactNumber: listingSpecificContact || listingOwnerData?.contactNumber,
+      listingOwnerUserId: listingOwnerUid,
+      listingId: listingId,
+
+
+    })
     s.setSnackbarChildComponent(
       <Alert
         icon={<WhatsAppIcon />}

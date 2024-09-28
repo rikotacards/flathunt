@@ -119,11 +119,11 @@ export const addListing = async (args: NewListingProps) => {
     }
 }
 interface AddContactRequestProps {
-    sendingUserId: string,
-    receivingUserId: string,
+    requesterUserId: string,
+    listingOwnerUserId: string,
     listingId: string,
-    message?: string,
-    contactNumber: string,
+    requesterContactNumber: string,
+    listingOwnerContactNumber: string
     requestId?: string
 }
 export const addContactRequest = async (args: AddContactRequestProps) => {
@@ -237,3 +237,20 @@ export const removeSavedListings = async (args: RemoveListingProps) => {
 
 }
 
+interface WhatsappOpenCountArgs {
+    listingId: string;
+    requesterNumber: string;
+    listingOwnerNumber: string
+}
+export const contactRequest = async(args: WhatsappOpenCountArgs) => {
+    try {
+        const docRef = await setDoc(
+            doc(db, "whatsapp", args.listingOwnerNumber, args.listingId), {
+            ...args,
+            dateAdded: serverTimestamp()
+        }, {merge: true});  
+        
+    }catch(e){
+        alert(e)
+    }
+}
