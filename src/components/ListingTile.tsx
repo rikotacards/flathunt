@@ -58,6 +58,7 @@ export const ListingTile: React.FC<IListing> = (props) => {
     bathrooms,
     isSaved,
     isDirectListing,
+    imageUrls
   } = props;
   const queryClient = useQueryClient();
 
@@ -159,9 +160,10 @@ export const ListingTile: React.FC<IListing> = (props) => {
           >
             <ImageSlider
               enablePagination={!isNarrow}
-              images={images}
+              images={ images}
               listingId={listingId}
               userId={userId}
+              imageUrls={imageUrls}
             />
           </Box>
         </Link>

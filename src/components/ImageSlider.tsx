@@ -7,12 +7,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
+import { ImageWithCloudinary } from "./ImageWithCloudinary";
 interface ImageSliderProps {
   images: string[];
   listingId: string;
   userId: string;
   enablePagination?: boolean;
   previewUrls?: string[];
+  imageUrls?: string[]
 }
 export const ImageSlider: React.FC<ImageSliderProps> = ({
   images,
@@ -20,7 +22,24 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   userId,
   enablePagination,
   previewUrls,
+  imageUrls
 }) => {
+  const imgsFromCloudinary = imageUrls?.map((imageUrl) => (
+    <SwiperSlide
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+      key={imageUrl + listingId}
+    >
+      <ImageWithCloudinary
+        style={{ objectFit: "cover", objectPosition: "center" }}
+        imageUrl={imageUrl}
+        listingId={listingId}
+        userId={userId}
+      />
+    </SwiperSlide>
+  ));
   const imgs = images?.map((image) => (
     <SwiperSlide
       style={{
@@ -54,6 +73,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
       />
     </SwiperSlide>
   ));
+  const imagesToUse = imageUrls?.length ? imgsFromCloudinary : imgs
   if (!listingId) {
     return;
   }
@@ -82,7 +102,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
             "0 3px 12px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.08)",
         }}
       >
-        <div>{previewUrls && previewUrls?.length > 0 ? previews : imgs}</div>
+        <div>{previewUrls && previewUrls?.length > 0 ? previews : imagesToUse}</div>
       </Swiper>
       {enablePagination && (
         <>

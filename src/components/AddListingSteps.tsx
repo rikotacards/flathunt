@@ -38,7 +38,10 @@ import { AddListingOtherFeatures } from "./AddListingOtherFeatures";
 import { AddListingValidation } from "./AddListingValidation";
 import App from "../App";
 import { useNavigate } from "react-router";
-
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
 interface AddListingStepsProps {
   onClose: () => void;
   listing?: IListing;
@@ -79,7 +82,6 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const downloadUrls: string[] = [];
   const s = useSnackbarContext();
   const [form, setForm] = React.useState({
     ...listing,
@@ -94,44 +96,86 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
   };
   const [isAdding, setIsAdding] = React.useState(false);
   const isNarrow = useIsNarrow();
+  
+  const uploadFile = async(file: File, listingId: string)=>{
+    const url = `https://api.cloudinary.com/v1_1/rikotacards/upload`;
+    const fd = new FormData();
+    fd.append('upload_preset', 'public');
+    fd.append('tags', 'browser_upload'); // Optional - add tags for image admin in Cloudinary
+    fd.append('file', file);
+    fd.append('folder', `listings/${listingId}`);
+
+  
+   const res = await fetch(url, {
+      method: 'POST',
+      body: fd,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('data scuces', data.secure_url)
+        // File uploaded successfully
+        const url = data.secure_url;
+        
+        // Create a thumbnail of the uploaded image, with 150px width
+        const tokens = url.split('/');
+        tokens.splice(-3, 0, 'w_150,c_scale');
+        const img = new Image();
+        img.src = tokens.join('/');
+        img.alt = data.public_id;
+       return url
+        // document.getElementById('gallery').appendChild(img);
+      })
+      .catch((error) => {
+        console.error('Error uploading the file:', error);
+      });
+    return res
+  }
   const handleUpload = async (userId: string, listingId: string) => {
-    for (const file of files) {
-      const storageRef = ref(storage, `${userId}/${listingId}/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+    const uploadPromise = files.map((f) => uploadFile(f, listingId))
+    const res = await Promise.all(uploadPromise)
+    console.log('handle wait', res)
+    return res
+    // for (const file of files) {
+      //  uploadFile(file)
+      
+      // const storageRef = ref(storage, `${userId}/${listingId}/${file.name}`);
+      // const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress((prevProgress) => ({
-            ...prevProgress,
-            [file.name]: progress,
-          }));
-        },
-        (error) => {
-          console.error("Upload failed:", error);
-          alert(error);
-        },
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          downloadUrls.push(url);
-        }
-      );
-    }
+      // uploadTask.on(
+      //   "state_changed",
+      //   (snapshot) => {
+      //     const progress =
+      //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      //     setUploadProgress((prevProgress) => ({
+      //       ...prevProgress,
+      //       [file.name]: progress,
+      //     }));
+      //   },
+      //   (error) => {
+      //     console.error("Upload failed:", error);
+      //     alert(error);
+      //   },
+      //   async () => {
+      //     const url = await getDownloadURL(uploadTask.snapshot.ref);
+      //     downloadUrls.push(url);
+      //   }
+      // );
+    // }
 
-    return downloadUrls;
   };
-  console.log('FORM', form)
+  
   const docRef = doc(collection(db, "listings"));
   const onAdd = async () => {
+    
+    
     // get download URLS,
     // add them to the listing
     try {
       setIsAdding(true);
 
       const fileNames = files.map((file) => file.name);
-      await handleUpload(userId || USER_ID, docRef.id);
+      const res = await handleUpload(userId || USER_ID, docRef.id);
+      console.log('AFRER UPLOD', res)
       await setDoc(docRef, {
         ...form,
         rentBuy: form.rentBuy || "rent",
@@ -141,9 +185,10 @@ export const AddListingSteps: React.FC<AddListingStepsProps> = ({
         netArea: parseInt(form.netArea),
         grossArea: parseInt(form.grossArea),
         userId: userId || USER_ID,
-        images: fileNames,
+        // images: fileNames,
         dateAdded: serverTimestamp(),
         desc: form.desc || "",
+        imageUrls: res
       });
       setIsAdding(false);
       queryClient.invalidateQueries({ queryKey: ["getAgentListings"] });

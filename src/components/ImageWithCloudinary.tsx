@@ -6,25 +6,19 @@ import React from "react";
 interface ListingImages {
   userId: string;
   listingId: string;
-  imageName: string;
+  imageUrl: string;
   style?: React.CSSProperties;
   previewUrl?: string;
 }
-export const ImageWithLoading: React.FC<ListingImages> = ({
+export const ImageWithCloudinary: React.FC<ListingImages> = ({
   userId,
   style,
   listingId,
-  imageName,
+  imageUrl,
   previewUrl,
 }) => {
-  const storage = getStorage();
-  const imageRef = ref(storage, `${userId}/${listingId}/${imageName}`);
   const [isLoaded, setIsLoaded] = React.useState(!!previewUrl ? true : false);
-
-  const { data } = useQuery({
-    queryKey: [imageName],
-    queryFn: () => !!previewUrl ? ({}) :getDownloadURL(imageRef),
-  });
+  console.log("IMAGE URL'", imageUrl)
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
@@ -48,7 +42,7 @@ export const ImageWithLoading: React.FC<ListingImages> = ({
           // height: 'auto'
         }}
         onLoad={handleImageLoad}
-        src={previewUrl || data}
+        src={previewUrl || imageUrl}
       />
     </>
   );
