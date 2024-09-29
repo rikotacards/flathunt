@@ -161,7 +161,7 @@ export const ListingVerticalLayout: React.FC<
     }
   };
 
-  const imgWithoutGrid = images?.map((image, i) => (
+  const imgWithoutGrid = (imageUrls || images)?.map((image, i) => (
     <Box
       key={image}
       sx={{
@@ -171,13 +171,19 @@ export const ListingVerticalLayout: React.FC<
         display: "flex",
       }}
     >
-      <ImageWithLoading
+      {imageUrls?.length ? <ImageWithCloudinary
+      key={image}
+      imageUrl={image}
+      listingId={listingId}
+      style={{ width: "100%", height: "auto" }}
+      userId={userId}
+      /> : <ImageWithLoading
         key={image}
         imageName={image}
         listingId={listingId}
         style={{ width: "100%", height: "auto" }}
         userId={userId}
-      />
+      />}
     </Box>
   ));
   const imageListItemToUse = imageUrls?.length ? (imageUrls).map((i) => (

@@ -35,7 +35,7 @@ export const ImageWithCloudinary: React.FC<ListingImages> = ({
         style={{
           ...style,
           objectFit: "cover",
-          // display: isLoaded ? "block" : "none",
+          display: isLoaded ? "block" : "none",
           height:'100%',
           width: '100%',
           
