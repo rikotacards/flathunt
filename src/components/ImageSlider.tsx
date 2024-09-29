@@ -24,13 +24,13 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({
   previewUrls,
   imageUrls
 }) => {
-  const imgsFromCloudinary = imageUrls?.map((imageUrl) => (
+  const imgsFromCloudinary = imageUrls?.map((imageUrl, i) => (
     <SwiperSlide
       style={{
         display: "flex",
         alignItems: "center",
       }}
-      key={imageUrl + listingId}
+      key={imageUrl + listingId + i}
     >
       <ImageWithCloudinary
         style={{ objectFit: "cover", objectPosition: "center" }}

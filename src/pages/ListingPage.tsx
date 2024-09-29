@@ -76,7 +76,7 @@ export const ListingPage: React.FC = () => {
       );
   }, [isLoading]);
   if (isLoading || !data) {
-    return <ListingTileSkeleton />;
+    return <Box sx={{p:2}}><ListingTileSkeleton /></Box>;
   }
   return (
     <Box

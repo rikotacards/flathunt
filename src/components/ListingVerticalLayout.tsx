@@ -51,6 +51,8 @@ import { ImageSlider } from "./ImageSlider";
 import { ListingVerticalInfo } from "./ListingVerticalInfo";
 import { NumericFormat } from "react-number-format";
 import { getWhatsappMessage } from "../utils/whatsapp";
+import { image } from "@cloudinary/url-gen/qualifiers/source";
+import { ImageWithCloudinary } from "./ImageWithCloudinary";
 export const ListingVerticalLayout: React.FC<
   IListing & { previewUrls?: string[] }
 > = (props) => {
@@ -72,6 +74,7 @@ export const ListingVerticalLayout: React.FC<
     bathrooms,
     bedrooms,
     location,
+    imageUrls,
     listingSpecificContact,
     realEstateCompany,
     listingSpecificRealEstateCompany,
@@ -177,7 +180,25 @@ export const ListingVerticalLayout: React.FC<
       />
     </Box>
   ));
+  const imageListItemToUse = imageUrls?.length ? (imageUrls).map((i) => (
+    <ImageListItem key={i}>
+      <ImageWithCloudinary
+        imageUrl={i}
+        listingId={listingId}
+        userId={userId}
 
+        previewUrl={!!previewUrls?.length ? i : undefined}
+      />
+    </ImageListItem>)) : (previewUrls || imageUrls || images).map((i) => (
+    <ImageListItem key={i}>
+      <ImageWithLoading
+        imageName={i}
+        listingId={listingId}
+        userId={userId}
+
+        previewUrl={!!previewUrls?.length ? i : undefined}
+      />
+    </ImageListItem>))
   return (
     <Box
       sx={{
@@ -209,6 +230,7 @@ export const ListingVerticalLayout: React.FC<
                 listingId={listingId}
                 userId={userId}
                 images={images}
+                imageUrls={imageUrls}
                 previewUrls={previewUrls}
               />
             ) : (
@@ -221,16 +243,7 @@ export const ListingVerticalLayout: React.FC<
                 variant="standard"
                 onClick={handleClickOpen}
               >
-                {(previewUrls || images).map((i) => (
-                  <ImageListItem key={i}>
-                    <ImageWithLoading
-                      imageName={i}
-                      listingId={listingId}
-                      userId={userId}
-                      previewUrl={!!previewUrls?.length ? i : undefined}
-                    />
-                  </ImageListItem>
-                ))}
+                {imageListItemToUse}
               </ImageList>
             )}
             <Button

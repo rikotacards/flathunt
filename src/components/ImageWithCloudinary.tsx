@@ -11,17 +11,16 @@ interface ListingImages {
   previewUrl?: string;
 }
 export const ImageWithCloudinary: React.FC<ListingImages> = ({
-  userId,
   style,
-  listingId,
   imageUrl,
   previewUrl,
 }) => {
   const [isLoaded, setIsLoaded] = React.useState(!!previewUrl ? true : false);
-  console.log("IMAGE URL'", imageUrl)
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
+  const optimizedImageUrl = imageUrl.split('/upload')
+  const newone = [optimizedImageUrl[0], '/upload', '/q_auto,f_auto', optimizedImageUrl[1]].join('')
   return (
     <>
       {!isLoaded && (
@@ -36,13 +35,14 @@ export const ImageWithCloudinary: React.FC<ListingImages> = ({
         style={{
           ...style,
           objectFit: "cover",
-          display: isLoaded ? "block" : "none",
+          // display: isLoaded ? "block" : "none",
           height:'100%',
           width: '100%',
+          
           // height: 'auto'
         }}
         onLoad={handleImageLoad}
-        src={previewUrl || imageUrl}
+        src={previewUrl || newone}
       />
     </>
   );

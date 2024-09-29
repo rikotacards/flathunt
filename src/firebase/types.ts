@@ -42,6 +42,7 @@ export interface IListing {
   hasBathtub?: boolean;
   hasOceanView?: boolean;
   hasSecurity?: boolean;
+  imageUrls?: string[]
 }
 
 export interface IFilters {
