@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography, Zoom } from "@mui/material";
+import { Box, IconButton, Paper, Typography, Zoom } from "@mui/material";
 import React from "react";
 import PetsIcon from "@mui/icons-material/Pets";
 import RoofingIcon from "@mui/icons-material/Roofing";
@@ -77,11 +77,14 @@ export const Categories: React.FC = () => {
 
   return (
     <Box
+  
       sx={{
         alignItems: "flex-start",
         display: "flex",
         justifyContent: "space-between",
         overflowX: "auto",
+        top:55,
+
       }}
     >
       {categories.map((c) => (
