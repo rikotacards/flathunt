@@ -76,24 +76,36 @@ export const ListingPage: React.FC = () => {
       );
   }, [isLoading]);
   if (isLoading || !data) {
-    return <Box sx={{p:2}}><ListingTileSkeleton /></Box>;
+    return (
+      <Box sx={{ p: 2 }}>
+        <ListingTileSkeleton />
+      </Box>
+    );
   }
   return (
     <Box
-    sx={{
-      position: "relative",
-      justifyContent: "center",
-      display: "flex",
-      flexDirection: "column",
-    }}
+      sx={{
+        position: "relative",
+        justifyContent: "center",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       <Helmet>
-        <title>{data.address}</title>
-        <meta property="og:title" content={data.address} />
+        <title>{`${data.price} HKD / ${data.address}`}</title>
+        <meta property="og:title" content={`${data.price} / ${data.address}`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://flathunt.co" />
+        <meta property="og:site_name" content="Flathunt.co" />
+        <meta
+          property="og:image"
+          content={data.imageUrls?.[0]}
+        />
+        <meta property="og:description" content="The best way to flat hunt" />
       </Helmet>
 
-        <ListingVerticalLayout {...data} />
-        <Toolbar />
+      <ListingVerticalLayout {...data} />
+      <Toolbar />
     </Box>
   );
 };
