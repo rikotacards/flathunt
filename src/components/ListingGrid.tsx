@@ -24,11 +24,11 @@ export const ListingGrid: React.FC<ListingGridProps> = ({savedListingsTransforme
                 <ListingTileSkeleton />
               </Grid>
             ))
-          : data?.map((l) => {
+          : data?.map((l,i) => {
               const savedDocId = savedListingsTransformed[l.listingId]
 
               return (
-                <Grid key={l.listingId} size={{ lg: 3, md: 4, xs: 4 }}>
+                <Grid key={l.listingId + i} size={{ lg: 3, md: 4, xs: 4 }}>
                   <ListingTile savedDocId={savedDocId}
                    isSaved={!!savedDocId} {...l} />
                 </Grid>

@@ -20,7 +20,7 @@ export const ImageWithCloudinary: React.FC<ListingImages> = ({
     setIsLoaded(true);
   };
   const optimizedImageUrl = imageUrl.split('/upload')
-  const newone = [optimizedImageUrl[0], '/upload', '/q_auto,f_auto', optimizedImageUrl[1]].join('')
+  const newone = [optimizedImageUrl[0], '/upload', '/q_auto,f_auto,h_400', optimizedImageUrl[1]].join('')
   return (
     <>
       {!isLoaded && (
@@ -42,7 +42,7 @@ export const ImageWithCloudinary: React.FC<ListingImages> = ({
           // height: 'auto'
         }}
         onLoad={handleImageLoad}
-        src={previewUrl || newone}
+        src={previewUrl || imageUrl}
       />
     </>
   );
