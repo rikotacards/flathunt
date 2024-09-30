@@ -136,10 +136,7 @@ export const ContactFormNew: React.FC<ContactFormNewProps> = ({
           Contact Agent
         </Typography>
         <Box sx={{
-            flexBasis: 1,
-            display: "flex",
-            flexGrow: 1,
-            justifyContent: "flex-end",
+          
           }}>
 
         <IconButton
